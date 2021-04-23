@@ -27,6 +27,13 @@ const auth_evenementiel_route_auth_event= require('./api/routes/evenementiel/aut
 /********************************/
 /****group admision routers******/
 /********************************/
+
+/********************************/
+/**group communication routers***/
+/********************************/
+
+
+
 /*********date base connection it will shut down every 5min you need to restart it*************************/
 var con = mysql.createConnection({
   host: "remotemysql.com",
@@ -80,6 +87,10 @@ con.connect(function(err) {
 
 /************************************/
 /****use group admision routers******/
+/************************************/
+
+/************************************/
+/**use group communication routers***/
 /************************************/
 
 

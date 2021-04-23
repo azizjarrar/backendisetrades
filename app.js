@@ -2,8 +2,9 @@ const express = require('express')
 const morgan = require('morgan')
 const app = express()
 const dotenv = require('dotenv');
-var mysql = require('mysql');
 dotenv.config();
+var client = require('./db_connection');
+
 /******************************************************/
 /***************import routes here*********************/
 /*******************************************************/
@@ -35,20 +36,18 @@ const auth_evenementiel_route_auth_event= require('./api/routes/evenementiel/aut
 
 
 /*********date base connection it will shut down every 5min you need to restart it*************************/
-var con = mysql.createConnection({
-  host: "remotemysql.com",
-  user: "5mrruYpkTT",
-  password: "MbMXb71BlA"
-});
-con.connect(function(err) {
-  if (err){
-      console.log(err.message)
-  }else{
-    console.log("Connected!");
-  };
+
+
   /***************************************/
   /*************cors handler**************/
   /***************************************/
+  client.connect(function(err) {
+    if (err){
+        console.log(err.message)
+    }else{
+      console.log("Connected!");
+    };
+  });
   app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*')
     res.header(
@@ -100,6 +99,6 @@ con.connect(function(err) {
   app.use((req, res) => {
     res.status(404).json({ error: 'api not found' })
   })
-});
+
 
 module.exports = app

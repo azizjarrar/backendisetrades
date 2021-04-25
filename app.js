@@ -19,7 +19,7 @@ const auth_evenementiel_route_auth_event= require('./api/routes/evenementiel/aut
 /********************************/
 /***group scolarite routers******/
 /********************************/
-
+const add_file= require('./api/routes/scolarite/AddFile')
 /********************************/
 /**group administration routers**/
 /********************************/
@@ -80,7 +80,7 @@ con.connect(function(err) {
 /************************************/
 /***use group scolarite routers******/
 /************************************/
-
+app.use("/addfile",add_file)
 /************************************/
 /**use group administration routers**/
 /************************************/

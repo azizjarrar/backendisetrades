@@ -60,6 +60,10 @@ const auth_evenementiel_route_auth_event= require('./api/routes/evenementiel/aut
   })
   app.use(express.urlencoded({extended: true}));  
   app.use(express.json())
+  
+  app.use('/uploads',express.static('./uploads'))
+
+
   app.use(morgan('dev'))
 /*************************************************/
 /****************use routes here******************/

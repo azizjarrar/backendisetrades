@@ -2,7 +2,27 @@ var client = require('../../../db_connection')
 const jwt = require("jsonwebtoken");
 
 exports.singup=(req,res)=>{
- 
+    if(req.body.nom==undefined){
+      res.status(res.statusCode).json({
+        message: " nom not found",
+        status: res.statusCode,
+      });
+      return
+    }
+    if(req.body.email==undefined){
+      res.status(res.statusCode).json({
+        message: "email not found",
+        status: res.statusCode,
+      });
+      return
+    }
+    if(req.body.password==undefined){
+      res.status(res.statusCode).json({
+        message: "password not found",
+        status: res.statusCode,
+      });
+      return
+    }
     client.query(` INSERT INTO member (nom, email, password) VALUES ('${req.body.nom}','${req.body.email}','${req.body.password}')`, function (err, result) {
         if (err){
             res.status(res.statusCode).json({
@@ -21,7 +41,20 @@ exports.singup=(req,res)=>{
 
 }
 exports.singin=(req,res)=>{
-  console.log(req.body)
+  if(req.body.email==undefined){
+    res.status(res.statusCode).json({
+      message: "email not found",
+      status: res.statusCode,
+    });
+    return
+  }
+  if(req.body.password==undefined){
+    res.status(res.statusCode).json({
+      message: "password not found",
+      status: res.statusCode,
+    });
+    return
+  }
   client.query(`SELECT * FROM  member  WHERE email='${req.body.email}' && password='${req.body.password}' `, function  (err, result) {
     if (err){
         res.status(res.statusCode).json({

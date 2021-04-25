@@ -36,11 +36,6 @@ const auth_evenementiel_route_auth_event= require('./api/routes/evenementiel/aut
 
 
 /*********date base connection it will shut down every 5min you need to restart it*************************/
-
-
-  /***************************************/
-  /*************cors handler**************/
-  /***************************************/
   client.connect(function(err) {
     if (err){
         console.log(err.message)
@@ -48,6 +43,9 @@ const auth_evenementiel_route_auth_event= require('./api/routes/evenementiel/aut
       console.log("Connected!");
     };
   });
+  /***************************************/
+  /*************cors handler**************/
+  /***************************************/
   app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*')
     res.header(
@@ -72,6 +70,8 @@ const auth_evenementiel_route_auth_event= require('./api/routes/evenementiel/aut
 /***use group evenementiel routers***/
 /************************************/
   app.use("/auth_event",auth_evenementiel_route_auth_event)
+
+
 /************************************/
 /***use group stage pfe routers******/
 /************************************/
@@ -89,7 +89,7 @@ const auth_evenementiel_route_auth_event= require('./api/routes/evenementiel/aut
 /************************************/
 
 /************************************/
-/**use group communication routers***/
+/***use group communication routers**/
 /************************************/
 
 

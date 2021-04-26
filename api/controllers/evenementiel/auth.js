@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 
 exports.singup=(req,res)=>{
   var newurlString=""
+  if(req.file!=undefined){
     for(let i = 0;i<req.file.path.length;i++){
       if(req.file.path[i]=='\\'){
         newurlString+="/"
@@ -10,9 +11,12 @@ exports.singup=(req,res)=>{
         newurlString+=req.file.path[i]
       }
     }
+  }
+
     if(req.body.nom==undefined){
       res.status(res.statusCode).json({
         message: " nom not found",
+        error:true,
         status: res.statusCode,
       });
       return
@@ -20,6 +24,7 @@ exports.singup=(req,res)=>{
     if(req.body.email==undefined){
       res.status(res.statusCode).json({
         message: "email not found",
+        error:true,
         status: res.statusCode,
       });
       return
@@ -27,6 +32,7 @@ exports.singup=(req,res)=>{
     if(req.body.password==undefined){
       res.status(res.statusCode).json({
         message: "password not found",
+        error:true,
         status: res.statusCode,
       });
       return
@@ -51,6 +57,7 @@ exports.singup=(req,res)=>{
       }else{
         res.status(res.statusCode).json({
           message: "user already exists",
+          error:true,
           status: res.statusCode,
       });
       }
@@ -63,6 +70,7 @@ exports.singin=(req,res)=>{
   if(req.body.email==undefined){
     res.status(res.statusCode).json({
       message: "email not found",
+      error:true,
       status: res.statusCode,
     });
     return
@@ -70,6 +78,7 @@ exports.singin=(req,res)=>{
   if(req.body.password==undefined){
     res.status(res.statusCode).json({
       message: "password not found",
+      error:true,
       status: res.statusCode,
     });
     return
@@ -84,6 +93,7 @@ exports.singin=(req,res)=>{
       if(result.length==0){
         res.status(res.statusCode).json({
           message: "user not found",
+          error:true,
           state:404,
           status: res.statusCode,
         });

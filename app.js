@@ -14,6 +14,9 @@ var client = require('./db_connection');
 /********************************/
 const auth_evenementiel_route_auth_event= require('./api/routes/evenementiel/auth')
 const auth_evenementiel_route_demande_event= require('./api/routes/evenementiel/demande')
+const auth_evenementiel_route_roles_and_teams = require('./api/routes/evenementiel/roles_and_teams')
+const auth_evenementiel_route_user = require('./api/routes/evenementiel/user')
+
 /********************************/
 /***group stage pfe routers******/
 /********************************/
@@ -76,7 +79,8 @@ const auth_evenementiel_route_demande_event= require('./api/routes/evenementiel/
 /************************************/
   app.use("/auth_event",auth_evenementiel_route_auth_event)
   app.use("/demande_event",auth_evenementiel_route_demande_event)
-
+  app.use("/roles_and_teams",auth_evenementiel_route_roles_and_teams)
+  app.use("/user",auth_evenementiel_route_user)
 /************************************/
 /***use group stage pfe routers******/
 /************************************/

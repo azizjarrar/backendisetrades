@@ -221,36 +221,47 @@ exports.acceptOrDeleteRequests=(req,res)=>{
                                 if(resultzero.length==0 || resultzero[0]==undefined){
                                     //hedhi ken user mafamech awel mara chi kon andou compte fi site lezm ngedlou compte
                                     var id = crypto.randomBytes(16).toString('hex');
-                                    client.query(`INSERT INTO membre 
-                                    (id_membre,nom,prenom,n_tel,email,motdepasse,membreimage,cin) 
-                                    VALUES('${id}','${result[0].nom}','${result[0].prenom}',${result[0].n_tel},'${result[0].email}','password','imageurl','${result[0].cin}')`, function  (err, resultone) {
-                                        if (err){
-                                            res.status(res.statusCode).json({
-                                                errorIn:"INSERT INTO membre 1",
-                                                errorCode: err,
-                                                status: res.statusCode,
-                                            });
-                                        }else{
-                                            client.query(`INSERT INTO liste_membre
-                                            (id_club,cin_membre,role,equipe)
-                                            VALUES('${result[0].club}','${result[0].cin}','1','${result[0].equipe}')
-                                            `,(err, resulttwo)=>{
-                                                if(err){
-                                                    res.status(res.statusCode).json({
-                                                        errorIn:"INSERT INTO liste_membre",
-                                                        errorCode: err.message,
-                                                        status: res.statusCode,
-                                                    });
-                                                }else{
-                                                    sendmail(result[0].email,"aproved")
-                                                    res.status(res.statusCode).json({
-                                                        message: "membre accepted",
-                                                        status: res.statusCode,
-                                                    });
-                                                }
-                                            })
-                                        }}
-                                        )
+                                    client.query(`SELECT * FROM roles WHERE role='membre'`,(err,resultrole)=>{
+                                      if(err){
+                                        res.status(res.statusCode).json({
+                                            errorIn:"INSERT INTO liste_membre if he is alredy membre",
+                                            errorCode: err.message,
+                                            status: res.statusCode,
+                                        });
+                                        return
+                                    }
+                                      client.query(`INSERT INTO membre 
+                                      (id_membre,role,nom,prenom,n_tel,email,motdepasse,membreimage,cin) 
+                                      VALUES('${id}',${resultrole[0].id_role},'${result[0].nom}','${result[0].prenom}',${result[0].n_tel},'${result[0].email}','password','imageurl','${result[0].cin}')`, function  (err, resultone) {
+                                          if (err){
+                                              res.status(res.statusCode).json({
+                                                  errorIn:"INSERT INTO membre 1",
+                                                  errorCode: err,
+                                                  status: res.statusCode,
+                                              });
+                                          }else{
+                                              client.query(`INSERT INTO liste_membre
+                                              (id_club,cin_membre,role,equipe)
+                                              VALUES('${result[0].club}','${result[0].cin}','1','${result[0].equipe}')
+                                              `,(err, resulttwo)=>{
+                                                  if(err){
+                                                      res.status(res.statusCode).json({
+                                                          errorIn:"INSERT INTO liste_membre",
+                                                          errorCode: err.message,
+                                                          status: res.statusCode,
+                                                      });
+                                                  }else{
+                                                      sendmail(result[0].email,"aproved")
+                                                      res.status(res.statusCode).json({
+                                                          message: "membre accepted",
+                                                          status: res.statusCode,
+                                                      });
+                                                  }
+                                              })
+                                          }}
+                                          )
+                                    })
+                         
                                 }else{
          
                                     client.query(`INSERT INTO liste_membre

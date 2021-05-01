@@ -11,6 +11,7 @@ exports.getOneUser=(req,res)=>{
         return
       }
     client.query(`SELECT *  FROM  membre WHERE id_membre='${req.body.idmembre}'`,(err,result)=>{
+      console.log(result)
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err.message,

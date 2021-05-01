@@ -19,7 +19,7 @@ exports.singin=(req,res)=>{
     });
     return
   }
-  client.query(`SELECT * FROM  membre  WHERE email='${req.body.email}' && motdepasse='${req.body.password}' `, function  (err, result) {
+  client.query(`SELECT * FROM  membre JOIN roles on roles.id_role=membre.role  WHERE email='${req.body.email}' && motdepasse='${req.body.password}' `, function  (err, result) {
     if (err){
         res.status(res.statusCode).json({
             errorCode: err.message,
@@ -46,7 +46,7 @@ exports.singin=(req,res)=>{
             res.status(res.statusCode).json({
               message: "done",
               token:token,
-              data:{nom:result[0].nom,prenom:result[0].pernom,tel:result[0].n_tel,cin:result[0].cin,id_membre:result[0].id_membre,email:result[0].email,membreImage:result[0].membreImage},
+              data:{role:result[0].role,nom:result[0].nom,prenom:result[0].pernom,tel:result[0].n_tel,cin:result[0].cin,id_membre:result[0].id_membre,email:result[0].email,membreImage:result[0].membreImage},
               status: res.statusCode,
             });
            }

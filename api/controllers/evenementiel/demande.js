@@ -153,6 +153,14 @@ exports.acceptOrDeleteRequests=(req,res)=>{
 
     if(req.body.option=="delete"){
         //;
+        if(req.body.idDemande==undefined){
+          res.status(res.statusCode).json({
+            message: "idDemande not found",
+            error:true,
+            status: res.statusCode,
+          });
+          return
+        }
         client.query(`DELETE demande FROM demande JOIN club on club.id_club=demande.club   WHERE club.id_member='${req.verified.user_auth.id_member}' && id_demande='${req.body.idDemande}'`, function  (err, result) {
             if (err){
                 res.status(res.statusCode).json({
@@ -178,6 +186,14 @@ exports.acceptOrDeleteRequests=(req,res)=>{
             })
 
     }else{
+      if(req.body.idDemande==undefined){
+        res.status(res.statusCode).json({
+          message: "idDemande not found",
+          error:true,
+          status: res.statusCode,
+        });
+        return
+      }
         client.query(`SELECT * FROM  demande JOIN club on club.id_club=demande.club   WHERE club.id_member='${req.verified.user_auth.id_member}' && id_demande='${req.body.idDemande}'`, function  (err, result) {
             if (err){
                 res.status(res.statusCode).json({

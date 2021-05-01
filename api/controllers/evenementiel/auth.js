@@ -46,7 +46,7 @@ exports.singin=(req,res)=>{
             res.status(res.statusCode).json({
               message: "done",
               token:token,
-              data:{nom:result[0].nom,email:result[0].email,memberImage:result[0].memberImage},
+              data:{nom:result[0].nom,prenom:result[0].pernom,tel:result[0].n_tel,cin:result[0].cin,id_membre:result[0].id_membre,email:result[0].email,memberImage:result[0].memberImage},
               status: res.statusCode,
             });
            }

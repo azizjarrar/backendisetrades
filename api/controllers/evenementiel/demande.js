@@ -132,7 +132,7 @@ exports.getRequests=(req,res)=>{
 
     client.query(`SELECT 
     id_demande, demande.cin ,demande.nom,demande.prenom,demande.classe,demande.equipe,demande.club,demande.motivation,demande.n_tel,demande.date,demande.email
-    FROM  member RIGHT JOIN club on club.id_member=member.id_member  RIGHT JOIN demande on demande.club=club.id_club WHERE member.id_member='${req.verified.user_auth.id_member}'`, function  (err, result) {
+    FROM  membre RIGHT JOIN club on club.id_membre=membre.id_membre  RIGHT JOIN demande on demande.club=club.id_club WHERE membre.id_membre='${req.verified.user_auth.id_membre}'`, function  (err, result) {
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err.message,
@@ -161,7 +161,8 @@ exports.acceptOrDeleteRequests=(req,res)=>{
           });
           return
         }
-        client.query(`DELETE demande FROM demande JOIN club on club.id_club=demande.club   WHERE club.id_member='${req.verified.user_auth.id_member}' && id_demande='${req.body.idDemande}'`, function  (err, result) {
+        console.log(req.verified.user_auth.id_membre)
+        client.query(`DELETE demande FROM demande JOIN club on club.id_club=demande.club   WHERE club.id_membre='${req.verified.user_auth.id_membre}' && id_demande='${req.body.idDemande}'`, function  (err, result) {
             if (err){
                 res.status(res.statusCode).json({
                     errorCode: err,
@@ -169,7 +170,8 @@ exports.acceptOrDeleteRequests=(req,res)=>{
                   });
                 
                 }else{
-                  if(result.length==0){
+                  console.log(result)
+                  if(result.affectedRows==0){
                     res.status(res.statusCode).json({
                       errorCode: "demande not found or you dont have acces to delete it",
                       status: res.statusCode,
@@ -194,7 +196,7 @@ exports.acceptOrDeleteRequests=(req,res)=>{
         });
         return
       }
-        client.query(`SELECT * FROM  demande JOIN club on club.id_club=demande.club   WHERE club.id_member='${req.verified.user_auth.id_member}' && id_demande='${req.body.idDemande}'`, function  (err, result) {
+        client.query(`SELECT * FROM  demande JOIN club on club.id_club=demande.club   WHERE club.id_membre='${req.verified.user_auth.id_membre}' && id_demande='${req.body.idDemande}'`, function  (err, result) {
             if (err){
                 res.status(res.statusCode).json({
                     errorCode: err.message,
@@ -209,7 +211,7 @@ exports.acceptOrDeleteRequests=(req,res)=>{
                             status: res.statusCode,
                     });  
                     }else{
-                        client.query(`SELECT * FROM  member  WHERE cin='${result[0].cin}'`, function  (err, resultzero) {
+                        client.query(`SELECT * FROM  membre  WHERE cin='${result[0].cin}'`, function  (err, resultzero) {
                             if (err){
                                 res.status(res.statusCode).json({
                                     errorCode: err.message,
@@ -219,30 +221,30 @@ exports.acceptOrDeleteRequests=(req,res)=>{
                                 if(resultzero.length==0 || resultzero[0]==undefined){
                                     //hedhi ken user mafamech awel mara chi kon andou compte fi site lezm ngedlou compte
                                     var id = crypto.randomBytes(16).toString('hex');
-                                    client.query(`INSERT INTO member 
-                                    (id_member,nom,pernom,n_tel,email,motdepasse,memberimage,cin) 
+                                    client.query(`INSERT INTO membre 
+                                    (id_membre,nom,prenom,n_tel,email,motdepasse,membreimage,cin) 
                                     VALUES('${id}','${result[0].nom}','${result[0].prenom}',${result[0].n_tel},'${result[0].email}','password','imageurl','${result[0].cin}')`, function  (err, resultone) {
                                         if (err){
                                             res.status(res.statusCode).json({
-                                                errorIn:"INSERT INTO member 1",
+                                                errorIn:"INSERT INTO membre 1",
                                                 errorCode: err,
                                                 status: res.statusCode,
                                             });
                                         }else{
-                                            client.query(`INSERT INTO list_member
-                                            (id_club,cin_member,role,equipe)
+                                            client.query(`INSERT INTO liste_membre
+                                            (id_club,cin_membre,role,equipe)
                                             VALUES('${result[0].club}','${result[0].cin}','1','${result[0].equipe}')
                                             `,(err, resulttwo)=>{
                                                 if(err){
                                                     res.status(res.statusCode).json({
-                                                        errorIn:"INSERT INTO list_member",
+                                                        errorIn:"INSERT INTO liste_membre",
                                                         errorCode: err.message,
                                                         status: res.statusCode,
                                                     });
                                                 }else{
                                                     sendmail(result[0].email,"aproved")
                                                     res.status(res.statusCode).json({
-                                                        message: "member accepted",
+                                                        message: "membre accepted",
                                                         status: res.statusCode,
                                                     });
                                                 }
@@ -251,20 +253,20 @@ exports.acceptOrDeleteRequests=(req,res)=>{
                                         )
                                 }else{
          
-                                    client.query(`INSERT INTO list_member
-                                    (id_club,cin_member,role,equipe)
+                                    client.query(`INSERT INTO liste_membre
+                                    (id_club,cin_membre,role,equipe)
                                     VALUES(${result[0].club},'${result[0].cin}',1,1)
                                     `,(err, resulttwo)=>{
                                         if(err){
                                             res.status(res.statusCode).json({
-                                                errorIn:"INSERT INTO list_member if he is alredy member",
+                                                errorIn:"INSERT INTO liste_membre if he is alredy membre",
                                                 errorCode: err.message,
                                                 status: res.statusCode,
                                             });
                                         }else{
                                             sendmail(result[0].email,"aproved")
                                             res.status(res.statusCode).json({
-                                                message: "member accepted",
+                                                message: "membre accepted",
                                                 status: res.statusCode,
                                             });
                                         }

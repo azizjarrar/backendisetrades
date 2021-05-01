@@ -19,7 +19,7 @@ exports.singin=(req,res)=>{
     });
     return
   }
-  client.query(`SELECT * FROM  member  WHERE email='${req.body.email}' && motdepasse='${req.body.password}' `, function  (err, result) {
+  client.query(`SELECT * FROM  membre  WHERE email='${req.body.email}' && motdepasse='${req.body.password}' `, function  (err, result) {
     if (err){
         res.status(res.statusCode).json({
             errorCode: err.message,
@@ -34,7 +34,7 @@ exports.singin=(req,res)=>{
           status: res.statusCode,
         });
       }else{
-         jwt.sign({ user_auth: {nom:result[0].nom,email:result[0].email,cin:result[0].cin,id_member:result[0].id_member} },process.env.secret_key_token_auth_event,
+         jwt.sign({ user_auth: {nom:result[0].nom,email:result[0].email,cin:result[0].cin,id_membre:result[0].id_membre} },process.env.secret_key_token_auth_event,
         async (err, token) => {
            if(err){
              res.status(res.statusCode).json({
@@ -46,7 +46,7 @@ exports.singin=(req,res)=>{
             res.status(res.statusCode).json({
               message: "done",
               token:token,
-              data:{nom:result[0].nom,prenom:result[0].pernom,tel:result[0].n_tel,cin:result[0].cin,id_membre:result[0].id_membre,email:result[0].email,memberImage:result[0].memberImage},
+              data:{nom:result[0].nom,prenom:result[0].pernom,tel:result[0].n_tel,cin:result[0].cin,id_membre:result[0].id_membre,email:result[0].email,membreImage:result[0].membreImage},
               status: res.statusCode,
             });
            }

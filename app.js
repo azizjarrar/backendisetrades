@@ -19,7 +19,18 @@ const auth_evenementiel_route_auth_event= require('./api/routes/evenementiel/aut
 /********************************/
 /***group scolarite routers******/
 /********************************/
+/////////////File ////////////////////////
 const add_file= require('./api/routes/scolarite/AddFile')
+const update_file= require('./api/routes/scolarite/AddFile')
+const deletefile= require('./api/routes/scolarite/AddFile')
+const getEtudiantById= require('./api/routes/scolarite/AddFile')
+
+/////////////reclamation////////////////
+const add_Reclamation= require('./api/routes/scolarite/Reclamation')
+const update_Reclamation= require('./api/routes/scolarite/Reclamation')
+const delete_Reclamation= require('./api/routes/scolarite/Reclamation');
+const { getById } = require('./api/controllers/scolarite/AddFile');
+const { get } = require('./api/routes/scolarite/AddFile');
 /********************************/
 /**group administration routers**/
 /********************************/
@@ -80,7 +91,15 @@ con.connect(function(err) {
 /************************************/
 /***use group scolarite routers******/
 /************************************/
+////////////File///////////////////
 app.use("/addfile",add_file)
+app.use("/updatefile",update_file)
+app.use("/DeleteFile",deletefile)
+app.use("/getEtudiant",getEtudiantById)
+///////////Reclamation///////////////
+app.use("/addReclamation",add_Reclamation)
+app.use("/updateReclamation",update_Reclamation)
+app.use("/DeleteReclamation",delete_Reclamation)
 /************************************/
 /**use group administration routers**/
 /************************************/

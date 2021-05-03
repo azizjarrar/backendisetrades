@@ -252,11 +252,20 @@ exports.acceptOrDeleteRequests=(req,res)=>{
                                                           status: res.statusCode,
                                                       });
                                                   }else{
+                                                    client.query(`DELETE demande FROM demande JOIN club on club.id_club=demande.club   WHERE club.id_membre='${req.verified.user_auth.id_membre}' && id_demande='${req.body.idDemande}'`, function  (err, resultdelete) {
+                                                      if (err){
+                                                        res.status(res.statusCode).json({
+                                                            errorCode: err.message,
+                                                            status: res.statusCode,
+                                                        });
+                                                    }else{
                                                       sendmail(result[0].email,"aproved")
                                                       res.status(res.statusCode).json({
                                                           message: "membre accepted",
                                                           status: res.statusCode,
                                                       });
+                                                    }
+                                                    })
                                                   }
                                               })
                                           }}
@@ -276,11 +285,20 @@ exports.acceptOrDeleteRequests=(req,res)=>{
                                                 status: res.statusCode,
                                             });
                                         }else{
+                                          client.query(`DELETE demande FROM demande JOIN club on club.id_club=demande.club   WHERE club.id_membre='${req.verified.user_auth.id_membre}' && id_demande='${req.body.idDemande}'`, function  (err, resultdelete) {
+                                            if (err){
+                                              res.status(res.statusCode).json({
+                                                  errorCode: err.message,
+                                                  status: res.statusCode,
+                                              });
+                                          }else{
                                             sendmail(result[0].email,"aproved")
                                             res.status(res.statusCode).json({
                                                 message: "membre accepted",
                                                 status: res.statusCode,
                                             });
+                                          }
+                                          })
                                         }
                                     })
                                 }
@@ -316,7 +334,7 @@ const sendmail=(email,state)=>{
           from: 'isetrades@gmail.com',
           to: email,
           subject: 'result',
-          text: state
+          text: "you are rejected to join  club"
         };
       }
 

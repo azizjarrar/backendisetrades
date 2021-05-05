@@ -19,7 +19,7 @@ exports.singin=(req,res)=>{
     });
     return
   }
-  client.query(`SELECT * FROM  membre JOIN roles on roles.id_role=membre.role  WHERE email='${req.body.email}' && motdepasse='${req.body.password}' `, function  (err, result) {
+  client.query(`SELECT * FROM  membre JOIN role_membre on role_membre.id_role=membre.role  WHERE email='${req.body.email}' && motdepasse='${req.body.password}' `, function  (err, result) {
     if (err){
         res.status(res.statusCode).json({
             errorCode: err.message,

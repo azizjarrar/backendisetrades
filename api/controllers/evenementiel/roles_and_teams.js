@@ -1,7 +1,7 @@
 var client = require('../../../db_connection')
 
 exports.getroles=(req,res)=>{
-    client.query(`SELECT *  FROM  roles `,(err,result)=>{
+    client.query(`SELECT *  FROM  role_membre `,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err.message,
@@ -16,7 +16,7 @@ exports.getroles=(req,res)=>{
     })
 }
 exports.getTeams=(req,res)=>{
-    client.query(`SELECT *  FROM equipes `,(err,result)=>{
+    client.query(`SELECT *  FROM equipe_membre `,(err,result)=>{
                 if (err){
             res.status(res.statusCode).json({
                 errorCode: err.message,

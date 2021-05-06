@@ -19,10 +19,10 @@ exports.singin=(req,res)=>{
     });
     return
   }
-  client.query(`SELECT * FROM  membre JOIN role_membre on role_membre.id_role=membre.role  WHERE email='${req.body.email}' && motdepasse='${req.body.password}' `, function  (err, result) {
+  client.query(`SELECT * ,membre.email FROM  membre JOIN role_membre on role_membre.id_role=membre.role JOIN user on user.cin=membre.cin WHERE membre.email='${req.body.email}' && membre.motdepasse='${req.body.password}' `, function  (err, result) {
     if (err){
         res.status(res.statusCode).json({
-            errorCode: err.message,
+            errorCode: err,
             status: res.statusCode,
           });
     }else{
@@ -43,10 +43,11 @@ exports.singin=(req,res)=>{
                state: false,
              });
            }else{
+             console.log(result[0])
             res.status(res.statusCode).json({
               message: "done",
               token:token,
-              data:{role:result[0].role,nom:result[0].nom,prenom:result[0].pernom,tel:result[0].n_tel,cin:result[0].cin,id_membre:result[0].id_membre,email:result[0].email,membreImage:result[0].membreImage},
+              data:{role:result[0].role,nom:result[0].nom,prenom:result[0].prenom,tel:result[0].n_tel,cin:result[0].cin,id_membre:result[0].id_membre,email:result[0].email,membreImage:result[0].membreImage},
               status: res.statusCode,
             });
            }

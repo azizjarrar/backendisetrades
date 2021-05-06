@@ -4,6 +4,7 @@ const app = express()
 const dotenv = require('dotenv');
 dotenv.config();
 var client = require('./db_connection');
+const path = require('path');
 
 /******************************************************/
 /***************import routes here*********************/
@@ -17,6 +18,7 @@ const auth_evenementiel_route_demande_event= require('./api/routes/evenementiel/
 const auth_evenementiel_route_roles_and_teams = require('./api/routes/evenementiel/roles_and_teams')
 const auth_evenementiel_route_user = require('./api/routes/evenementiel/user')
 const auth_evenementiel_route_club = require('./api/routes/evenementiel/club')
+const auth_evenementiel_route_forgetpassword = require('./api/routes/evenementiel/forgetpassword')
 
 /********************************/
 /***group stage pfe routers******/
@@ -83,6 +85,11 @@ const auth_evenementiel_route_club = require('./api/routes/evenementiel/club')
   app.use("/roles_and_teams",auth_evenementiel_route_roles_and_teams)
   app.use("/user",auth_evenementiel_route_user)
   app.use("/club",auth_evenementiel_route_club)
+  app.use("/forgetpassword",auth_evenementiel_route_forgetpassword)
+  app.get('/resetpassword/:token',function(req,res){
+    res.sendFile(path.join(__dirname+'/api/routes/evenementiel/resetpassword.html'));
+  });
+  
 /************************************/
 /***use group stage pfe routers******/
 /************************************/

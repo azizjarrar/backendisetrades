@@ -317,7 +317,6 @@ exports.acceptOrDeleteRequests = (req, res) => {
 }
 
 const sendmail = (email, state) => {
-  console.log(email)
   var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {

@@ -43,7 +43,6 @@ exports.singin=(req,res)=>{
                state: false,
              });
            }else{
-             console.log(result[0])
             res.status(res.statusCode).json({
               message: "done",
               token:token,
@@ -57,3 +56,5 @@ exports.singin=(req,res)=>{
     }
   });
 }
+
+

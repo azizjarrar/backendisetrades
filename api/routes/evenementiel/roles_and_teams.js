@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router()
-const auth_controler = require('../../controllers/evenementiel/roles_and_teams')
+const roles_and_teams = require('../../controllers/evenementiel/roles_and_teams')
 
-router.post('/getroles', auth_controler.getroles)
-router.post('/getTeams', auth_controler.getTeams)
+router.post('/getroles', roles_and_teams.getroles)
+router.post('/getTeams', roles_and_teams.getTeams)
 
 module.exports = router

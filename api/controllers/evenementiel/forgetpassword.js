@@ -14,7 +14,6 @@ exports.sendEmailForgetPassword=(req,res)=>{
             if(result.length==0){
                 res.status(res.statusCode).json({
                     message: "user not found",
-                    data:result,
                   });
             }else{
                
@@ -42,7 +41,6 @@ exports.sendEmailForgetPassword=(req,res)=>{
                       });
                         res.status(res.statusCode).json({
                             message: "we sent email ",
-                            data:result,
                           });
                 
 

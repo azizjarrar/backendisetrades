@@ -120,7 +120,7 @@ exports.sendRequest = (req, res) => {
 
 exports.getRequests = (req, res) => {
 
-  client.query(`SELECT 
+  client.query(`SELECT membre.cin,demande_club.id_demande, 
     user.nom,user.prenom,club.nom_club,demande_club.motivation,demande_club.equipe,user.age,user.sexe,demande_club.date,club.id_club,demande_club.email
     FROM  membre RIGHT JOIN club on club.id_membre=${req.verified.user_auth.id_membre}  RIGHT JOIN demande_club on demande_club.id_club=club.id_club JOIN user on user.cin=demande_club.cin 
     WHERE membre.id_membre='${req.verified.user_auth.id_membre}'`, function (err, result) {
@@ -141,7 +141,8 @@ exports.getRequests = (req, res) => {
   })
 }
 exports.acceptOrDeleteRequests = (req, res) => {
-
+  
+  const idmembre = crypto.randomBytes(16).toString("hex");
   if (req.body.option == "delete") {
     //;
     if (req.body.idDemande == undefined) {
@@ -152,7 +153,7 @@ exports.acceptOrDeleteRequests = (req, res) => {
       });
       return
     }
-    client.query(`DELETE demande_club FROM demande_club JOIN club on club.id_club=demande_club.id_club   WHERE club.id_membre='${req.verified.user_auth.id_membre}' && id_demande_club='${req.body.idDemande}'`, function (err, result) {
+    client.query(`DELETE demande_club FROM demande_club JOIN club on club.id_club=demande_club.id_club   WHERE club.id_membre='${req.verified.user_auth.id_membre}' && id_demande='${req.body.idDemande}'`, function (err, result) {
       if (err) {
         res.status(res.statusCode).json({
           errorCode: err,
@@ -186,7 +187,7 @@ exports.acceptOrDeleteRequests = (req, res) => {
       });
       return
     }
-    client.query(`SELECT * FROM  demande_club JOIN club on club.id_club=demande_club.id_club   WHERE club.id_membre='${req.verified.user_auth.id_membre}' && id_demande_club='${req.body.idDemande}'`, function (err, result) {
+    client.query(`SELECT * FROM  demande_club JOIN club on club.id_club=demande_club.id_club   WHERE club.id_membre='${req.verified.user_auth.id_membre}' && id_demande='${req.body.idDemande}'`, function (err, result) {
       if (err) {
         res.status(res.statusCode).json({
           errorCode: err.message,
@@ -227,8 +228,8 @@ exports.acceptOrDeleteRequests = (req, res) => {
                     return
                   }
                   client.query(`INSERT INTO membre 
-                                      (role,email,motdepasse,membreimage,cin) 
-                                      VALUES(${resultrole[0].id_role},'${result[0].email}','${randompassword}','imageurl','${result[0].cin}')`, function (err, resultone) {
+                                      (id_membre,role,email,motdepasse,membreimage,cin) 
+                                      VALUES('${idmembre}','${resultrole[0].id_role},'${result[0].email}','${randompassword}','imageurl','${result[0].cin}')`, function (err, resultone) {
                     if (err) {
                       res.status(res.statusCode).json({
                         errorIn: "INSERT INTO membre 1",

@@ -3,7 +3,7 @@ var client = require('../../../db_connection')
 
 exports.getposts=(req,res)=>{
     client.query(`SELECT user.nom,user.prenom,publication_club.description,publication_club.date,publication_club.heure,publication_club.url_image,publication_club.id_publication
-    FROM  publication_club JOIN membre on publication_club.id_member=membre.id_membre JOIN user on membre.cin=user.cin  WHERE id_club='${req.body.idclub}'  `,(err,result)=>{
+    FROM  publication_club JOIN membre on publication_club.id_membre=membre.id_membre JOIN user on membre.cin=user.cin  WHERE id_club='${req.body.idclub}'  `,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err.message,
@@ -35,7 +35,7 @@ exports.addpost=(req,res)=>{
     const datee=date.getFullYear()+"-"+date.getMonth()+"-"+date.getDay();
     const heure=date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
     client.query(`INSERT INTO publication_club
-    (date,heure,id_member,description,id_club,url_image) 
+    (date,heure,id_membre,description,id_club,url_image) 
     VALUES ('${datee}','${heure}','${req.verified.user_auth.id_membre}','${req.body.description}','${req.body.idclub}','${newurlString}') `,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
@@ -56,7 +56,7 @@ exports.addComment=(req,res)=>{
     const heure=date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
     client.query(`INSERT INTO commentaire_publication
     (date,heure,id_publication,description,id_membre) 
-    VALUES ('${datee}','${heure}','${req.body.idpublication}','${req.body.description}','${req.verified.user_auth.id_membre}') `,(err,result)=>{
+    VALUES ('${datee}','${heure}','${req.body.id_publication}','${req.body.description}','${req.verified.user_auth.id_membre}') `,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err,

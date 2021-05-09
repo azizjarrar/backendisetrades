@@ -3,6 +3,8 @@ const crypto = require("crypto");
 var nodemailer = require('nodemailer');
 
 exports.sendRequest = (req, res) => {
+  const id = crypto.randomBytes(16).toString("hex");
+
   var newurlString = ""
   if (req.file != undefined) {
     for (let i = 0; i < req.file.path.length; i++) {
@@ -84,8 +86,8 @@ exports.sendRequest = (req, res) => {
 
             var newDateFormated = `${nowTime.getFullYear()}-${nowTime.getMonth().length == 1 ? nowTime.getMonth() + "0" : nowTime.getMonth()}-${nowTime.getDay().length == 1 ? nowTime.getDay() + "0" : nowTime.getDay()} ${nowTime.getHours()}:${nowTime.getMinutes()}:${nowTime.getSeconds()}`
             var newDateFormated = "2021-05-02"
-            client.query(` INSERT INTO demande_club (cin,statut,id_etudiant,equipe,id_club,motivation,date,email) 
-          VALUES ('${req.body.cin}',"en attend",'${resultEtudiant[0].id_user}','${req.body.equipe}','${req.body.club}','${req.body.motivation}','${newDateFormated}','${req.body.email}')`,
+            client.query(` INSERT INTO demande_club (id_demande,cin,statut,id_etudiant,equipe,id_club,motivation,date,email) 
+          VALUES ('${id}','${req.body.cin}',"en attend",'${resultEtudiant[0].id_user}','${req.body.equipe}','${req.body.club}','${req.body.motivation}','${newDateFormated}','${req.body.email}')`,
               function (err, result) {
                 if (err) {
                   res.status(res.statusCode).json({
@@ -118,7 +120,7 @@ exports.sendRequest = (req, res) => {
 
 exports.getRequests = (req, res) => {
 
-  client.query(`SELECT 
+  client.query(`SELECT membre.cin,demande_club.id_demande, 
     user.nom,user.prenom,club.nom_club,demande_club.motivation,demande_club.equipe,user.age,user.sexe,demande_club.date,club.id_club,demande_club.email
     FROM  membre RIGHT JOIN club on club.id_membre=${req.verified.user_auth.id_membre}  RIGHT JOIN demande_club on demande_club.id_club=club.id_club JOIN user on user.cin=demande_club.cin 
     WHERE membre.id_membre='${req.verified.user_auth.id_membre}'`, function (err, result) {
@@ -139,7 +141,8 @@ exports.getRequests = (req, res) => {
   })
 }
 exports.acceptOrDeleteRequests = (req, res) => {
-
+  
+  const idmembre = crypto.randomBytes(16).toString("hex");
   if (req.body.option == "delete") {
     //;
     if (req.body.idDemande == undefined) {
@@ -150,7 +153,7 @@ exports.acceptOrDeleteRequests = (req, res) => {
       });
       return
     }
-    client.query(`DELETE demande_club FROM demande_club JOIN club on club.id_club=demande_club.id_club   WHERE club.id_membre='${req.verified.user_auth.id_membre}' && id_demande_club='${req.body.idDemande}'`, function (err, result) {
+    client.query(`DELETE demande_club FROM demande_club JOIN club on club.id_club=demande_club.id_club   WHERE club.id_membre='${req.verified.user_auth.id_membre}' && id_demande='${req.body.idDemande}'`, function (err, result) {
       if (err) {
         res.status(res.statusCode).json({
           errorCode: err,
@@ -183,7 +186,7 @@ exports.acceptOrDeleteRequests = (req, res) => {
       });
       return
     }
-    client.query(`SELECT * FROM  demande_club JOIN club on club.id_club=demande_club.id_club   WHERE club.id_membre='${req.verified.user_auth.id_membre}' && id_demande_club='${req.body.idDemande}'`, function (err, result) {
+    client.query(`SELECT * FROM  demande_club JOIN club on club.id_club=demande_club.id_club   WHERE club.id_membre='${req.verified.user_auth.id_membre}' && id_demande='${req.body.idDemande}'`, function (err, result) {
       if (err) {
         res.status(res.statusCode).json({
           errorCode: err.message,
@@ -224,8 +227,8 @@ exports.acceptOrDeleteRequests = (req, res) => {
                     return
                   }
                   client.query(`INSERT INTO membre 
-                                      (role,email,motdepasse,membreimage,cin) 
-                                      VALUES(${resultrole[0].id_role},'${result[0].email}','${randompassword}','imageurl','${result[0].cin}')`, function (err, resultone) {
+                                      (id_membre,role,email,motdepasse,membreimage,cin) 
+                                      VALUES('${idmembre}','${resultrole[0].id_role},'${result[0].email}','${randompassword}','imageurl','${result[0].cin}')`, function (err, resultone) {
                     if (err) {
                       res.status(res.statusCode).json({
                         errorIn: "INSERT INTO membre 1",

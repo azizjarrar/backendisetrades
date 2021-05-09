@@ -3,6 +3,8 @@ const crypto = require("crypto");
 var nodemailer = require('nodemailer');
 
 exports.sendRequest = (req, res) => {
+  const id = crypto.randomBytes(16).toString("hex");
+
   var newurlString = ""
   if (req.file != undefined) {
     for (let i = 0; i < req.file.path.length; i++) {
@@ -84,8 +86,8 @@ exports.sendRequest = (req, res) => {
 
             var newDateFormated = `${nowTime.getFullYear()}-${nowTime.getMonth().length == 1 ? nowTime.getMonth() + "0" : nowTime.getMonth()}-${nowTime.getDay().length == 1 ? nowTime.getDay() + "0" : nowTime.getDay()} ${nowTime.getHours()}:${nowTime.getMinutes()}:${nowTime.getSeconds()}`
             var newDateFormated = "2021-05-02"
-            client.query(` INSERT INTO demande_club (cin,statut,id_etudiant,equipe,id_club,motivation,date,email) 
-          VALUES ('${req.body.cin}',"en attend",'${resultEtudiant[0].id_user}','${req.body.equipe}','${req.body.club}','${req.body.motivation}','${newDateFormated}','${req.body.email}')`,
+            client.query(` INSERT INTO demande_club (id_demande,cin,statut,id_etudiant,equipe,id_club,motivation,date,email) 
+          VALUES ('${id}','${req.body.cin}',"en attend",'${resultEtudiant[0].id_user}','${req.body.equipe}','${req.body.club}','${req.body.motivation}','${newDateFormated}','${req.body.email}')`,
               function (err, result) {
                 if (err) {
                   res.status(res.statusCode).json({

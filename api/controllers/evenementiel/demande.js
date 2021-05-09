@@ -158,7 +158,6 @@ exports.acceptOrDeleteRequests = (req, res) => {
         });
 
       } else {
-        console.log(result)
         if (result.affectedRows == 0) {
           res.status(res.statusCode).json({
             errorCode: "demande_club not found or you dont have acces to delete it",

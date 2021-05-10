@@ -42,7 +42,13 @@ exports.addVote=(req,res)=>{
     VALUES ('${req.verified.user_auth.id_membre}',${req.body.statut},'${req.body.idsondage}') `,(err,result)=>{
         if (err){
             if(err.errno=="1062"){
-                client.query(`UPDATE vote_sondage  SET statut=${req.body.statut}  WHERE id_sondage='${req.body.idsondage}'`,async (err,result)=>{
+                let statut=0
+                if(req.body.statut==true || req.body.statut=="true"){
+                    statut=1
+                }else{
+                    statut=0
+                }
+                client.query(`UPDATE vote_sondage  SET statut=${statut}  WHERE id_sondage='${req.body.idsondage}'`,async (err,result)=>{
                     if (err){
                         res.status(res.statusCode).json({
                             errorCode: err.message,

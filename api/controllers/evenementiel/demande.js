@@ -141,7 +141,7 @@ exports.getRequests = (req, res) => {
   })
 }
 exports.acceptOrDeleteRequests = (req, res) => {
-  
+
   const idmembre = crypto.randomBytes(16).toString("hex");
   if (req.body.option == "delete") {
     //;
@@ -229,7 +229,7 @@ exports.acceptOrDeleteRequests = (req, res) => {
                   }
                   client.query(`INSERT INTO membre 
                                       (id_membre,role,email,motdepasse,membreimage,cin) 
-                                      VALUES('${idmembre}','${resultrole[0].id_role},'${result[0].email}','${randompassword}','imageurl','${result[0].cin}')`, function (err, resultone) {
+                                      VALUES('${idmembre}','${resultrole[0].id_role}','${result[0].email}','${randompassword}','imageurl','${result[0].cin}')`, function (err, resultone) {
                     if (err) {
                       res.status(res.statusCode).json({
                         errorIn: "INSERT INTO membre 1",
@@ -248,7 +248,7 @@ exports.acceptOrDeleteRequests = (req, res) => {
                             status: res.statusCode,
                           });
                         } else {
-                          client.query(`DELETE demande_club FROM demande_club JOIN club on club.id_club=demande_club.id_club   WHERE club.id_membre='${req.verified.user_auth.id_membre}' && id_demande_club='${req.body.idDemande}'`, function (err, resultdelete) {
+                          client.query(`DELETE demande_club FROM demande_club JOIN club on club.id_club=demande_club.id_club   WHERE club.id_membre='${req.verified.user_auth.id_membre}' && id_demande='${req.body.idDemande}'`, function (err, resultdelete) {
                             if (err) {
                               res.status(res.statusCode).json({
                                 errorCode: err.message,
@@ -288,7 +288,7 @@ exports.acceptOrDeleteRequests = (req, res) => {
                         status: res.statusCode,
                       });
                     } else {
-                      client.query(`DELETE demande_club FROM demande_club JOIN club on club.id_club=demande_club.id_club   WHERE club.id_membre='${req.verified.user_auth.id_membre}' && id_demande_club='${req.body.idDemande}'`, function (err, resultdelete) {
+                      client.query(`DELETE demande_club FROM demande_club JOIN club on club.id_club=demande_club.id_club   WHERE club.id_membre='${req.verified.user_auth.id_membre}' && id_demande='${req.body.idDemande}'`, function (err, resultdelete) {
                         if (err) {
                           res.status(res.statusCode).json({
                             errorCode: err.message,

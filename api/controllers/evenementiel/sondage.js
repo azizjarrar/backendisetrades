@@ -38,7 +38,7 @@ exports.addsondage=(req,res)=>{
 exports.addVote=(req,res)=>{
     if (req.body.idsondage == undefined) {
         res.status(res.statusCode).json({
-          message: "club not idsondage",
+          message: "idsondage not found",
           error: true,
           status: res.statusCode,
         });

@@ -36,7 +36,23 @@ exports.addsondage=(req,res)=>{
     })
 }
 exports.addVote=(req,res)=>{
-    
+    if (req.body.idsondage == undefined) {
+        res.status(res.statusCode).json({
+          message: "club not idsondage",
+          error: true,
+          status: res.statusCode,
+        });
+        return
+      }
+
+      if (req.body.statut == undefined) {
+        res.status(res.statusCode).json({
+          message: "statut not found",
+          error: true,
+          status: res.statusCode,
+        });
+        return
+      }
     client.query(`INSERT INTO vote_sondage
     (id_membre,statut,id_sondage) 
     VALUES ('${req.verified.user_auth.id_membre}',${req.body.statut},'${req.body.idsondage}') `,(err,result)=>{

@@ -161,7 +161,6 @@ exports.acceptOrDeleteRequests = (req, res) => {
         });
 
       } else {
-        console.log(result)
         if (result.affectedRows == 0) {
           res.status(res.statusCode).json({
             errorCode: "demande_club not found or you dont have acces to delete it",
@@ -227,9 +226,8 @@ exports.acceptOrDeleteRequests = (req, res) => {
                     });
                     return
                   }
-                  client.query(`INSERT INTO membre 
-                                      (id_membre,role,email,motdepasse,membreimage,cin) 
-                                      VALUES('${idmembre}','${resultrole[0].id_role}','${result[0].email}','${randompassword}','imageurl','${result[0].cin}')`, function (err, resultone) {
+                  client.query(`INSERT INTO membre (id_membre,role,email,motdepasse,membreimage,cin) 
+                                      VALUES('${idmembre}',${resultrole[0].id_role},'${result[0].email}','${randompassword}','imageurl',${result[0].cin})`, function (err, resultone) {
                     if (err) {
                       res.status(res.statusCode).json({
                         errorIn: "INSERT INTO membre 1",

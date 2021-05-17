@@ -2,7 +2,7 @@ var client = require('../../../db_connection')
 
 
 exports.getOneUser=(req,res)=>{
-    if(req.body.idmembre==undefined){
+    if(req.body.id_membre==undefined){
         res.status(res.statusCode).json({
           message: "idmembre not found",
           error:true,
@@ -10,7 +10,7 @@ exports.getOneUser=(req,res)=>{
         });
         return
       }
-    client.query(`SELECT *  FROM  membre WHERE id_membre='${req.body.idmembre}'`,(err,result)=>{
+    client.query(`SELECT *  FROM  membre WHERE id_membre='${req.body.id_membre}'`,(err,result)=>{
       console.log(result)
         if (err){
             res.status(res.statusCode).json({

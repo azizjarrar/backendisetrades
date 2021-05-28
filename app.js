@@ -21,7 +21,7 @@ const auth_evenementiel_route_club = require('./api/routes/evenementiel/club')
 const auth_evenementiel_route_forgetpassword = require('./api/routes/evenementiel/forgetpassword')
 const auth_evenementiel_route_sondage = require('./api/routes/evenementiel/sondage')
 const auth_evenementiel_route_post=require('./api/routes/evenementiel/post')
-
+const auth_evenementiel_route_evenment=require('./api/routes/evenementiel/evenment')
 /********************************/
 /***group stage pfe routers******/
 /********************************/
@@ -86,6 +86,7 @@ const auth_evenementiel_route_post=require('./api/routes/evenementiel/post')
   app.use("/demande_event",auth_evenementiel_route_demande_event)
   app.use("/roles_and_teams",auth_evenementiel_route_roles_and_teams)
   app.use("/user",auth_evenementiel_route_user)
+  app.use("/evenment",auth_evenementiel_route_evenment)
   app.use("/club",auth_evenementiel_route_club)
   app.use("/forgetpassword",auth_evenementiel_route_forgetpassword)
   app.use("/sondage",auth_evenementiel_route_sondage)

@@ -56,3 +56,59 @@ exports.getClubUsers=(req,res)=>{
         }
     })
 }
+exports.updateUserInfo=(req,res)=>{
+  const email =req.body.email
+  const motdepasse=req.body.motdepasse
+  if(email!=undefined && motdepasse!=undefined){
+    client.query(`UPDATE membre SET email='${email}' , motdepasse='${motdepasse}' where id_membre=${req.verified.user_auth.id_membre} ` ,(err,result)=>{
+      if (err){
+        res.status(res.statusCode).json({
+            errorCode: err.message,
+            status: res.statusCode,
+          });
+    }else{
+        res.status(res.statusCode).json({
+        message: "email and mdp was updated",
+        data:result,
+        });
+    }
+    })
+  }else if(email!=undefined ){
+    client.query(`UPDATE membre SET email='${email}' where id_membre=${req.verified.user_auth.id_membre}` ,(err,result)=>{
+      if (err){
+        res.status(res.statusCode).json({
+            errorCode: err.message,
+            status: res.statusCode,
+          });
+    }else{
+        res.status(res.statusCode).json({
+        message: "email was updated",
+        data:result,
+        });
+    }
+    })
+  }else if(motdepasse!=undefined){
+    client.query(`UPDATE membre SET motdepasse='${motdepasse}' where id_membre=${req.verified.user_auth.id_membre}` ,(err,result)=>{
+      if (err){
+        res.status(res.statusCode).json({
+            errorCode: err.message,
+            status: res.statusCode,
+          });
+    }else{
+        res.status(res.statusCode).json({
+        message: "password was updated",
+        data:result,
+        });
+    }
+    })
+  }else{
+    res.status(res.statusCode).json({
+      message: "no change was made",
+      
+      });
+  }
+  
+
+
+
+}

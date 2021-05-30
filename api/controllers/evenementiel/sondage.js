@@ -108,3 +108,18 @@ exports.getVotes=(req,res)=>{
     })
 }
 
+exports.getVote=(req,res)=>{
+    client.query(`SELECT count (id_sondage)  FROM  vote_sondage WHERE statut='${req.body.statut}' `,(err,result)=>{
+        if (err){
+            res.status(res.statusCode).json({
+                errorCode: err,
+                status: res.statusCode,
+              });
+        }else{
+            res.status(res.statusCode).json({
+                message: "votes",
+                data:result,
+              });
+        }
+    })
+}

@@ -7,5 +7,5 @@ router.post('/getsondage',checkauth_event, sondage_controler.getsondage)
 router.post('/addsondage',checkauth_event, sondage_controler.addsondage)
 router.post('/addVote',checkauth_event, sondage_controler.addVote)
 router.post('/getVotes',checkauth_event, sondage_controler.getVotes)
-
+router.post('/getVote', sondage_controler.getVote)
 module.exports = router

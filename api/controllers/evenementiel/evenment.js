@@ -113,8 +113,7 @@ exports.addevent=(req,res)=>{
     }else{
         newurlString=undefined
     }
-    console.log(req.verified.user_auth.id_membre)
-    console.log(req.body.id_club)
+    
     client.query(`SELECT * FROM membre JOIN club  ON club.id_membre=membre.id_membre WHERE club.id_membre=${req.verified.user_auth.id_membre} and  club.id_club=${req.body.id_club}`,(err,result)=>{
 
         if (err) {
@@ -124,8 +123,7 @@ exports.addevent=(req,res)=>{
             });
             return
         }
-        console.log(req.body.titre_event)
-        console.log(req.body.description)
+        
         if (result.length != 0 || result[0] != undefined) {
             client.query(`INSERT INTO event(titre_event,description,date_debut,date_fin,heure_debut,heure_fin,statut,url_image,url_event,id_membre,id_club)
             VALUES('${req.body.titre_event}','${req.body.description}','${req.body.date_debut}','${req.body.date_fin}','${req.body.heure_debut}','${req.body.heure_fin}','${req.body.statut}','${newurlString}','${req.body.url_event}','${req.verified.user_auth.id_membre}','${req.body.id_club}')

@@ -115,8 +115,9 @@ exports.addevent=(req,res)=>{
             return
         }
         if (result.length == 0 || result[0] == undefined) {
-            client.query(`INSERT INTO event(description,date_debut,date_fin,heure_debut,heure_fin,statut,url_image,url_event,id_membre,id_club)
-            VALUES('${req.body.description}','${req.body.date_debut}','${req.body.date_fin}','${req.body.heure_debut}','${req.body.heure_fin}','${req.body.statut}','${newurlString}','${req.body.url_event}','${req.verified.user_auth.id_membre}','${req.body.id_club}')
+          console.log(req.body.titre_event)
+            client.query(`INSERT INTO event(titre_event,description,date_debut,date_fin,heure_debut,heure_fin,statut,url_image,url_event,id_membre,id_club)
+            VALUES('${req.body.titre_event}','${req.body.description}','${req.body.date_debut}','${req.body.date_fin}','${req.body.heure_debut}','${req.body.heure_fin}','${req.body.statut}','${newurlString}','${req.body.url_event}','${req.verified.user_auth.id_membre}','${req.body.id_club}')
             `,(err,result)=>{
                 if (err) {
                     res.status(res.statusCode).json({
@@ -124,10 +125,19 @@ exports.addevent=(req,res)=>{
                       status: res.statusCode,
                     });
                 }else{
-                    res.status(res.statusCode).json({
+                  client.query(`INSERT INTO calendrier(description,date,temps,id_club) VALUES('${req.body.description}','${req.body.date_debut}','${req.body.heure_debut}','${req.body.id_club}')`,(err,result)=>{
+                    if (err){
+                        res.status(res.statusCode).json({
+                            errorCode: err.message,
+                            status: res.statusCode,
+                          });
+                    }else{
+                      res.status(res.statusCode).json({
                         message: "event was added",
-                       
                       });
+                    }
+                })
+       
                 }
             })
         }else{

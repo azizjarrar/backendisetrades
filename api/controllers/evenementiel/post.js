@@ -94,3 +94,82 @@ exports.getComments=(req,res)=>{
         }
     })
 }
+exports.deletePost=(req,res)=>{
+    if (req.body.id_publication == undefined) {
+        res.status(res.statusCode).json({
+          message: "id_publication not found",
+          error: true,
+          status: res.statusCode,
+        });
+        return
+      }
+      
+    client.query(`SELECT  * FROM publication_club JOIN club ON publication_club.id_club=club.id_club WHERE id_publication='${req.body.id_publication}' AND club.id_membre='${req.verified.user_auth.id_membre}' OR publication_club.id_publication='${req.body.id_publication}' AND club.id_membre='${req.verified.user_auth.id_membre}'`,(err,result)=>{
+        if (err){
+            res.status(res.statusCode).json({
+                errorCode: err,
+                status: res.statusCode,
+              });
+        }else{
+            if(result[0]==undefined){
+                res.status(res.statusCode).json({
+                    message: "post not found or you are not authorized  to deleted",
+                  });
+            }else{
+                client.query(`DELETE commentaire_publication FROM commentaire_publication where id_publication=${result[0].id_publication}`,(err,resuldelCommen)=>{
+                    if (err){
+                        res.status(res.statusCode).json({
+                            errorCode: err,
+                            status: res.statusCode,
+                          });
+                    }else{
+                        client.query(`DELETE publication_club FROM publication_club where id_publication=${result[0].id_publication}`,(err,resuldeletePost)=>{
+                            if (err){
+                                res.status(res.statusCode).json({
+                                    errorCode: err.message,
+                                    status: res.statusCode,
+                                  });
+                            }else{
+                                res.status(res.statusCode).json({
+                                    message: "post was deleted",
+                                    status: res.statusCode,
+                                  });
+                            }
+                        })
+                    }
+                })
+            }
+
+        }
+    })
+}
+exports.deleteComment=(req,res)=>{
+    if (req.body.id_commentaire == undefined) {
+        res.status(res.statusCode).json({
+          message: "id_commentaire not found",
+          error: true,
+          status: res.statusCode,
+        });
+        return
+      }
+    client.query(`DELETE commentaire_publication FROM commentaire_publication  WHERE id_commentaire=${req.body.id_commentaire} AND id_membre=${req.verified.user_auth.id_membre}`,(err,result)=>{
+        if (err){
+                res.status(res.statusCode).json({
+                errorCode: err.message,
+                status: res.statusCode,
+              });
+        }else{
+          if(result.affectedRows!=0){
+            res.status(res.statusCode).json({
+              message: "calander was deleted",
+              data:result,
+          });
+          }else{
+            res.status(res.statusCode).json({
+              message: " calendrier data not found or you are not authorized  to deleted"
+         
+          });
+          }
+        }
+      })
+}

@@ -104,7 +104,7 @@ exports.deletePost=(req,res)=>{
         return
       }
       
-    client.query(`SELECT  * FROM publication_club JOIN club ON publication_club.id_club=club.id_club WHERE id_publication='${req.body.id_publication}' AND club.id_membre='${req.verified.user_auth.id_membre}' OR publication_club.id_publication='${req.body.id_publication}' AND club.id_membre='${req.verified.user_auth.id_membre}'`,(err,result)=>{
+    client.query(`SELECT  * FROM publication_club JOIN club ON publication_club.id_club=club.id_club WHERE id_publication='${req.body.id_publication}' AND publication_club.id_membre='${req.verified.user_auth.id_membre}' OR publication_club.id_publication='${req.body.id_publication}' AND club.id_membre='${req.verified.user_auth.id_membre}'`,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err,

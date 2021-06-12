@@ -173,3 +173,38 @@ exports.getClubEvents=(req,res)=>{
         }
     })
 }
+
+
+exports.deleteEvent=(req,res)=>{
+  
+
+  if (req.body.id_event == undefined) {
+      res.status(res.statusCode).json({
+        message: "id_event not found",
+        error: true,
+        status: res.statusCode,
+      });
+      return
+    }
+  client.query(`DELETE   event FROM event JOIN club ON event.id_club=club.id_club WHERE event.id_event='${req.body.id_event}' AND event.id_membre='${req.verified.user_auth.id_membre}' OR event.id_event='${req.body.id_event}' AND club.id_membre='${req.verified.user_auth.id_membre}'`,(err,result)=>{
+      if (err){
+          res.status(res.statusCode).json({
+              errorCode: err,
+              status: res.statusCode,
+            });
+      }else{
+        if(result.affectedRows==0){
+          res.status(res.statusCode).json({
+            message: " event data not found or you are not authorized  to deleted"
+       
+        });
+        }else{
+          res.status(res.statusCode).json({
+            data: result,
+          });
+  
+        }
+
+      }
+  })
+}

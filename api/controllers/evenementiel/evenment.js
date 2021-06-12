@@ -127,19 +127,9 @@ exports.addevent=(req,res)=>{
                       status: res.statusCode,
                     });
                 }else{
-                  client.query(`INSERT INTO calendrier(description,date,temps,id_club) VALUES('${req.body.description}','${req.body.date_debut}','${req.body.heure_debut}','${req.body.id_club}')`,(err,result)=>{
-                    if (err){
-                        res.status(res.statusCode).json({
-                            errorCode: err.message,
-                            status: res.statusCode,
-                          });
-                    }else{
                       res.status(res.statusCode).json({
                         message: "event was added",
                       });
-                    }
-                })
-       
                 }
             })
         }else{

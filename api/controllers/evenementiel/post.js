@@ -74,7 +74,7 @@ exports.addComment=(req,res)=>{
 }
 exports.getComments=(req,res)=>{
     client.query(`SELECT  
-        user.nom,user.prenom,commentaire_publication.description,commentaire_publication.heure,commentaire_publication.date
+        user.nom,user.prenom,commentaire_publication.description,commentaire_publication.id_commentaire,commentaire_publication.heure,commentaire_publication.date
         FROM
         publication_club JOIN commentaire_publication on commentaire_publication.id_publication=publication_club.id_publication
         JOIN membre on membre.id_membre=commentaire_publication.id_membre JOIN user on membre.cin=user.cin

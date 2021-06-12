@@ -167,7 +167,7 @@ exports.getClubEvents=(req,res)=>{
               });
         }else{
             res.status(res.statusCode).json({
-                message: "club posts",
+                message: "club events",
                 data:result,
               });
         }

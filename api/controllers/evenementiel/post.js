@@ -161,7 +161,7 @@ exports.deleteComment=(req,res)=>{
         }else{
           if(result.affectedRows!=0){
             res.status(res.statusCode).json({
-              message: "calander was deleted",
+              message: "calandrier was deleted",
               data:result,
           });
           }else{

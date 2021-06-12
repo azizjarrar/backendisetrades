@@ -134,7 +134,7 @@ exports.addevent=(req,res)=>{
             })
         }else{
             res.status(res.statusCode).json({
-                message: "you are not allowd to add event ",
+                message: "you are not allowed to add event ",
               });
         }
     })

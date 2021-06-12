@@ -112,3 +112,27 @@ exports.updateUserInfo=(req,res)=>{
 
 
 }
+exports.updateUserImage=(req,res)=>{
+//
+let url=""
+for(let i = 0;i<req.file.path.length;i++){
+  if(req.file.path[i]=='\\'){
+    url+="/"
+  }else{
+    url+=req.file.path[i]
+  }
+}
+client.query(`UPDATE membre SET membreimage='${url}' where id_membre=${req.verified.user_auth.id_membre}` ,(err,result)=>{
+  if (err){
+    res.status(res.statusCode).json({
+        errorCode: err.message,
+        status: res.statusCode,
+      });
+}else{
+    res.status(res.statusCode).json({
+    message: "image was updated",
+    data:result,
+    });
+}
+})
+}

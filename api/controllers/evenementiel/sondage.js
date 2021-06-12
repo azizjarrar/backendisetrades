@@ -1,7 +1,9 @@
 var client = require('../../../db_connection')
 //id_membre
 exports.getsondage=(req,res)=>{
-    client.query(`SELECT user.nom,user.prenom,sondage.id_sondage,sondage.date_sondage,sondage.heure_sondage,sondage.titre,sondage.id_sondage FROM  sondage JOIN membre on sondage.id_membre=membre.id_membre JOIN user on membre.cin=user.cin  WHERE id_club='${req.body.idclub}'  `,(err,result)=>{
+    client.query(`SELECT user.nom,user.prenom,sondage.id_sondage,sondage.date_sondage,sondage.heure_sondage,sondage.titre,sondage.id_sondage FROM  sondage JOIN membre on sondage.id_membre=membre.id_membre JOIN user on membre.cin=user.cin  WHERE id_club='${req.body.idclub}' 
+    ORDER BY sondage.date_sondage DESC
+    `,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err.message,
@@ -121,5 +123,53 @@ exports.getVote=(req,res)=>{
                 data:result,
               });
         }
+    })
+}
+exports.deletesondage=(req,res)=>{
+    if (req.body.idsondage == undefined) {
+        res.status(res.statusCode).json({
+          message: "idsondage not found",
+          error: true,
+          status: res.statusCode,
+        });
+        return
+      }
+      
+    client.query(`SELECT  * FROM sondage JOIN club ON sondage.id_club=club.id_club WHERE id_sondage='${req.body.idsondage}' AND sondage.id_membre='${req.verified.user_auth.id_membre}' OR id_sondage='${req.body.idsondage}' AND club.id_membre='${req.verified.user_auth.id_membre}'`,(err,result)=>{
+        if (err){
+            res.status(res.statusCode).json({
+                errorCode: err,
+                status: res.statusCode,
+              });
+        }else{
+            if(result[0]==undefined){
+                res.status(res.statusCode).json({
+                    message: "sondage not found or you are not authorized  to deleted",
+                  });
+            }else{
+                client.query(`DELETE vote_sondage FROM vote_sondage where id_sondage=${result[0].id_sondage}`,(err,resuldelCommen)=>{
+                    if (err){
+                        res.status(res.statusCode).json({
+                            errorCode: err,
+                            status: res.statusCode,
+                          });
+                    }else{
+                        client.query(`DELETE sondage FROM sondage where id_sondage=${result[0].id_sondage}`,(err,resuldeletePost)=>{
+                            if (err){
+                                res.status(res.statusCode).json({
+                                    errorCode: err.message,
+                                    status: res.statusCode,
+                                  });
+                            }else{
+                                res.status(res.statusCode).json({
+                                    message: "sondage was deleted",
+                                    status: res.statusCode,
+                                  });
+                            }
+                        })
+                    }
+                })
+            }
+        }   
     })
 }

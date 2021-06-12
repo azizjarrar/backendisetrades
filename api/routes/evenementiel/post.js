@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router()
-const sondage_controler = require('../../controllers/evenementiel/post')
+const post_controler = require('../../controllers/evenementiel/post')
 const checkauth_event = require('../../middleware/check_auth_evenmentiel')
 /*********************************************************************************/
 /*************************upload Files********************************************/
@@ -59,9 +59,12 @@ function checkUploadPath(req, res, next) {
 /*********************************************************************************/
 /*********************************************************************************/
 /*********************************************************************************/
-router.post('/getposts',checkauth_event, sondage_controler.getposts)
-router.post('/addpost',checkauth_event,checkUploadPath,uploadMulter.single('file'),sondage_controler.addpost)
-router.post('/addComment',checkauth_event, sondage_controler.addComment)
-router.post('/getComments',checkauth_event, sondage_controler.getComments)
+router.post('/getposts',checkauth_event, post_controler.getposts)
+router.post('/addpost',checkauth_event,checkUploadPath,uploadMulter.single('file'),post_controler.addpost)
+router.post('/deletePost',checkauth_event, post_controler.deletePost)
+
+router.post('/addComment',checkauth_event, post_controler.addComment)
+router.post('/getComments',checkauth_event, post_controler.getComments)
+router.post('/deleteComment',checkauth_event, post_controler.deleteComment)
 
 module.exports = router

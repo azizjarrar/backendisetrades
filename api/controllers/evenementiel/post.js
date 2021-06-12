@@ -3,7 +3,9 @@ var client = require('../../../db_connection')
 
 exports.getposts=(req,res)=>{
     client.query(`SELECT user.nom,user.prenom,publication_club.description,publication_club.date,publication_club.heure,publication_club.url_image,publication_club.id_publication
-    FROM  publication_club JOIN membre on publication_club.id_membre=membre.id_membre JOIN user on membre.cin=user.cin  WHERE id_club='${req.body.idclub}'  `,(err,result)=>{
+    FROM  publication_club JOIN membre on publication_club.id_membre=membre.id_membre JOIN user on membre.cin=user.cin  WHERE id_club='${req.body.idclub}'  
+    ORDER BY publication_club.date DESC
+    `,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err.message,
@@ -76,7 +78,9 @@ exports.getComments=(req,res)=>{
         FROM
         publication_club JOIN commentaire_publication on commentaire_publication.id_publication=publication_club.id_publication
         JOIN membre on membre.id_membre=commentaire_publication.id_membre JOIN user on membre.cin=user.cin
-          WHERE publication_club.id_publication='${req.body.idpublication}'  `,(err,result)=>{
+          WHERE publication_club.id_publication='${req.body.idpublication}' 
+          ORDER BY commentaire_publication.date DESC
+          `,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err,

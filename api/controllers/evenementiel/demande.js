@@ -120,10 +120,10 @@ exports.sendRequest = (req, res) => {
 
 exports.getRequests = (req, res) => {
 
-  client.query(`SELECT membre.cin,demande_club.id_demande,demande_club.equipe,
+  client.query(`SELECT membre.cin,demande_club.id_demande,
     user.nom,user.prenom,club.nom_club,demande_club.motivation,user.age,user.sexe,demande_club.date,club.id_club,demande_club.email
-    FROM  membre   RIGHT JOIN club on club.id_membre=${req.verified.user_auth.id_membre}  RIGHT JOIN demande_club on demande_club.id_club=club.id_club JOIN user on user.cin=demande_club.cin 
-    WHERE  membre.id_membre='${req.verified.user_auth.id_membre}'`, function (err, result) {
+    ,equipes.equipe FROM  membre   RIGHT JOIN club on club.id_membre=${req.verified.user_auth.id_membre}  RIGHT JOIN demande_club on demande_club.id_club=club.id_club JOIN user on user.cin=demande_club.cin 
+    JOIN equipes on id_equipe=demande_club.equipe WHERE  membre.id_membre='${req.verified.user_auth.id_membre}'`, function (err, result) {
     if (err) {
       res.status(res.statusCode).json({
         errorCode: err.message,

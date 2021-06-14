@@ -88,12 +88,12 @@ const auth_evenementiel_route_calendrier=require('./api/routes/evenementiel/cale
   app.use("/demande_event",auth_evenementiel_route_demande_event)
   app.use("/roles_and_teams",auth_evenementiel_route_roles_and_teams)
   app.use("/user",auth_evenementiel_route_user)
-  app.use("/evenment",auth_evenementiel_route_evenment)
+  app.use("/event",auth_evenementiel_route_evenment)
   app.use("/club",auth_evenementiel_route_club)
   app.use("/forgetpassword",auth_evenementiel_route_forgetpassword)
   app.use("/sondage",auth_evenementiel_route_sondage)
   app.use("/post",auth_evenementiel_route_post)
-  app.use("/calander",auth_evenementiel_route_calendrier)
+  app.use("/calendar",auth_evenementiel_route_calendrier)
   app.get('/resetpassword/:token',function(req,res){
     res.sendFile(path.join(__dirname+'/api/routes/evenementiel/resetpassword.html'));
   });

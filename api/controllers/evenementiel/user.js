@@ -42,7 +42,7 @@ exports.getClubUsers=(req,res)=>{
         });
         return
       }
-    client.query(`SELECT user.nom,user.prenom,membre.id_membre,membre.email,equipe_membre.equipe  FROM  club JOIN liste_membre on club.id_club=liste_membre.id_club  JOIN membre on membre.cin=liste_membre.cin_membre JOIN user on user.cin=membre.cin JOIN equipe_membre on id_equipe=liste_membre.equipe where club.id_club='${req.body.idclub}'` ,(err,result)=>{
+    client.query(`SELECT user.nom,user.prenom,membre.id_membre,membre.email,equipes.equipe  FROM  club JOIN liste_membre on club.id_club=liste_membre.id_club  JOIN membre on membre.cin=liste_membre.cin_membre JOIN user on user.cin=membre.cin JOIN equipes on id_equipe=liste_membre.equipe where club.id_club='${req.body.idclub}'` ,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err.message,

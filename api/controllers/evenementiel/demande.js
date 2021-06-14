@@ -56,6 +56,14 @@ exports.sendRequest = (req, res) => {
     });
     return
   }
+  if (req.body.tel == undefined) {
+    res.status(res.statusCode).json({
+      message: "numero telephone not found",
+      error: true,
+      status: res.statusCode,
+    });
+    return
+  }
 
   client.query(`SELECT * FROM  user  WHERE cin='${req.body.cin}'`, function (err, resultEtudiant) {
     if (err) {
@@ -86,8 +94,8 @@ exports.sendRequest = (req, res) => {
 
             var newDateFormated = `${nowTime.getFullYear()}-${nowTime.getMonth().length == 1 ? nowTime.getMonth() + "0" : nowTime.getMonth()}-${nowTime.getDay().length == 1 ? nowTime.getDay() + "0" : nowTime.getDay()} ${nowTime.getHours()}:${nowTime.getMinutes()}:${nowTime.getSeconds()}`
             var newDateFormated = "2021-05-02"
-            client.query(` INSERT INTO demande_club (id_demande,cin,statut,id_etudiant,equipe,id_club,motivation,date,email) 
-          VALUES ('${id}','${req.body.cin}',"en attend",'${resultEtudiant[0].id_user}','${req.body.equipe}','${req.body.club}','${req.body.motivation}','${newDateFormated}','${req.body.email}')`,
+            client.query(` INSERT INTO demande_club (id_demande,cin,statut,id_etudiant,equipe,id_club,motivation,date,email,tel) 
+          VALUES ('${id}','${req.body.cin}',"en attend",'${resultEtudiant[0].id_user}','${req.body.equipe}','${req.body.club}','${req.body.motivation}','${newDateFormated}','${req.body.email}','${req.body.tel}')`,
               function (err, result) {
                 if (err) {
                   res.status(res.statusCode).json({

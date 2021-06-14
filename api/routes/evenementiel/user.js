@@ -61,6 +61,8 @@ function checkUploadPath(req, res, next) {
 /*********************************************************************************/
 router.post('/getOneUser', auth_controler.getOneUser)
 router.post('/getClubUsers', auth_controler.getClubUsers)
+router.post('/getMembres', auth_controler.getMembres)
+router.post('/getResponsables', auth_controler.getResponsables)
 router.post('/updateUserInfo',checkauth_event, auth_controler.updateUserInfo)
 router.post('/updateUserImage',checkauth_event, checkUploadPath,uploadMulter.single('file'),auth_controler.updateUserImage)
 

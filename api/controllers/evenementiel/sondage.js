@@ -95,7 +95,7 @@ exports.addVote=(req,res)=>{
     })
 }
 exports.getVotes=(req,res)=>{
-    client.query(`SELECT  count(statut) AS NumberOfVotes,statut  FROM  vote_sondage  WHERE id_sondage='${req.body.idsondage}' GROUP BY statut`,(err,result)=>{
+    client.query(`SELECT  count(statut) AS NumberOfVotes,statut  FROM  vote_sondage  WHERE id_sondage='${req.body.idsondage}' GROUP BY statut ORDER BY statut`,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err,
@@ -105,7 +105,8 @@ exports.getVotes=(req,res)=>{
             console.log(result)
             res.status(res.statusCode).json({
                 message: "votes",
-                data:result,
+                NumberOfVotesFalse:result[0].NumberOfVotes,
+                NumberOfVotesTrue:result[1].NumberOfVotes
               });
         }
     })

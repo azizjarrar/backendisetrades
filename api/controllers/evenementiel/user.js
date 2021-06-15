@@ -138,7 +138,7 @@ for(let i = 0;i<req.file.path.length;i++){
     url+=req.file.path[i]
   }
 }
-client.query(`UPDATE membre SET membreimage='${url}' where id_membre=${req.verified.user_auth.id_membre}` ,(err,result)=>{
+client.query(`UPDATE membre SET membreimage='${url}' where id_membre='${req.verified.user_auth.id_membre}'` ,(err,result)=>{
   if (err){
     res.status(res.statusCode).json({
         errorCode: err.message,

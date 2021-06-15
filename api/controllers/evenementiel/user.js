@@ -112,7 +112,7 @@ exports.updateUserInfo=(req,res)=>{
       queryString=queryString.replace(" ",",")
     }
    }
-  let query=`UPDATE membre SET ${queryString} where id_membre=${req.verified.user_auth.id_membre}`;
+  let query=`UPDATE membre SET ${queryString} where id_membre='${req.verified.user_auth.id_membre}'`;
   client.query(query ,(err,result)=>{
     if (err){
       res.status(res.statusCode).json({

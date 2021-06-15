@@ -32,6 +32,7 @@ exports.getuserClubs=(req,res)=>{
         }
     })
 }
+/*not Used */
 exports.getClubYouAreAdminIn=(req,res)=>{
     client.query(`SELECT club.id_club,club.nom_club  FROM  club join membre on membre.id_membre=club.id_membre where club.id_membre=${req.verified.user_auth.id_membre} `,(err,result)=>{
         if (err){
@@ -40,6 +41,7 @@ exports.getClubYouAreAdminIn=(req,res)=>{
                 status: res.statusCode,
               });
         }else{
+            console.log(result)
             res.status(res.statusCode).json({
                 message: "club you are admin in",
                 data:result,
@@ -48,3 +50,34 @@ exports.getClubYouAreAdminIn=(req,res)=>{
     })
 }
 
+exports.isAdmin=(req,res)=>{
+    if (req.body.id_club == undefined) {
+        res.status(res.statusCode).json({
+          message: "id_club not found",
+          error: true,
+          status: res.statusCode,
+        });
+        return
+      }
+    client.query(`SELECT *  FROM  club join membre on membre.id_membre=club.id_membre where club.id_membre=${req.verified.user_auth.id_membre} && club.id_club=${req.body.id_club} `,(err,result)=>{
+        if (err){
+            res.status(res.statusCode).json({
+                errorCode: err.message,
+                status: res.statusCode,
+              });
+        }else{
+            if(result.length==1){
+                res.status(res.statusCode).json({
+                    message: "club you are admin in",
+                    isAdmin:true,
+                  });
+            }else{
+                res.status(res.statusCode).json({
+                    message: "club you are admin in",
+                    isAdmin:false,
+                  });
+            }
+      
+        }
+    })
+}

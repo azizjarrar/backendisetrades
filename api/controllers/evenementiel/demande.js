@@ -78,6 +78,7 @@ exports.sendRequest = (req, res) => {
         res.status(res.statusCode).json({
           message: "mkch m9ayed fil fac",
           status: res.statusCode,
+
         });
       } else {
         
@@ -85,21 +86,23 @@ exports.sendRequest = (req, res) => {
           if (err) {
             res.status(res.statusCode).json({
               errorCode: err,
+
               status: res.statusCode,
             });
             return
           }
           if (result.length == 0) {
             var nowTime = new Date()
-
+            //ngedha
             var newDateFormated = `${nowTime.getFullYear()}-${nowTime.getMonth().length == 1 ? nowTime.getMonth() + "0" : nowTime.getMonth()}-${nowTime.getDay().length == 1 ? nowTime.getDay() + "0" : nowTime.getDay()} ${nowTime.getHours()}:${nowTime.getMinutes()}:${nowTime.getSeconds()}`
             var newDateFormated = "2021-05-02"
+            console.log(resultEtudiant[0].id_user)
             client.query(` INSERT INTO demande_club (id_demande,cin,statut,id_etudiant,equipe,id_club,motivation,date,email,tel) 
-          VALUES ('${id}','${req.body.cin}',"en attend",'${resultEtudiant[0].id_user}','${req.body.equipe}','${req.body.club}','${req.body.motivation}','${newDateFormated}','${req.body.email}','${req.body.tel}')`,
+          VALUES ('${id}',${req.body.cin},"en attend",${resultEtudiant[0].id_user},${req.body.equipe},${req.body.club},'${req.body.motivation}','${newDateFormated}','${req.body.email}','${req.body.tel}')`,
               function (err, result) {
                 if (err) {
                   res.status(res.statusCode).json({
-                    errorCode: err.message,
+                    errorCode: err,
                     status: res.statusCode,
 
                   });

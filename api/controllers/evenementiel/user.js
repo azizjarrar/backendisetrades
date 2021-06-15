@@ -4,13 +4,13 @@ var client = require('../../../db_connection')
 exports.getOneUser=(req,res)=>{
     if(req.body.id_membre==undefined){
         res.status(res.statusCode).json({
-          message: "idmembre not found",
+          message: "id_membre not found",
           error:true,
           status: res.statusCode,
         });
         return
       }
-    client.query(`SELECT *  FROM  membre WHERE id_membre='${req.body.id_membre}'`,(err,result)=>{
+    client.query(`SELECT membre.id_membre ,membre.cin ,membre.email ,membre.membreimage,user.age ,user.sexe ,user.date_naissance  FROM  membre  JOIN  user  ON user.cin=membre.cin WHERE id_membre='${req.body.id_membre}'`,(err,result)=>{
       console.log(result)
         if (err){
             res.status(res.statusCode).json({
@@ -103,60 +103,29 @@ exports.getClubUsers=(req,res)=>{
     })
 }
 exports.updateUserInfo=(req,res)=>{
-  const email =req.body.email
-  const motdepasse=req.body.motdepasse
-  if(email!=undefined && motdepasse!=undefined){
-    client.query(`UPDATE membre SET email='${email}' , motdepasse='${motdepasse}' where id_membre=${req.verified.user_auth.id_membre} ` ,(err,result)=>{
-      if (err){
-        res.status(res.statusCode).json({
-            errorCode: err.message,
-            status: res.statusCode,
-          });
-    }else{
-        res.status(res.statusCode).json({
-        message: "email and mdp was updated",
-        data:result,
-        });
+  const email =req.body.email;
+  const motdepasse=req.body.motdepasse;
+  const tel=req.body.tel;
+  let queryString=`${email!=undefined?"email="+"'"+email+"'":''} ${motdepasse!=undefined?"motdepasse="+"'"+motdepasse+"'":''} ${tel!=undefined?"tel="+"'"+tel+"'":''}`
+  for(let i =0;i<queryString.length-1;i++){
+    if(queryString[i]==" "&&queryString[i+1]!=" "){
+      queryString=queryString.replace(" ",",")
     }
-    })
-  }else if(email!=undefined ){
-    client.query(`UPDATE membre SET email='${email}' where id_membre=${req.verified.user_auth.id_membre}` ,(err,result)=>{
-      if (err){
-        res.status(res.statusCode).json({
-            errorCode: err.message,
-            status: res.statusCode,
-          });
-    }else{
-        res.status(res.statusCode).json({
-        message: "email was updated",
-        data:result,
+   }
+  let query=`UPDATE membre SET ${queryString} where id_membre=${req.verified.user_auth.id_membre}`;
+  client.query(query ,(err,result)=>{
+    if (err){
+      res.status(res.statusCode).json({
+          errorCode: err.message,
+          status: res.statusCode,
         });
-    }
-    })
-  }else if(motdepasse!=undefined){
-    client.query(`UPDATE membre SET motdepasse='${motdepasse}' where id_membre=${req.verified.user_auth.id_membre}` ,(err,result)=>{
-      if (err){
-        res.status(res.statusCode).json({
-            errorCode: err.message,
-            status: res.statusCode,
-          });
-    }else{
-        res.status(res.statusCode).json({
-        message: "password was updated",
-        data:result,
-        });
-    }
-    })
   }else{
-    res.status(res.statusCode).json({
-      message: "no change was made",
-      
+      res.status(res.statusCode).json({
+      message: "user data  was updated",
+      data:result,
       });
   }
-  
-
-
-
+  })
 }
 exports.updateUserImage=(req,res)=>{
 //

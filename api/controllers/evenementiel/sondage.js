@@ -95,13 +95,14 @@ exports.addVote=(req,res)=>{
     })
 }
 exports.getVotes=(req,res)=>{
-    client.query(`SELECT *  FROM  vote_sondage WHERE id_sondage='${req.body.idsondage}' `,(err,result)=>{
+    client.query(`SELECT  count(statut) AS NumberOfVotes,statut  FROM  vote_sondage  WHERE id_sondage='${req.body.idsondage}' GROUP BY statut`,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err,
                 status: res.statusCode,
               });
         }else{
+            console.log(result)
             res.status(res.statusCode).json({
                 message: "votes",
                 data:result,

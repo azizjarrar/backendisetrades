@@ -19,7 +19,7 @@ exports.getsondage=(req,res)=>{
 }
 exports.addsondage=(req,res)=>{
     const date = new Date();
-    const datee=date.getFullYear()+"-"+date.getMonth()+"-"+date.getDay();
+    const datee=date.getFullYear()+"-"+(date.getMonth()+1-0)+"-"+date.getDate();
     const heure=date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
     client.query(`INSERT INTO sondage
     (date_sondage,heure_sondage,id_membre,titre,id_club) 

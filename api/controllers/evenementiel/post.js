@@ -34,7 +34,7 @@ exports.addpost=(req,res)=>{
     }
  
     const date = new Date();
-    const datee=date.getFullYear()+"-"+date.getMonth()+"-"+date.getDay();
+    const datee=date.getFullYear()+"-"+(date.getMonth()+1-0)+"-"+date.getDate();
     const heure=date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
     client.query(`INSERT INTO publication_club
     (date,heure,id_membre,description,id_club,url_image) 
@@ -54,7 +54,7 @@ exports.addpost=(req,res)=>{
 }
 exports.addComment=(req,res)=>{
     const date = new Date();
-    const datee=date.getFullYear()+"-"+date.getMonth()+"-"+date.getDay();
+    const datee=date.getFullYear()+"-"+(date.getMonth()+1-0)+"-"+date.getDate();
     const heure=date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
     client.query(`INSERT INTO commentaire_publication
     (date,heure,id_publication,description,id_membre) 

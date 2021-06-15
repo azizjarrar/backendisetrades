@@ -116,7 +116,8 @@ exports.addevent=(req,res)=>{
             });
             return
         }
-       
+        console.log(result.length)
+        console.log(result[0])
         if (result.length != 0 || result[0] != undefined) {
           console.log(req.body.titre_event)
             client.query(`INSERT INTO event(titre_event,description,date_debut,date_fin,heure_debut,heure_fin,statut,url_image,url_event,id_membre,id_club)

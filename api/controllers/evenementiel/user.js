@@ -108,10 +108,11 @@ exports.updateUserInfo=(req,res)=>{
   const tel=req.body.tel;
   let queryString=`${email!=undefined?"email="+"'"+email+"'":''} ${motdepasse!=undefined?"motdepasse="+"'"+motdepasse+"'":''} ${tel!=undefined?"tel="+"'"+tel+"'":''}`
   for(let i =0;i<queryString.length-1;i++){
-    if(queryString[i]==" "&&queryString[i+1]!=" "){
+    if(queryString[i]==" "&&queryString[i+1]!=" "&&queryString[0]!=" "){
       queryString=queryString.replace(" ",",")
     }
    }
+
   let query=`UPDATE membre SET ${queryString} where id_membre='${req.verified.user_auth.id_membre}'`;
   client.query(query ,(err,result)=>{
     if (err){

@@ -56,6 +56,14 @@ exports.sendRequest = (req, res) => {
     });
     return
   }
+  if (req.body.tel == undefined) {
+    res.status(res.statusCode).json({
+      message: "numero telephone not found",
+      error: true,
+      status: res.statusCode,
+    });
+    return
+  }
 
   client.query(`SELECT * FROM  user  WHERE cin='${req.body.cin}'`, function (err, resultEtudiant) {
     if (err) {
@@ -86,8 +94,8 @@ exports.sendRequest = (req, res) => {
 
             var newDateFormated = `${nowTime.getFullYear()}-${nowTime.getMonth().length == 1 ? nowTime.getMonth() + "0" : nowTime.getMonth()}-${nowTime.getDay().length == 1 ? nowTime.getDay() + "0" : nowTime.getDay()} ${nowTime.getHours()}:${nowTime.getMinutes()}:${nowTime.getSeconds()}`
             var newDateFormated = "2021-05-02"
-            client.query(` INSERT INTO demande_club (id_demande,cin,statut,id_etudiant,equipe,id_club,motivation,date,email) 
-          VALUES ('${id}','${req.body.cin}',"en attend",'${resultEtudiant[0].id_user}','${req.body.equipe}','${req.body.club}','${req.body.motivation}','${newDateFormated}','${req.body.email}')`,
+            client.query(` INSERT INTO demande_club (id_demande,cin,statut,id_etudiant,equipe,id_club,motivation,date,email,tel) 
+          VALUES ('${id}','${req.body.cin}',"en attend",'${resultEtudiant[0].id_user}','${req.body.equipe}','${req.body.club}','${req.body.motivation}','${newDateFormated}','${req.body.email}','${req.body.tel}')`,
               function (err, result) {
                 if (err) {
                   res.status(res.statusCode).json({
@@ -120,10 +128,10 @@ exports.sendRequest = (req, res) => {
 
 exports.getRequests = (req, res) => {
 
-  client.query(`SELECT membre.cin,demande_club.id_demande,demande_club.equipe,
+  client.query(`SELECT membre.cin,demande_club.id_demande,
     user.nom,user.prenom,club.nom_club,demande_club.motivation,user.age,user.sexe,demande_club.date,club.id_club,demande_club.email
-    FROM  membre   RIGHT JOIN club on club.id_membre=${req.verified.user_auth.id_membre}  RIGHT JOIN demande_club on demande_club.id_club=club.id_club JOIN user on user.cin=demande_club.cin 
-    WHERE  membre.id_membre='${req.verified.user_auth.id_membre}'`, function (err, result) {
+    ,equipes.equipe FROM  membre   RIGHT JOIN club on club.id_membre=${req.verified.user_auth.id_membre}  RIGHT JOIN demande_club on demande_club.id_club=club.id_club JOIN user on user.cin=demande_club.cin 
+    JOIN equipes on id_equipe=demande_club.equipe WHERE  membre.id_membre='${req.verified.user_auth.id_membre}'`, function (err, result) {
     if (err) {
       res.status(res.statusCode).json({
         errorCode: err.message,

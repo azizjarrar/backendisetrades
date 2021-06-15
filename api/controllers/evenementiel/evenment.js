@@ -3,8 +3,8 @@ var client = require('../../../db_connection')
 
 //id_event	description	date_debut	date_fin	heure_debut	heure_fin	statut	url_image	url_event	id_membre	id_club
 exports.getevents=(req,res)=>{
-    client.query(`SELECT  event.url_image,club.nom_club,event.url_event,event.heure_fin,event.heure_debut,event.date_fin,event.date_debut,event.statut,event.description,club.id_club,event.id_event FROM event JOIN club on club.id_club=event.id_club
-    ORDER BY event.date_debut DESC
+    client.query(`SELECT event.titre_event, event.url_image,club.nom_club,event.url_event,event.heure_fin,event.heure_debut,event.date_fin,event.date_debut,event.statut,event.description,club.id_club,event.id_event FROM event JOIN club on club.id_club=event.id_club
+    ORDER BY event.date_debut 
     `,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
@@ -136,7 +136,7 @@ exports.addevent=(req,res)=>{
             })
         }else{
             res.status(res.statusCode).json({
-                message: "you are not allowd to add event ",
+                message: "you are not allowed to add event ",
               });
         }
     })
@@ -151,7 +151,7 @@ exports.getClubEvents=(req,res)=>{
         });
         return
       }
-    client.query(`SELECT  event.url_image,club.nom_club,event.url_event,event.heure_fin,event.heure_debut,event.date_fin,event.date_debut,event.statut,event.description,club.id_club,event.id_event FROM event JOIN club on club.id_club=event.id_club WHERE club.id_club=${req.body.id_club} `,(err,result)=>{
+    client.query(`SELECT  event.titre_event,event.url_image,club.nom_club,event.url_event,event.heure_fin,event.heure_debut,event.date_fin,event.date_debut,event.statut,event.description,club.id_club,event.id_event FROM event JOIN club on club.id_club=event.id_club WHERE club.id_club=${req.body.id_club} `,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err.message,
@@ -159,7 +159,7 @@ exports.getClubEvents=(req,res)=>{
               });
         }else{
             res.status(res.statusCode).json({
-                message: "club posts",
+                message: "club events",
                 data:result,
               });
         }

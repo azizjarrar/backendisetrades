@@ -102,12 +102,35 @@ exports.getVotes=(req,res)=>{
                 status: res.statusCode,
               });
         }else{
-            console.log(result)
-            res.status(res.statusCode).json({
-                message: "votes",
-                NumberOfVotesFalse:result[0].NumberOfVotes,
-                NumberOfVotesTrue:result[1].NumberOfVotes
-              });
+            if(result.length==0){
+                res.status(res.statusCode).json({
+                    message: "votes",
+                    NumberOfVotesFalse:0,
+                    NumberOfVotesTrue:0
+                  });
+            }else if(result[0]==undefined || result[1]==undefined){
+                if(result[0].statut==1){
+                    res.status(res.statusCode).json({
+                        message: "votes",
+                        NumberOfVotesFalse:0,
+                        NumberOfVotesTrue:result[0].NumberOfVotes
+                      });
+                }else{
+                    res.status(res.statusCode).json({
+                        message: "votes",
+                        NumberOfVotesFalse:result[0].NumberOfVotes,
+                        NumberOfVotesTrue:0
+                      }); 
+                }
+            }
+            else{
+                res.status(res.statusCode).json({
+                    message: "votes",
+                    NumberOfVotesFalse:result[0]==undefined?0:result[0].NumberOfVotes??0,
+                    NumberOfVotesTrue:result[1]==undefined?0:result[1].NumberOfVotes??0
+                  });
+            }
+
         }
     })
 }

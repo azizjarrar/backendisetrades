@@ -92,8 +92,11 @@ exports.sendRequest = (req, res) => {
             return
           }
           if (result.length == 0) {
-            var nowTime = new Date()
+            var date = new Date()
             //ngedha
+            const datee=date.getFullYear()+"-"+(date.getMonth()+1-0)+"-"+date.getDate();
+            const heure=date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
+            const newDateFormated=datee+" "+heure;
            // var newDateFormated = `${nowTime.getFullYear()}-${nowTime.getMonth().length == 1 ? nowTime.getMonth() + "0" : nowTime.getMonth()}-${nowTime.getDay().length == 1 ? nowTime.getDay() + "0" : nowTime.getDay()} ${nowTime.getHours()}:${nowTime.getMinutes()}:${nowTime.getSeconds()}`
            // var newDateFormated = "2021-05-02"
             client.query(` INSERT INTO demande_club (id_demande,cin,statut,id_etudiant,equipe,id_club,motivation,date,email,tel) 

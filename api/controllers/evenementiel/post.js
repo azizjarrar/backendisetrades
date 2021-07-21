@@ -2,7 +2,7 @@
 var client = require('../../../db_connection')
 
 exports.getposts=(req,res)=>{
-    client.query(`SELECT user.nom,user.prenom,publication_club.description,publication_club.date,publication_club.heure,publication_club.url_image,publication_club.id_publication
+    client.query(`SELECT user.nom,user.prenom,publication_club.description,publication_club.date,publication_club.heure,publication_club.url_image,publication_club.id_publication,membre.membreimage
     FROM  publication_club JOIN membre on publication_club.id_membre=membre.id_membre JOIN user on membre.cin=user.cin  WHERE id_club='${req.body.idclub}'  
     ORDER BY publication_club.date DESC , publication_club.heure DESC
     `,(err,result)=>{
@@ -74,7 +74,7 @@ exports.addComment=(req,res)=>{
 }
 exports.getComments=(req,res)=>{
     client.query(`SELECT  
-        user.nom,user.prenom,commentaire_publication.description,commentaire_publication.id_commentaire,commentaire_publication.heure,commentaire_publication.date
+        user.nom,user.prenom,commentaire_publication.description,commentaire_publication.id_commentaire,commentaire_publication.heure,commentaire_publication.date,membre.membreimage
         FROM
         publication_club JOIN commentaire_publication on commentaire_publication.id_publication=publication_club.id_publication
         JOIN membre on membre.id_membre=commentaire_publication.id_membre JOIN user on membre.cin=user.cin

@@ -23,6 +23,7 @@ const auth_evenementiel_route_sondage = require('./api/routes/evenementiel/sonda
 const auth_evenementiel_route_post=require('./api/routes/evenementiel/post')
 const auth_evenementiel_route_evenment=require('./api/routes/evenementiel/evenment')
 const auth_evenementiel_route_calendrier=require('./api/routes/evenementiel/calendrier')
+const auth_evenementiel_route_participation=require('./api/routes/evenementiel/participation')
 
 /********************************/
 /***group stage pfe routers******/
@@ -94,6 +95,7 @@ const auth_evenementiel_route_calendrier=require('./api/routes/evenementiel/cale
   app.use("/sondage",auth_evenementiel_route_sondage)
   app.use("/post",auth_evenementiel_route_post)
   app.use("/calendar",auth_evenementiel_route_calendrier)
+  app.use("/participation",auth_evenementiel_route_participation)
   app.get('/resetpassword/:token',function(req,res){
     res.sendFile(path.join(__dirname+'/api/routes/evenementiel/resetpassword.html'));
   });

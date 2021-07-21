@@ -4,7 +4,7 @@ var client = require('../../../db_connection')
 //id_event	description	date_debut	date_fin	heure_debut	heure_fin	statut	url_image	url_event	id_membre	id_club
 exports.getevents=(req,res)=>{
     client.query(`SELECT event.titre_event, event.url_image,club.nom_club,event.url_event,event.heure_fin,event.heure_debut,event.date_fin,event.date_debut,event.statut,event.description,club.id_club,event.id_event FROM event JOIN club on club.id_club=event.id_club
-    ORDER BY event.date_debut 
+    ORDER BY event.date_debut DESC , event.heure_debut DESC
     `,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({

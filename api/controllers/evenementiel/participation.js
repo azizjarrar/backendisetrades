@@ -53,7 +53,7 @@ exports.getAllParticipation=(req,res)=>{
         });
         return
       }
-    client.query(`SELECT  user.nom,user.prenom,membre.cin,membre.tel,participation.id_event FROM  participation   JOIN membre on membre.id_membre=participation.id_membre JOIN user on membre.cin=user.cin WHERE  id_event=${client.escape(req.body.id_event)}`,(err,result)=>{
+    client.query(`SELECT  membre.email,participation.id_participation,user.nom,user.prenom,membre.cin,membre.tel,participation.id_event FROM  participation   JOIN membre on membre.id_membre=participation.id_membre JOIN user on membre.cin=user.cin WHERE  id_event=${client.escape(req.body.id_event)}`,(err,result)=>{
         if (err) {
             res.status(res.statusCode).json({
               errorCode: err.message,
@@ -87,12 +87,42 @@ exports.updatestatut=(req,res)=>{
           });
           return
       }else{
-        console.log(result)
           res.status(res.statusCode).json({
-   
               "message":"statu updated",
               status: res.statusCode
           });
       }
+  })
+}
+exports.deleteParticipation=(req,res)=>{
+  if(req.body.id_participation==undefined){
+    res.status(res.statusCode).json({
+      message: "id_participation not found",
+      error:true,
+      status: res.statusCode,
+    });
+    return
+  }
+  client.query(`DELETE FROM participation  where id_participation=${client.escape(req.body.id_participation)}`,(err,result)=>{
+    if (err) {
+        res.status(res.statusCode).json({
+          errorCode: err.message,
+          status: res.statusCode,
+        });
+        return
+    }else{
+      if(result.affectedRows==0){
+        res.status(res.statusCode).json({
+          "message":"event not found",
+          status: res.statusCode
+      });
+      }else{
+        res.status(res.statusCode).json({
+          "message":"participation is deleted",
+          status: res.statusCode
+      });
+      }
+
+    }
   })
 }

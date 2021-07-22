@@ -239,8 +239,8 @@ exports.acceptOrDeleteRequests = (req, res) => {
                     });
                     return
                   }
-                  client.query(`INSERT INTO membre (tel,id_membre,role,email,motdepasse,membreimage,cin) 
-                                      VALUES('${result[0].tel}','${idmembre}',${resultrole[0].id_role},'${result[0].email}','${randompassword}','imageurl',${result[0].cin})`, function (err, resultone) {
+                  client.query(`INSERT INTO membre (tel,role,email,motdepasse,membreimage,cin) 
+                                      VALUES('${result[0].tel}',${resultrole[0].id_role},'${result[0].email}','${randompassword}','imageurl',${result[0].cin})`, function (err, resultone) {
                     if (err) {
                       res.status(res.statusCode).json({
                         errorIn: "INSERT INTO membre 1",

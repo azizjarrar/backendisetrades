@@ -38,7 +38,7 @@ exports.addpost=(req,res)=>{
     const heure=date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
     client.query(`INSERT INTO publication_club
     (date,heure,id_membre,description,id_club,url_image) 
-    VALUES ('${datee}','${heure}','${req.verified.user_auth.id_membre}','${req.body.description}','${req.body.idclub}','${newurlString}') `,(err,result)=>{
+    VALUES ('${datee}','${heure}','${req.verified.user_auth.id_membre}',${client.escape(req.body.description)},'${req.body.idclub}','${newurlString}') `,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err,

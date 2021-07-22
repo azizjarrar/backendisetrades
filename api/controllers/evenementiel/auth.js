@@ -1,43 +1,40 @@
 var client = require('../../../db_connection')
 const jwt = require("jsonwebtoken");
 
-exports.singup=(req,res)=>{
- 
-    client.query(` INSERT INTO member (nom, email, password) VALUES ('${req.body.nom}','${req.body.email}','${req.body.password}')`, function (err, result) {
-        if (err){
-            res.status(res.statusCode).json({
-                errorCode: err.message,
-                status: res.statusCode,
-                
-              });
-        }else{
-            res.status(res.statusCode).json({
-                message: "done",
-                data:result,
-                status: res.statusCode,
-              });
-        }
-      });
 
-}
 exports.singin=(req,res)=>{
-  console.log(req.body)
-  client.query(`SELECT * FROM  member  WHERE email='${req.body.email}' && password='${req.body.password}' `, function  (err, result) {
+  if(req.body.email==undefined){
+    res.status(res.statusCode).json({
+      message: "email not found",
+      error:true,
+      status: res.statusCode,
+    });
+    return
+  }
+  if(req.body.password==undefined){
+    res.status(res.statusCode).json({
+      message: "password not found",
+      error:true,
+      status: res.statusCode,
+    });
+    return
+  }
+  client.query(`SELECT * ,membre.email FROM  membre JOIN role_membre on role_membre.id_role=membre.role JOIN user on user.cin=membre.cin WHERE membre.email=${client.escape(req.body.email)} && membre.motdepasse=${client.escape(req.body.password)} `, function  (err, result) {
     if (err){
         res.status(res.statusCode).json({
-            errorCode: err.message,
+            errorCode: err,
             status: res.statusCode,
-            
           });
     }else{
       if(result.length==0){
         res.status(res.statusCode).json({
-          message: "user not found",
+          message: "username or password  incorect",
+          error:true,
           state:404,
           status: res.statusCode,
         });
       }else{
-         jwt.sign({ user_auth: {nom:result[0].nom,email:result[0].email} },process.env.secret_key_token_auth_event,{ expiresIn: '86400s' },
+         jwt.sign({ user_auth: {nom:result[0].nom,email:result[0].email,cin:result[0].cin,id_membre:result[0].id_membre} },process.env.secret_key_token_auth_event,
         async (err, token) => {
            if(err){
              res.status(res.statusCode).json({
@@ -49,13 +46,11 @@ exports.singin=(req,res)=>{
             res.status(res.statusCode).json({
               message: "done",
               token:token,
-              data:{nom:result[0].nom,email:result[0].email},
+              data:{role:result[0].role,nom:result[0].nom,prenom:result[0].prenom,tel:result[0].n_tel,cin:result[0].cin,id_membre:result[0].id_membre,email:result[0].email,membreImage:result[0].membreImage},
               status: res.statusCode,
             });
            }
-   
-         },
-         
+         },   
        );
       }
     }

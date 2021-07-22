@@ -53,7 +53,7 @@ exports.getAllParticipation=(req,res)=>{
         });
         return
       }
-    client.query(`SELECT  membre.nom,membre.prenom,membre.cin,membre.tel,participation.id_event FROM  participation   JOIN membre on membre.id_membre=participation.id_membre WHERE  id_event=${client.escape(req.body.id_event)}`,(err,result)=>{
+    client.query(`SELECT  user.nom,user.prenom,membre.cin,membre.tel,participation.id_event FROM  participation   JOIN membre on membre.id_membre=participation.id_membre JOIN user on membre.cin=user.cin WHERE  id_event=${client.escape(req.body.id_event)}`,(err,result)=>{
         if (err) {
             res.status(res.statusCode).json({
               errorCode: err.message,

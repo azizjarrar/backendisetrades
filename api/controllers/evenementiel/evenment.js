@@ -177,25 +177,28 @@ exports.deleteEvent=(req,res)=>{
       });
       return
     }
-  client.query(`DELETE   event FROM event JOIN club ON event.id_club=club.id_club WHERE event.id_event='${req.body.id_event}' AND event.id_membre='${req.verified.user_auth.id_membre}' OR event.id_event='${req.body.id_event}' AND club.id_membre='${req.verified.user_auth.id_membre}'`,(err,result)=>{
-      if (err){
+    client.query(`DELETE FROM participation  where id_event=${client.escape(req.body.id_event)}`,(err,result)=>{
+      if (err) {
           res.status(res.statusCode).json({
-              errorCode: err,
-              status: res.statusCode,
-            });
-      }else{
-        if(result.affectedRows==0){
-          res.status(res.statusCode).json({
-            message: " event data not found or you are not authorized  to deleted"
-       
-        });
-        }else{
-          res.status(res.statusCode).json({
-            data: result,
+            errorCode: err.message,
+            status: res.statusCode,
           });
-  
-        }
-
+          return
+      }else{
+        client.query(`DELETE   event FROM event JOIN club ON event.id_club=club.id_club WHERE event.id_event='${req.body.id_event}' AND event.id_membre='${req.verified.user_auth.id_membre}' OR event.id_event='${req.body.id_event}' AND club.id_membre='${req.verified.user_auth.id_membre}'`,(err,result)=>{
+          if (err){
+              res.status(res.statusCode).json({
+                  errorCode: err,
+                  status: res.statusCode,
+                });
+          }else{
+              res.status(res.statusCode).json({
+                message: "event  was deleted",
+                status: res.statusCode,
+              });
+          }
+        })
       }
-  })
+    })
+
 }

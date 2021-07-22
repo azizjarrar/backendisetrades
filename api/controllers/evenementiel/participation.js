@@ -9,7 +9,7 @@ exports.addParticipation=(req,res)=>{
         });
         return
       }
-    client.query(`SELECT * FROM  participation  WHERE  id_event=${req.body.id_event} and id_membre=${req.verified.user_auth.id_membre}`,(err,result)=>{
+    client.query(`SELECT * FROM  participation  WHERE  id_event=${client.escape(req.body.id_event)} and id_membre=${client.escape(req.verified.user_auth.id_membre)}`,(err,result)=>{
         if (err) {
             res.status(res.statusCode).json({
               errorCode: err.message,
@@ -23,8 +23,8 @@ exports.addParticipation=(req,res)=>{
                     status: res.statusCode,
                   });
             }else{
-                client.query(`INSERT INTO participation(id_event,id_membre,id_club) 
-                VALUES('${req.body.id_event}','${req.verified.user_auth.id_membre}','1') 
+                client.query(`INSERT INTO participation(id_event,id_membre,statut) 
+                VALUES('${req.body.id_event}','${req.verified.user_auth.id_membre}','pas confirmé') 
                 `,(err,result)=>{
                     if (err) {
                         res.status(res.statusCode).json({
@@ -53,7 +53,7 @@ exports.getAllParticipation=(req,res)=>{
         });
         return
       }
-    client.query(`SELECT  membre.nom,membre.prenom,membre.cin,membre.tel,participation.id_event FROM  participation   JOIN membre on membre.id_membre=participation.id_membre WHERE  id_event=${req.body.id_event}`,(err,result)=>{
+    client.query(`SELECT  membre.nom,membre.prenom,membre.cin,membre.tel,participation.id_event FROM  participation   JOIN membre on membre.id_membre=participation.id_membre WHERE  id_event=${client.escape(req.body.id_event)}`,(err,result)=>{
         if (err) {
             res.status(res.statusCode).json({
               errorCode: err.message,
@@ -69,4 +69,30 @@ exports.getAllParticipation=(req,res)=>{
             });
         }
     })
+}
+exports.updatestatut=(req,res)=>{
+  if(req.body.id_participation==undefined){
+      res.status(res.statusCode).json({
+        message: "id_participation not found",
+        error:true,
+        status: res.statusCode,
+      });
+      return
+    }
+    client.query(`UPDATE participation participation SET statut='confirmé' where id_participation=${client.escape(req.body.id_participation)}`,(err,result)=>{
+      if (err) {
+          res.status(res.statusCode).json({
+            errorCode: err.message,
+            status: res.statusCode,
+          });
+          return
+      }else{
+        console.log(result)
+          res.status(res.statusCode).json({
+   
+              "message":"statu updated",
+              status: res.statusCode
+          });
+      }
+  })
 }

@@ -57,7 +57,7 @@ exports.getcalender=(req,res)=>{
         });
         return
       }
-    client.query(`SELECT *  FROM calendrier where id_club='${req.body.id_club}'ORDER BY calendrier.date DESC , calendrier.temps DESC`,(err,result)=>{
+    client.query(`SELECT *  FROM calendrier where id_club='${client.escape(req.body.id_club)}'ORDER BY calendrier.date DESC , calendrier.temps DESC`,(err,result)=>{
         if (err){
     res.status(res.statusCode).json({
         errorCode: err.message,

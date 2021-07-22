@@ -19,7 +19,7 @@ exports.singin=(req,res)=>{
     });
     return
   }
-  client.query(`SELECT * ,membre.email FROM  membre JOIN role_membre on role_membre.id_role=membre.role JOIN user on user.cin=membre.cin WHERE membre.email='${client.escape(req.body.email)}' && membre.motdepasse='${client.escape(req.body.password)}' `, function  (err, result) {
+  client.query(`SELECT * ,membre.email FROM  membre JOIN role_membre on role_membre.id_role=membre.role JOIN user on user.cin=membre.cin WHERE membre.email=${client.escape(req.body.email)} && membre.motdepasse=${client.escape(req.body.password)} `, function  (err, result) {
     if (err){
         res.status(res.statusCode).json({
             errorCode: err,

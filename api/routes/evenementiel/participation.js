@@ -7,5 +7,6 @@ router.post('/addParticipation', checkauth_event,participation_controler.addPart
 router.post('/getAllParticipation', checkauth_event,participation_controler.getAllParticipation)
 router.post('/updatestatut', checkauth_event,participation_controler.updatestatut)
 router.post('/deleteParticipation', checkauth_event,participation_controler.deleteParticipation)
+router.post('/getOneUserParti', checkauth_event,participation_controler.getOneUserParti)
 
 module.exports = router

@@ -1,4 +1,5 @@
 var client = require('../../../db_connection')
+var nodemailer = require('nodemailer');
 
 exports.addParticipation=(req,res)=>{
     if(req.body.id_event==undefined){
@@ -79,6 +80,22 @@ exports.updatestatut=(req,res)=>{
       });
       return
     }
+    if(req.body.email==undefined){
+      res.status(res.statusCode).json({
+        message: "email not found",
+        error:true,
+        status: res.statusCode,
+      });
+      return
+    }
+    if(req.body.event_name==undefined){
+      res.status(res.statusCode).json({
+        message: "event_name not found",
+        error:true,
+        status: res.statusCode,
+      });
+      return
+    }
     client.query(`UPDATE participation participation SET statut='confirmé' where id_participation=${client.escape(req.body.id_participation)}`,(err,result)=>{
       if (err) {
           res.status(res.statusCode).json({
@@ -87,6 +104,26 @@ exports.updatestatut=(req,res)=>{
           });
           return
       }else{
+        var transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            user: 'Cclub621@gmail.com',
+            pass: 'club123456789'
+          }
+        });
+          var mailOptions = {
+            from: 'isetrades@gmail.com',
+            to: req.body.email,
+            subject: 'result',
+            text: "la demande de participation à notre événement a été acceptée " + req.body.event_name
+          };
+        transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log('Email sent: ' + info.response);
+          }
+        });
           res.status(res.statusCode).json({
               "message":"statu updated",
               status: res.statusCode
@@ -125,4 +162,23 @@ exports.deleteParticipation=(req,res)=>{
 
     }
   })
+}
+
+exports.getOneUserParti=(req,res)=>{
+client.query(`SELECT  participation.statut,membre.email,participation.id_participation,user.nom,user.prenom,membre.cin,membre.tel,participation.id_event FROM  participation   JOIN membre on membre.id_membre=participation.id_membre JOIN user on membre.cin=user.cin WHERE  participation.id_membre=${req.verified.user_auth.id_membre}`,(err,result)=>{
+    if (err) {
+        res.status(res.statusCode).json({
+          errorCode: err.message,
+          status: res.statusCode,
+        });
+        return
+    }else{
+        res.status(res.statusCode).json({
+            message: "participation event",
+            data:result,
+            nombreofparticipation:result.length,
+            status: res.statusCode
+        });
+    }
+})
 }

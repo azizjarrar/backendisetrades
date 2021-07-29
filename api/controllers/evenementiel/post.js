@@ -32,7 +32,7 @@ exports.addpost=(req,res)=>{
     }else{
         newurlString=undefined
     }
- 
+ console.log(client.escape(req.body.description))
     const date = new Date();
     const datee=date.getFullYear()+"-"+(date.getMonth()+1-0)+"-"+date.getDate();
     const heure=date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();

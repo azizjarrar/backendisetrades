@@ -11,7 +11,7 @@ exports.getOneUser=(req,res)=>{
         return
       }
     client.query(`SELECT membre.id_membre ,membre.cin ,membre.email ,membre.membreimage,user.age ,user.sexe ,user.date_naissance  FROM  membre  JOIN  user  ON user.cin=membre.cin WHERE id_membre='${req.body.id_membre}'`,(err,result)=>{
-      console.log(result)
+      //console.log(result)
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err.message,

@@ -19,8 +19,9 @@ exports.addParticipation=(req,res)=>{
         }else{
             if(result.length!=0){
                 res.status(res.statusCode).json({
-                    message: "you are alredy  participeted ",
+                    message: "vous avez déjà participé ",
                     status: res.statusCode,
+                    error : true,
                   });
             }else{
                 client.query(`INSERT INTO participation(id_event,id_membre,statut) 
@@ -34,8 +35,9 @@ exports.addParticipation=(req,res)=>{
                         return
                     }else{
                         res.status(res.statusCode).json({
-                            message: "you have been participeted",
+                            message: "you have been participated",
                             status: res.statusCode,
+                            
                           });
                     }
                 })
@@ -53,7 +55,7 @@ exports.getAllParticipation=(req,res)=>{
         });
         return
       }
-    client.query(`SELECT  membre.email,participation.id_participation,user.nom,user.prenom,membre.cin,membre.tel,participation.id_event FROM  participation   JOIN membre on membre.id_membre=participation.id_membre JOIN user on membre.cin=user.cin WHERE  id_event=${client.escape(req.body.id_event)}`,(err,result)=>{
+    client.query(`SELECT  membre.email,participation.statut,participation.id_participation,user.nom,user.prenom,membre.cin,membre.tel,participation.id_event FROM  participation   JOIN membre on membre.id_membre=participation.id_membre JOIN user on membre.cin=user.cin WHERE  id_event=${client.escape(req.body.id_event)}`,(err,result)=>{
         if (err) {
             res.status(res.statusCode).json({
               errorCode: err.message,
@@ -88,7 +90,7 @@ exports.updatestatut=(req,res)=>{
           return
       }else{
           res.status(res.statusCode).json({
-              "message":"statu updated",
+              "message":"statut updated",
               status: res.statusCode
           });
       }

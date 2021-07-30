@@ -21,6 +21,7 @@ exports.addParticipation=(req,res)=>{
                 res.status(res.statusCode).json({
                     message: "you are alredy  participeted ",
                     status: res.statusCode,
+                    error:true
                   });
             }else{
                 client.query(`INSERT INTO participation(id_event,id_membre,statut) 

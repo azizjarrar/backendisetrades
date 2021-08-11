@@ -166,7 +166,7 @@ exports.deleteParticipation=(req,res)=>{
 }
 
 exports.getOneUserParti=(req,res)=>{
-client.query(`SELECT  event.titre_event,participation.statut,membre.email,participation.id_participation,user.nom,user.prenom,membre.cin,membre.tel,participation.id_event FROM  participation   JOIN membre on membre.id_membre=participation.id_membre JOIN user on membre.cin=user.cin JOIN event on event.id_event=participation.id_event WHERE  participation.id_membre=${req.verified.user_auth.id_membre}`,(err,result)=>{
+client.query(`SELECT  event.date_debut,event.titre_event,participation.statut,membre.email,participation.id_participation,user.nom,user.prenom,membre.cin,membre.tel,participation.id_event FROM  participation   JOIN membre on membre.id_membre=participation.id_membre JOIN user on membre.cin=user.cin JOIN event on event.id_event=participation.id_event WHERE  participation.id_membre=${req.verified.user_auth.id_membre}`,(err,result)=>{
     if (err) {
         res.status(res.statusCode).json({
           errorCode: err.message,

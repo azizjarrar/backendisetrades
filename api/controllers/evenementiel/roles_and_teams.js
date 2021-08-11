@@ -13,7 +13,7 @@ exports.getroles=(req,res)=>{
                 data:result,
               });
         }
-    })
+    })  
 }
 exports.getTeams=(req,res)=>{
     client.query(`SELECT *  FROM equipes `,(err,result)=>{

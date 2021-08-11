@@ -34,7 +34,15 @@ exports.addcalender=(req,res)=>{
         });
         return
       }
-    client.query(`INSERT INTO calendrier(description,date,temps,id_club) VALUES('${req.body.description}','${req.body.date}','${req.body.temps}','${req.body.id_club}')`,(err,result)=>{
+      if (req.body.titre == undefined) {
+        res.status(res.statusCode).json({
+          message: "description not found",
+          error: true,
+          status: res.statusCode,
+        });
+        return
+      }
+    client.query(`INSERT INTO calendrier(titre,description,date,temps,id_club) VALUES(${client.escape(req.body.titre)},'${client.escape(req.body.description)}','${client.escape(req.body.date)}','${client.escape(req.body.temps)}','${client.escape(req.body.id_club)}')`,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err.message,
@@ -82,7 +90,7 @@ exports.deletecalender=(req,res)=>{
   }
   
 
-  client.query(`DELETE calendrier FROM calendrier JOIN club ON calendrier.id_club=club.id_club WHERE id_calendrier='${req.body.id_calendrier}' AND club.id_membre='${req.verified.user_auth.id_membre}'`,(err,result)=>{
+  client.query(`DELETE calendrier FROM calendrier JOIN club ON calendrier.id_club=club.id_club WHERE id_calendrier='${client.escape(req.body.id_calendrier)}' AND club.id_membre='${req.verified.user_auth.id_membre}'`,(err,result)=>{
     if (err){
             res.status(res.statusCode).json({
             errorCode: err.message,

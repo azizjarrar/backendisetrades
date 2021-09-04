@@ -1,7 +1,6 @@
 var client = require('../../../db_connection')
 
 exports.addactivite=(req,res)=>{
-  console.log(req.file)
     if (req.body.titre_act == undefined) {
         res.status(res.statusCode).json({
           message: "titre_act not found",

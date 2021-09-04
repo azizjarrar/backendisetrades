@@ -33,7 +33,7 @@ const auth_evenementiel_route_activites=require('./api/routes/evenementiel/activ
 /********************************/
 /***group scolarite routers******/
 /********************************/
-
+const add_file= require('./api/routes/scolarite/AddFile')
 /********************************/
 /**group administration routers**/
 /********************************/
@@ -109,7 +109,7 @@ const auth_evenementiel_route_activites=require('./api/routes/evenementiel/activ
 /************************************/
 /***use group scolarite routers******/
 /************************************/
-
+app.use("/addfile",add_file)
 /************************************/
 /**use group administration routers**/
 /************************************/

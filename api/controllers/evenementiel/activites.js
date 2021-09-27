@@ -25,8 +25,15 @@ exports.addactivite=(req,res)=>{
         });
         return
       }
-
-    client.query(`INSERT INTO activites(titre_act,description_act,idclub) VALUES(${client.escape(req.body.titre_act)},${client.escape(req.body.description_act)},${client.escape(req.body.idclub)})`,(err,result)=>{
+      let url=""
+      for(let i = 0;i<req.file.path.length;i++){
+        if(req.file.path[i]=='\\'){
+          url+="/"
+        }else{
+          url+=req.file.path[i]
+        }
+      }
+    client.query(`INSERT INTO activites(image_act,titre_act,description_act,idclub) VALUES(${client.escape(url)},${client.escape(req.body.titre_act)},${client.escape(req.body.description_act)},${client.escape(req.body.idclub)})`,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err.message,

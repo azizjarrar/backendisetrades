@@ -10,7 +10,7 @@ exports.getOneUser=(req,res)=>{
         });
         return
       }
-    client.query(`SELECT membre.id_membre ,membre.cin ,membre.email ,membre.membreimage,user.age ,user.sexe ,user.date_naissance  FROM  membre  JOIN  user  ON user.cin=membre.cin WHERE id_membre='${req.body.id_membre}'`,(err,result)=>{
+    client.query(`SELECT membre.id_membre ,membre.cin ,membre.email ,membre.membreimage,user.age ,user.sexe ,user.date_naissance ,membre.tel FROM  membre  JOIN  user  ON user.cin=membre.cin WHERE id_membre='${req.body.id_membre}'`,(err,result)=>{
       //console.log(result)
         if (err){
             res.status(res.statusCode).json({
@@ -88,7 +88,7 @@ exports.getClubUsers=(req,res)=>{
         });
         return
       }
-    client.query(`SELECT membre.membreimage,user.nom,user.prenom,membre.id_membre,membre.email,equipes.equipe  FROM  club JOIN liste_membre on club.id_club=liste_membre.id_club  JOIN membre on membre.cin=liste_membre.cin_membre JOIN user on user.cin=membre.cin JOIN equipes on id_equipe=liste_membre.equipe where club.id_club='${req.body.idclub}'` ,(err,result)=>{
+    client.query(`SELECT membre.membreimage,user.nom,user.prenom,membre.id_membre,membre.email,membre.tel,equipes.equipe  FROM  club JOIN liste_membre on club.id_club=liste_membre.id_club  JOIN membre on membre.cin=liste_membre.cin_membre JOIN user on user.cin=membre.cin JOIN equipes on id_equipe=liste_membre.equipe where club.id_club='${req.body.idclub}'` ,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err.message,

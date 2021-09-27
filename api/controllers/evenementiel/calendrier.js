@@ -36,13 +36,14 @@ exports.addcalender=(req,res)=>{
       }
       if (req.body.titre == undefined) {
         res.status(res.statusCode).json({
-          message: "description not found",
+          message: "titre not found",
           error: true,
           status: res.statusCode,
         });
         return
       }
-    client.query(`INSERT INTO calendrier(titre,description,date,temps,id_club) VALUES(${client.escape(req.body.titre)},'${client.escape(req.body.description)}','${client.escape(req.body.date)}','${client.escape(req.body.temps)}','${client.escape(req.body.id_club)}')`,(err,result)=>{
+    client.query(`INSERT INTO calendrier(titre,description,date,temps,id_club) VALUES(${client.escape(req.body.titre)},${client.escape(req.body.description)},${client.escape(req.body.date)},${client.escape(req.body.temps)},${client.escape(req.body.id_club)})`,(err,result)=>{
+  
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err.message,

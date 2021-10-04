@@ -58,7 +58,7 @@ function checkUploadPath(req, res, next) {
 /*********************************************************************************/
 /*********************************************************************************/
 /*********************************************************************************/
-router.post('/addactivite',checkauth_event,checkUploadPath,uploadMulter.single('file'),activite_controle.addactivite)
+router.post('/addactivite',checkauth_event,checkUploadPath,uploadMulter.array('file',20),activite_controle.addactivite)
 router.post('/getactivites' ,checkauth_event,activite_controle.getactivites)
 router.post('/deleteactivite' ,checkauth_event,activite_controle.deleteactivite)
 

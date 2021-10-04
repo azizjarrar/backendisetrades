@@ -120,7 +120,7 @@ exports.addevent=(req,res)=>{
         if (result.length != 0 || result[0] != undefined) {
           console.log(req.body.titre_event)
             client.query(`INSERT INTO event(titre_event,description,date_debut,date_fin,heure_debut,heure_fin,statut,url_image,url_event,id_membre,id_club)
-            VALUES('${req.body.titre_event}','${req.body.description}','${req.body.date_debut}','${req.body.date_fin}','${req.body.heure_debut}','${req.body.heure_fin}','${req.body.statut}','${newurlString}','${req.body.url_event}','${req.verified.user_auth.id_membre}','${req.body.id_club}')
+            VALUES(${client.escape(req.body.titre_event)},${client.escape(req.body.description)},${client.escape(req.body.date_debut)},${client.escape(req.body.date_fin)},${client.escape(req.body.heure_debut)},${client.escape(req.body.heure_fin)},${client.escape(req.body.statut)},${client.escape(newurlString)},${client.escape(req.body.url_event)},${client.escape(req.verified.user_auth.id_membre)},${client.escape(req.body.id_club)})
             `,(err,result)=>{
                 if (err) {
                     res.status(res.statusCode).json({
@@ -150,7 +150,7 @@ exports.getClubEvents=(req,res)=>{
         });
         return
       }
-    client.query(`SELECT  event.titre_event,event.url_image,club.nom_club,event.url_event,event.heure_fin,event.heure_debut,event.date_fin,event.date_debut,event.statut,event.description,club.id_club,event.id_event FROM event JOIN club on club.id_club=event.id_club WHERE club.id_club=${req.body.id_club} `,(err,result)=>{
+    client.query(`SELECT  event.titre_event,event.url_image,club.nom_club,event.url_event,event.heure_fin,event.heure_debut,event.date_fin,event.date_debut,event.statut,event.description,club.id_club,event.id_event FROM event JOIN club on club.id_club=event.id_club WHERE club.id_club=${client.escape(req.body.id_club)} `,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err.message,
@@ -185,7 +185,7 @@ exports.deleteEvent=(req,res)=>{
           });
           return
       }else{
-        client.query(`DELETE   event FROM event JOIN club ON event.id_club=club.id_club WHERE event.id_event='${req.body.id_event}' AND event.id_membre='${req.verified.user_auth.id_membre}' OR event.id_event='${req.body.id_event}' AND club.id_membre='${req.verified.user_auth.id_membre}'`,(err,result)=>{
+        client.query(`DELETE   event FROM event JOIN club ON event.id_club=club.id_club WHERE event.id_event='${client.escape(req.body.id_event)}' AND event.id_membre='${req.verified.user_auth.id_membre}' OR event.id_event='${client.escape(req.body.id_event)}' AND club.id_membre='${req.verified.user_auth.id_membre}'`,(err,result)=>{
           if (err){
               res.status(res.statusCode).json({
                   errorCode: err,
@@ -201,4 +201,28 @@ exports.deleteEvent=(req,res)=>{
       }
     })
 
+}
+exports.getOneEvent=(req,res)=>{
+  
+  if(req.body.id_event==undefined){
+    res.status(res.statusCode).json({
+      message: "id_event not found",
+      error:true,
+      status: res.statusCode,
+    });
+    return
+  }
+  client.query(`SELECT  *  from event join club on club.id_club=event.id_club where id_event=${client.escape(req.body.id_event)} `,(err,result)=>{
+    if (err){
+        res.status(res.statusCode).json({
+            errorCode: err,
+            status: res.statusCode,
+          });
+    }else{
+        res.status(res.statusCode).json({
+          message: "event",
+          data: result,
+        });
+    }
+  })
 }

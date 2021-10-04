@@ -17,6 +17,14 @@ exports.addactivite=(req,res)=>{
         });
         return
       }
+      if (req.body.date_act == undefined) {
+        res.status(res.statusCode).json({
+          message: "date not found",
+          error: true,
+          status: res.statusCode,
+        });
+        return
+      }
       if (req.body.idclub == undefined) {
         res.status(res.statusCode).json({
           message: "idclub not found",
@@ -33,7 +41,7 @@ exports.addactivite=(req,res)=>{
           url+=req.file.path[i]
         }
       }
-    client.query(`INSERT INTO activites(image_act,titre_act,description_act,idclub) VALUES(${client.escape(url)},${client.escape(req.body.titre_act)},${client.escape(req.body.description_act)},${client.escape(req.body.idclub)})`,(err,result)=>{
+    client.query(`INSERT INTO activites(image_act,titre_act,description_act,date_act,idclub) VALUES(${client.escape(url)},${client.escape(req.body.titre_act)},${client.escape(req.body.description_act)},${client.escape(req.body.date_act)},${client.escape(req.body.idclub)})`,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err.message,

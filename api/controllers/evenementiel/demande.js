@@ -306,7 +306,7 @@ exports.acceptOrDeleteRequests = (req, res) => {
                             status: res.statusCode,
                           });
                         } else {
-                          sendmail(result[0].email, "aproved")
+                          sendmail(result[0].email, "aproved" , randompassword)
                           res.status(res.statusCode).json({
                             message: "membre accepted",
                             status: res.statusCode,
@@ -330,7 +330,7 @@ exports.acceptOrDeleteRequests = (req, res) => {
   }
 }
 
-const sendmail = (email, state) => {
+const sendmail = (email, state , password) => {
   var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -343,7 +343,7 @@ const sendmail = (email, state) => {
       from: 'isetrades@gmail.com',
       to: email,
       subject: 'result',
-      text: "you are aproved to join our club your default password is password and login is your email if you alredy have account just sing in with your info"
+      text: "you are aproved to join our club your default password is "+password +"and login is your email if you alredy have account just sing in with your info"
     };
   } else {
     var mailOptions = {

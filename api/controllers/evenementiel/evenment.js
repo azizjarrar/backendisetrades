@@ -107,7 +107,7 @@ exports.addevent=(req,res)=>{
     }else{
         newurlString=undefined
     }
-    client.query(`SELECT * FROM membre JOIN club  ON club.id_membre=membre.id_membre WHERE club.id_membre=${req.verified.user_auth.id_membre} and  club.id_club=${req.body.id_club}`,(err,result)=>{
+    client.query(`SELECT * FROM membre JOIN club  ON club.id_membre=membre.id_membre WHERE club.id_membre=${req.verified.user_auth.id_membre} and  club.id_club=${client.escape(req.body.id_club)}`,(err,result)=>{
 
         if (err) {
             res.status(res.statusCode).json({
@@ -185,7 +185,7 @@ exports.deleteEvent=(req,res)=>{
           });
           return
       }else{
-        client.query(`DELETE   event FROM event JOIN club ON event.id_club=club.id_club WHERE event.id_event='${client.escape(req.body.id_event)}' AND event.id_membre='${req.verified.user_auth.id_membre}' OR event.id_event='${client.escape(req.body.id_event)}' AND club.id_membre='${req.verified.user_auth.id_membre}'`,(err,result)=>{
+        client.query(`DELETE   event FROM event JOIN club ON event.id_club=club.id_club WHERE event.id_event=${client.escape(req.body.id_event)} AND event.id_membre=${req.verified.user_auth.id_membre} OR event.id_event=${client.escape(req.body.id_event)} AND club.id_membre=${req.verified.user_auth.id_membre}`,(err,result)=>{
           if (err){
               res.status(res.statusCode).json({
                   errorCode: err,
@@ -225,4 +225,64 @@ exports.getOneEvent=(req,res)=>{
         });
     }
   })
+}
+exports.updateEvent=(req,res)=>{
+  if(req.body.id_event==undefined){
+    res.status(res.statusCode).json({
+      message: "id_event not found",
+      error:true,
+      status: res.statusCode,
+    });
+    return
+  }
+  client.query(`SELECT  club.id_membre as idAdminClub,event.id_membre as idOfCreatorOfEvent FROM event JOIN club on club.id_club=event.id_club where id_event=${client.escape(req.body.id_event)} LIMIT 1` ,(err,result)=>{
+    if (err){ 
+      res.status(res.statusCode).json({
+          errorCode: err.message,
+          status: res.statusCode,
+        });
+  }else{
+    if(req.verified.user_auth.id_membre===result[0].idAdminClub || req.verified.user_auth.id_membre===result[0].idOfCreatorOfEvent){
+      const titre_event =req.body.titre_event;
+      const description=req.body.description;
+      const date_debut=req.body.date_debut;
+      const date_fin=req.body.date_fin;
+      const heure_debut=req.body.heure_debut;
+      const heure_fin=req.body.heure_fin;
+      const statu=req.body.statu;
+      const url_event=req.body.url_event;
+      const url_image=req.body.url_image;
+    
+      let queryString=`${titre_event!=undefined?"titre_event="+"'"+titre_event+"'":''} ${description!=undefined?"description="+"'"+description+"'":''}  ${date_debut!=undefined?"date_debut="+"'"+date_debut+"'":''} ${date_fin!=undefined?"date_fin="+"'"+date_fin+"'":''} ${heure_debut!=undefined?"heure_debut="+"'"+heure_debut+"'":''} ${heure_fin!=undefined?"heure_fin="+"'"+heure_fin+"'":''} ${statu!=undefined?"statut="+"'"+statu+"'":''} ${url_event!=undefined?"url_event="+"'"+url_event+"'":''} ${url_image!=undefined?"url_image="+"'"+url_image+"'":''} `
+    
+      for(let i =0;i<queryString.length-1;i++){
+        if(queryString[i]==" "&&queryString[i+1]!=" "&&queryString[0]!=" "){
+          queryString=queryString.replace(" ",",")
+        }
+       }
+    
+    
+      let query=`UPDATE event SET ${queryString} where id_event=${client.escape(req.body.id_event)}`;
+      client.query(query ,(err,result)=>{
+        if (err){ 
+          res.status(res.statusCode).json({
+              errorCode: err.message,
+              status: res.statusCode,
+            });
+      }else{
+          res.status(res.statusCode).json({
+          message: "user data  was updated",
+          data:result,
+          });
+      }
+      })
+    }else{
+      res.status(res.statusCode).json({
+        status: res.statusCode,
+        message:"you are not authorized"
+      });
+    }
+  }
+})
+
 }

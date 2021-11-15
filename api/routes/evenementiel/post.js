@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router()
-const post_controler = require('../../controllers/evenementiel/post')
+const post_controler = require('../../controllers/evenementiel/publication')
 const checkauth_event = require('../../middleware/check_auth_evenmentiel')
 /*********************************************************************************/
 /*************************upload Files********************************************/

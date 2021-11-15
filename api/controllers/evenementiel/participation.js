@@ -1,13 +1,9 @@
 var client = require('../../../db_connection')
 var nodemailer = require('nodemailer');
+const validator = require('../../middleware/validator')
 
 exports.addParticipation=(req,res)=>{
-    if(req.body.id_event==undefined){
-        res.status(res.statusCode).json({
-          message: "id_event not found",
-          error:true,
-          status: res.statusCode,
-        });
+      if (validator(req.body, ["id_event"], res)) {
         return
       }
     client.query(`SELECT * FROM  participation  WHERE  id_event=${client.escape(req.body.id_event)} and id_membre=${client.escape(req.verified.user_auth.id_membre)};`,(err,result)=>{
@@ -48,12 +44,7 @@ exports.addParticipation=(req,res)=>{
     })
 }
 exports.getAllParticipation=(req,res)=>{
-    if(req.body.id_event==undefined){
-        res.status(res.statusCode).json({
-          message: "id_event not found",
-          error:true,
-          status: res.statusCode,
-        });
+      if (validator(req.body, ["id_event"], res)) {
         return
       }
     client.query(`SELECT  membre.email,participation.statut,participation.id_participation,user.nom,user.prenom,membre.cin,membre.tel,participation.id_event FROM  participation   JOIN membre on membre.id_membre=participation.id_membre JOIN user on membre.cin=user.cin WHERE  id_event=${client.escape(req.body.id_event)} ;`,(err,result)=>{
@@ -74,28 +65,7 @@ exports.getAllParticipation=(req,res)=>{
     })
 }
 exports.updatestatut=(req,res)=>{
-  if(req.body.id_participation==undefined){
-      res.status(res.statusCode).json({
-        message: "id_participation not found",
-        error:true,
-        status: res.statusCode,
-      });
-      return
-    }
-    if(req.body.email==undefined){
-      res.status(res.statusCode).json({
-        message: "email not found",
-        error:true,
-        status: res.statusCode,
-      });
-      return
-    }
-    if(req.body.event_name==undefined){
-      res.status(res.statusCode).json({
-        message: "event_name not found",
-        error:true,
-        status: res.statusCode,
-      });
+    if (validator(req.body, ["event_name","email","id_participation"], res)) {
       return
     }
     client.query(`UPDATE participation participation SET statut='confirmé' where id_participation=${client.escape(req.body.id_participation)};`,(err,result)=>{
@@ -134,12 +104,7 @@ exports.updatestatut=(req,res)=>{
   })
 }
 exports.deleteParticipation=(req,res)=>{
-  if(req.body.id_participation==undefined){
-    res.status(res.statusCode).json({
-      message: "id_participation not found",
-      error:true,
-      status: res.statusCode,
-    });
+  if (validator(req.body, ["id_participation"], res)) {
     return
   }
   client.query(`DELETE FROM participation  where id_participation=${client.escape(req.body.id_participation)};`,(err,result)=>{
@@ -167,6 +132,7 @@ exports.deleteParticipation=(req,res)=>{
 }
 
 exports.getOneUserParti=(req,res)=>{
+  
 client.query(`SELECT  event.date_debut,event.titre_event,participation.statut,membre.email,participation.id_participation,user.nom,user.prenom,membre.cin,membre.tel,participation.id_event FROM  participation   JOIN membre on membre.id_membre=participation.id_membre JOIN user on membre.cin=user.cin JOIN event on event.id_event=participation.id_event WHERE  participation.id_membre=${req.verified.user_auth.id_membre} ;`,(err,result)=>{
     if (err) {
         res.status(res.statusCode).json({

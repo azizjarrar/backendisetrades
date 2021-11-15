@@ -1,5 +1,8 @@
 const jwt = require('jsonwebtoken')
-
+/**
+ * check user  auth
+ * @constructor
+ */
 module.exports=(req,res,next)=>{
     try{
         let token = req.headers['authorization'] 

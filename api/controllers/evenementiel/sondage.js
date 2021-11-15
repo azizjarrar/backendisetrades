@@ -1,5 +1,8 @@
 var client = require('../../../db_connection')
-//id_membre
+const validator = require('../../middleware/validator')
+/**************************************************************************/
+/**************this part is responsible for all poll APIS *****************/
+/**************************************************************************/
 exports.getsondage=async (req,res)=>{
 
     client.query(`SELECT user.nom,user.prenom,sondage.id_sondage,sondage.date_sondage,sondage.heure_sondage,sondage.titre,sondage.id_sondage FROM  sondage JOIN membre on sondage.id_membre=membre.id_membre JOIN user on membre.cin=user.cin  WHERE id_club='${req.body.idclub}' 
@@ -21,6 +24,9 @@ exports.addsondage=(req,res)=>{
     const date = new Date();
     const datee=date.getFullYear()+"-"+(date.getMonth()+1-0)+"-"+date.getDate();
     const heure=date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
+    if (validator(req.body, ["titre","idclub"], res)) {
+        return
+      }
     client.query(`INSERT INTO sondage
     (date_sondage,heure_sondage,id_membre,titre,id_club) 
     VALUES ('${datee}','${heure}','${req.verified.user_auth.id_membre}',${client.escape(req.body.titre)},${client.escape(req.body.idclub)});`,(err,result)=>{
@@ -38,21 +44,7 @@ exports.addsondage=(req,res)=>{
     })
 }
 exports.addVote=(req,res)=>{
-    if (req.body.idsondage ===undefined) {
-        res.status(res.statusCode).json({
-          message: "idsondage not found",
-          error: true,
-          status: res.statusCode,
-        });
-        return
-      }
-
-      if (req.body.statut ===undefined) {
-        res.status(res.statusCode).json({
-          message: "statut not found",
-          error: true,
-          status: res.statusCode,
-        });
+      if (validator(req.body, ["statut","idsondage"], res)) {
         return
       }
     client.query(`INSERT INTO vote_sondage
@@ -95,6 +87,9 @@ exports.addVote=(req,res)=>{
     })
 }
 exports.getVotes=(req,res)=>{
+    if (validator(req.body, ["idsondage"], res)) {
+        return
+      }
     client.query(`SELECT  count(statut) AS NumberOfVotes,statut  FROM  vote_sondage  WHERE id_sondage=${client.escape(req.body.idsondage)} GROUP BY statut ORDER BY statut;`,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
@@ -136,6 +131,9 @@ exports.getVotes=(req,res)=>{
 }
 
 exports.getVote=(req,res)=>{
+    if (validator(req.body, ["statut"], res)) {
+        return
+      }
     client.query(`SELECT count (id_sondage)  FROM  vote_sondage WHERE statut=${client.escape(req.body.statut)} ;`,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
@@ -151,15 +149,9 @@ exports.getVote=(req,res)=>{
     })
 }
 exports.deletesondage=(req,res)=>{
-    if (req.body.idsondage ===undefined) {
-        res.status(res.statusCode).json({
-          message: "idsondage not found",
-          error: true,
-          status: res.statusCode,
-        });
+    if (validator(req.body, ["idsondage"], res)) {
         return
-      }
-      
+      }    
     client.query(`SELECT  * FROM sondage JOIN club ON sondage.id_club=club.id_club WHERE id_sondage=${client.escape(req.body.idsondage)} AND sondage.id_membre='${req.verified.user_auth.id_membre}' OR id_sondage=${client.escape(req.body.idsondage)} AND club.id_membre='${req.verified.user_auth.id_membre}'`,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({

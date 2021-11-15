@@ -1,11 +1,15 @@
 var client = require('../../../db_connection')
 const crypto = require("crypto");
 var nodemailer = require('nodemailer');
-
+const validator = require('../../middleware/validator')
+/**************************************************************************/
+/**************this part is responsible of all demmandes API***************/
+/**************************************************************************/
 exports.sendRequest = (req, res) => {
   const id = crypto.randomBytes(16).toString("hex");
 
   var newurlString = ""
+  // reverse in image url '\'  to '/'
   if (req.file != undefined) {
     for (let i = 0; i < req.file.path.length; i++) {
       if (req.file.path[i] ==='\\') {
@@ -15,57 +19,10 @@ exports.sendRequest = (req, res) => {
       }
     }
   }
-
-  if (req.body.email ===undefined) {
-    res.status(res.statusCode).json({
-      message: "email not found",
-      error: true,
-      status: res.statusCode,
-    });
+  req.body.tel="52"
+  if(validator(req.body,["tel","motivation","club","equipe","cin","email"],res)){
     return
   }
-  if (req.body.cin ===undefined) {
-    res.status(res.statusCode).json({
-      message: "cin not found",
-      error: true,
-      status: res.statusCode,
-    });
-    return
-  }
-  if (req.body.equipe ===undefined) {
-    res.status(res.statusCode).json({
-      message: "equipe not found",
-      error: true,
-      status: res.statusCode,
-    });
-    return
-  }
-  if (req.body.club ===undefined) {
-    res.status(res.statusCode).json({
-      message: "club not found",
-      error: true,
-      status: res.statusCode,
-    });
-    return
-  }
-  if (req.body.motivation ===undefined) {
-    res.status(res.statusCode).json({
-      message: "motivation not found",
-      error: true,
-      status: res.statusCode,
-    });
-    return
-  }
-  req.body.tel="fa"
-  if (req.body.tel ===undefined) {
-    res.status(res.statusCode).json({
-      message: "numero telephone not found",
-      error: true,
-      status: res.statusCode,
-    });
-    return
-  }
-
   client.query(`SELECT * FROM  user  WHERE cin=${client.escape(req.body.cin)}`, function (err, resultEtudiant) {
     if (err) {
       res.status(res.statusCode).json({
@@ -93,8 +50,8 @@ exports.sendRequest = (req, res) => {
             return
           }
           if (result.length ===0) {
+            //create current date
             var date = new Date()
-
             const datee=date.getFullYear()+"-"+(date.getMonth()+1-0)+"-"+date.getDate();
             const heure=date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
             const newDateFormated=datee+" "+heure;
@@ -153,16 +110,13 @@ exports.getRequests = (req, res) => {
   })
 }
 exports.acceptOrDeleteRequests = (req, res) => {
-
+  if(validator(req.body,["idDemande","option"],res)){
+    return
+  }
   const idmembre = Math.floor(Math.random() * 1000000000);
   if (req.body.option ==="delete") {
     //;
-    if (req.body.idDemande ===undefined) {
-      res.status(res.statusCode).json({
-        message: "idDemande not found",
-        error: true,
-        status: res.statusCode,
-      });
+    if(validator(req.body,["idDemande"],res)){
       return
     }
     client.query(`DELETE demande_club FROM demande_club JOIN club on club.id_club=demande_club.id_club   WHERE club.id_membre='${req.verified.user_auth.id_membre}' && id_demande=${client.escape(req.body.idDemande)};`, function (err, result) {
@@ -190,14 +144,7 @@ exports.acceptOrDeleteRequests = (req, res) => {
     })
 
   } else {
-    if (req.body.idDemande ===undefined) {
-      res.status(res.statusCode).json({
-        message: "idDemande not found",
-        error: true,
-        status: res.statusCode,
-      });
-      return
-    }
+
     client.query(`SELECT * FROM  demande_club JOIN club on club.id_club=demande_club.id_club   WHERE club.id_membre='${req.verified.user_auth.id_membre}' && id_demande=${client.escape(req.body.idDemande)};`, function (err, result) {
       if (err) {
         res.status(res.statusCode).json({
@@ -221,7 +168,7 @@ exports.acceptOrDeleteRequests = (req, res) => {
               });
             } else {
               if (resultzero.length ===0 || resultzero[0] ===undefined) {
-                //hedhi ken user mafamech awel mara chi kon andou compte fi site lezm ngedlou compte
+                //if this is the first time for user in any club we will create new membre
                 client.query(`SELECT * FROM role_membre WHERE role='membre';`, (err, resultrole) => {
                   if (err) {
                     res.status(res.statusCode).json({
@@ -238,6 +185,7 @@ exports.acceptOrDeleteRequests = (req, res) => {
                     });
                     return
                   }
+                  //create user
                   client.query(`INSERT INTO membre (tel,id_membre,role,email,motdepasse,membreimage,cin) 
                                       VALUES('${result[0].tel}','${idmembre}',${resultrole[0].id_role},'${result[0].email}',${client.escape(randompassword)},'imageurl',${result[0].cin});`, function (err, resultone) {
                     if (err) {
@@ -247,6 +195,7 @@ exports.acceptOrDeleteRequests = (req, res) => {
                         status: res.statusCode,
                       });
                     } else {
+                      //add user to list_membre here we found all users of  giving club
                       client.query(`INSERT INTO liste_membre
                                               (id_club,cin_membre,role,equipe)
                                               VALUES('${result[0].id_club}','${result[0].cin}','${resultrole[0].id_role}','${result[0].equipe}')
@@ -258,6 +207,7 @@ exports.acceptOrDeleteRequests = (req, res) => {
                             status: res.statusCode,
                           });
                         } else {
+                          //delete demmande after adding user
                           client.query(`DELETE demande_club FROM demande_club JOIN club on club.id_club=demande_club.id_club   WHERE club.id_membre='${req.verified.user_auth.id_membre}' && id_demande='${req.body.idDemande}';`, function (err, resultdelete) {
                             if (err) {
                               res.status(res.statusCode).json({
@@ -265,7 +215,7 @@ exports.acceptOrDeleteRequests = (req, res) => {
                                 status: res.statusCode,
                               });
                             } else {
-                              sendmail(result[0].email, "aproved")
+                              sendmail(result[0].email, "aproved",randompassword)
                               res.status(res.statusCode).json({
                                 message: "membre accepted",
                                 status: res.statusCode,
@@ -280,6 +230,7 @@ exports.acceptOrDeleteRequests = (req, res) => {
                 })
 
               } else {
+                //if its not his first time we will just add him to club
                 client.query(`SELECT * FROM role_membre WHERE role='membre'`, (err, resultrole) => {
                   if (err) {
                     res.status(res.statusCode).json({
@@ -330,8 +281,8 @@ const sendmail = (email, state , password) => {
   var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'Cclub621@gmail.com',
-      pass: 'club123456789'
+      user: 'clubcelva89@gmail.com',
+      pass: 'Celva123'
     }
   });
   if (state ==="aproved") {

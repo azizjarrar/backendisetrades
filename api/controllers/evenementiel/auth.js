@@ -1,22 +1,10 @@
 var client = require('../../../db_connection')
 const jwt = require("jsonwebtoken");
+const validator = require('../../middleware/validator')
 
 
 exports.singin=(req,res)=>{
-  if(req.body.email==undefined){
-    res.status(res.statusCode).json({
-      message: "email not found",
-      error:true,
-      status: res.statusCode,
-    });
-    return
-  }
-  if(req.body.password==undefined){
-    res.status(res.statusCode).json({
-      message: "password not found",
-      error:true,
-      status: res.statusCode,
-    });
+  if(validator(req.body,["password","email"],res)){
     return
   }
   client.query(`SELECT * ,membre.email FROM  membre JOIN role_membre on role_membre.id_role=membre.role JOIN user on user.cin=membre.cin WHERE membre.email=${client.escape(req.body.email)} && membre.motdepasse=${client.escape(req.body.password)} ;`, function  (err, result) {

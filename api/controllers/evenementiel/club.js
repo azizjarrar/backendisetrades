@@ -1,5 +1,8 @@
 var client = require('../../../db_connection')
-
+const validator = require('../../middleware/validator')
+/**************************************************************************/
+/**************this part is responsible of all club API********************/
+/**************************************************************************/
 exports.getclubs=(req,res)=>{
     client.query(`SELECT *  FROM  club ;`,(err,result)=>{
         if (err){
@@ -51,12 +54,7 @@ exports.getClubYouAreAdminIn=(req,res)=>{
 }
 
 exports.isAdmin=(req,res)=>{
-    if (req.body.id_club ===undefined) {
-        res.status(res.statusCode).json({
-          message: "id_club not found",
-          error: true,
-          status: res.statusCode,
-        });
+      if(validator(req.body,["id_club"],res)){
         return
       }
     client.query(`SELECT *  FROM  club join membre on membre.id_membre=club.id_membre where club.id_membre=${client.escape(req.verified.user_auth.id_membre)} && club.id_club=${client.escape(req.body.id_club)};`,(err,result)=>{

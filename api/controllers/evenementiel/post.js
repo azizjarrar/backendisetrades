@@ -4,8 +4,8 @@ var client = require('../../../db_connection')
 exports.getposts=(req,res)=>{
     client.query(`SELECT user.nom,user.prenom,publication_club.description,publication_club.date,publication_club.heure,publication_club.url_image,publication_club.id_publication,membre.membreimage
     FROM  publication_club JOIN membre on publication_club.id_membre=membre.id_membre JOIN user on membre.cin=user.cin  WHERE id_club='${req.body.idclub}'  
-    ORDER BY publication_club.date DESC , publication_club.heure DESC
-    `,(err,result)=>{
+    ORDER BY publication_club.date ASC  , publication_club.heure DESC
+    ;`,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err.message,
@@ -32,13 +32,13 @@ exports.addpost=(req,res)=>{
     }else{
         newurlString=undefined
     }
- 
+ console.log(client.escape(req.body.description))
     const date = new Date();
     const datee=date.getFullYear()+"-"+(date.getMonth()+1-0)+"-"+date.getDate();
     const heure=date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
     client.query(`INSERT INTO publication_club
     (date,heure,id_membre,description,id_club,url_image) 
-    VALUES ('${datee}','${heure}','${req.verified.user_auth.id_membre}',${client.escape(req.body.description)},'${req.body.idclub}','${newurlString}') `,(err,result)=>{
+    VALUES ('${datee}','${heure}','${req.verified.user_auth.id_membre}',${client.escape(req.body.description)},${client.escape(req.body.idclub)},${client.escape(newurlString)});`,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err,
@@ -58,7 +58,7 @@ exports.addComment=(req,res)=>{
     const heure=date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
     client.query(`INSERT INTO commentaire_publication
     (date,heure,id_publication,description,id_membre) 
-    VALUES ('${datee}','${heure}','${req.body.id_publication}','${req.body.description}','${req.verified.user_auth.id_membre}') `,(err,result)=>{
+    VALUES ('${datee}','${heure}',${client.escape(req.body.id_publication)},${client.escape(req.body.description)},${client.escape(req.verified.user_auth.id_membre)}) ;`,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err,
@@ -80,7 +80,7 @@ exports.getComments=(req,res)=>{
         JOIN membre on membre.id_membre=commentaire_publication.id_membre JOIN user on membre.cin=user.cin
           WHERE publication_club.id_publication='${req.body.idpublication}' 
           ORDER BY commentaire_publication.date DESC , commentaire_publication.heure DESC
-          `,(err,result)=>{
+          ;`,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err,
@@ -95,7 +95,7 @@ exports.getComments=(req,res)=>{
     })
 }
 exports.deletePost=(req,res)=>{
-    if (req.body.id_publication == undefined) {
+    if (req.body.id_publication ===undefined) {
         res.status(res.statusCode).json({
           message: "id_publication not found",
           error: true,
@@ -104,7 +104,7 @@ exports.deletePost=(req,res)=>{
         return
       }
       
-    client.query(`SELECT  * FROM publication_club JOIN club ON publication_club.id_club=club.id_club WHERE id_publication='${req.body.id_publication}' AND publication_club.id_membre='${req.verified.user_auth.id_membre}' OR publication_club.id_publication='${req.body.id_publication}' AND club.id_membre='${req.verified.user_auth.id_membre}'`,(err,result)=>{
+    client.query(`SELECT  * FROM publication_club JOIN club ON publication_club.id_club=club.id_club WHERE id_publication='${req.body.id_publication}' AND publication_club.id_membre='${req.verified.user_auth.id_membre}' OR publication_club.id_publication=${client.escape(req.body.id_publication)} AND club.id_membre='${req.verified.user_auth.id_membre}';`,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err,
@@ -144,7 +144,7 @@ exports.deletePost=(req,res)=>{
     })
 }
 exports.deleteComment=(req,res)=>{
-    if (req.body.id_commentaire == undefined) {
+    if (req.body.id_commentaire ===undefined) {
         res.status(res.statusCode).json({
           message: "id_commentaire not found",
           error: true,

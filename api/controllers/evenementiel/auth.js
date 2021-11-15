@@ -2,7 +2,9 @@ var client = require('../../../db_connection')
 const jwt = require("jsonwebtoken");
 const validator = require('../../middleware/validator')
 
-
+/**************************************************************************/
+/**************this part is responsible of all auth API********************/
+/**************************************************************************/
 exports.singin=(req,res)=>{
   if(validator(req.body,["password","email"],res)){
     return
@@ -22,6 +24,7 @@ exports.singin=(req,res)=>{
           status: res.statusCode,
         });
       }else{
+        //token generation
          jwt.sign({ user_auth: {nom:result[0].nom,email:result[0].email,cin:result[0].cin,id_membre:result[0].id_membre} },process.env.secret_key_token_auth_event,
         async (err, token) => {
            if(err){

@@ -1,7 +1,9 @@
 var client = require('../../../db_connection')
 var nodemailer = require('nodemailer');
 const validator = require('../../middleware/validator')
-
+/**************************************************************************/
+/**************this part is responsible for all participation APIS ********/
+/**************************************************************************/
 exports.addParticipation=(req,res)=>{
       if (validator(req.body, ["id_event"], res)) {
         return

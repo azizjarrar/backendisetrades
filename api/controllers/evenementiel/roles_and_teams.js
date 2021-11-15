@@ -1,5 +1,7 @@
 var client = require('../../../db_connection')
-
+/**************************************************************************/
+/**********this part is responsible for getting teams and roles ***********/
+/**************************************************************************/
 exports.getroles=(req,res)=>{
     client.query(`SELECT *  FROM  role_membre ;`,(err,result)=>{
         if (err){

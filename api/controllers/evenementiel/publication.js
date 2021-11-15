@@ -1,7 +1,9 @@
 
 var client = require('../../../db_connection')
 const validator = require('../../middleware/validator')
-
+/**************************************************************************/
+/**************this part is responsible for all posts APIS ****************/
+/**************************************************************************/
 exports.getposts=(req,res)=>{
   if (validator(req.body, ["idclub"], res)) {
     return

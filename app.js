@@ -5,9 +5,11 @@ const dotenv = require('dotenv');
 const nodemailer = require('nodemailer');
 const bodyParser = require('body-parser');
 const id_Server = "192.168.118.228";
-
 var mysql = require('mysql');
 dotenv.config();
+var client = require('./db_connection');
+const path = require('path');
+
 /******************************************************/
 /***************import routes here*********************/
 /*******************************************************/
@@ -16,6 +18,18 @@ dotenv.config();
 /***group evenementiel routers***/
 /********************************/
 const auth_evenementiel_route_auth_event= require('./api/routes/evenementiel/auth')
+const auth_evenementiel_route_demande_event= require('./api/routes/evenementiel/demande')
+const auth_evenementiel_route_roles_and_teams = require('./api/routes/evenementiel/roles_and_teams')
+const auth_evenementiel_route_user = require('./api/routes/evenementiel/user')
+const auth_evenementiel_route_club = require('./api/routes/evenementiel/club')
+const auth_evenementiel_route_forgetpassword = require('./api/routes/evenementiel/forgetpassword')
+const auth_evenementiel_route_sondage = require('./api/routes/evenementiel/sondage')
+const auth_evenementiel_route_post=require('./api/routes/evenementiel/post')
+const auth_evenementiel_route_evenment=require('./api/routes/evenementiel/evenment')
+const auth_evenementiel_route_calendrier=require('./api/routes/evenementiel/calendrier')
+const auth_evenementiel_route_participation=require('./api/routes/evenementiel/participation')
+const auth_evenementiel_route_activites=require('./api/routes/evenementiel/activites')
+
 /********************************/
 /***group stage pfe routers******/
 /********************************/
@@ -80,32 +94,14 @@ const con=require('./db_connection')
 
 
 /*********date base connection it will shut down every 5min you need to restart it*************************/
-// var con = mysql.createConnection({
-//   host: "remotemysql.com",
-//   user: "5mrruYpkTT",
-//   password: "MbMXb71BlA"
-// });
-con.connect(function(err) {
-  if (err){
-      console.log(err.message)
-  }else{
-    console.log("Connected!");
-  };
-  con.on('error', function(err) {
-    console.log('db error', err);
-    if(err.code === 'PROTOCOL_CONNECTION_LOST') {
-      con.connect(function(err) {
-        if (err){
-          console.log(err.message)
-        }else{
-          console.log("Connected!");
-        }             
-      })
-    } else {
-      throw err;
-    }
+  client.connect(function(err) {
+    if (err){
+        console.log(err.message)
+    }else{
+      console.log("Connected!");
+    };
   });
- /***************************************/
+  /***************************************/
   /*************cors handler**************/
   /***************************************/
   app.use((req, res, next) => {
@@ -135,6 +131,21 @@ con.connect(function(err) {
 /***use group evenementiel routers***/
 /************************************/
   app.use("/auth_event",auth_evenementiel_route_auth_event)
+  app.use("/demande_event",auth_evenementiel_route_demande_event)
+  app.use("/roles_and_teams",auth_evenementiel_route_roles_and_teams)
+  app.use("/user",auth_evenementiel_route_user)
+  app.use("/event",auth_evenementiel_route_evenment)
+  app.use("/club",auth_evenementiel_route_club)
+  app.use("/forgetpassword",auth_evenementiel_route_forgetpassword)
+  app.use("/sondage",auth_evenementiel_route_sondage)
+  app.use("/post",auth_evenementiel_route_post)
+  app.use("/calendar",auth_evenementiel_route_calendrier)
+  app.use("/participation",auth_evenementiel_route_participation)
+  app.use("/activites",auth_evenementiel_route_activites)
+  app.get('/resetpassword/:token',function(req,res){
+    res.sendFile(path.join(__dirname+'/api/routes/evenementiel/resetpassword.html'));
+  });
+  
 /************************************/
 /***use group stage pfe routers******/
 /************************************/
@@ -196,7 +207,7 @@ app.use("/getDates",getDates)
 /************************************/
 
 /************************************/
-/**use group communication routers***/
+/***use group communication routers**/
 /************************************/
 app.use(function(req, res, next) {
   // update to match the domain you will make the request from
@@ -257,6 +268,6 @@ app.post('/send/:emailfrom', (req, res) => {
   app.use((req, res) => {
     res.status(404).json({ error: 'api not found' })
   })
-});
+
 
 module.exports = app

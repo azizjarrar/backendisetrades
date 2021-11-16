@@ -1,0 +1,7 @@
+/uploads
+/node_modules
+/cypress
+/.scannerwork
+/scannerwork
+/package-lock.json
+/yarn.lock

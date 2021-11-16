@@ -1,12 +1,18 @@
 const jwt = require('jsonwebtoken')
-
+/**
+ * check user  auth
+ * @constructor
+ */
 module.exports=(req,res,next)=>{
     try{
         let token = req.headers['authorization'] 
         if (token.startsWith('Bearer ')) {
             try{
+
                 token = token.slice(7, token.length);
-                const decoded = jwt.verify(token, secret_key_token_auth_event)
+
+                const decoded = jwt.verify(token, process.env.secret_key_token_auth_event)
+               
                 req.verified = decoded
                 next()
             }catch(error) {

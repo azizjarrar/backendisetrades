@@ -33,6 +33,7 @@
     "path": "^0.12.7"
   },
   "devDependencies": {
-    "cypress": "^8.7.0"
+    "cypress": "^8.7.0",
+    "cypress-file-upload": "^5.0.8"
   }
 }

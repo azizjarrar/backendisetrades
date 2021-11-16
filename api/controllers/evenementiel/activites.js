@@ -88,17 +88,29 @@ exports.deleteactivite=(req,res)=>{
     if(validator(req.body,["id_activites","idclub"],res)){
         return
       }
-    client.query(`DELETE  FROM   activites where idclub=${client.escape(req.body.idclub)} AND id_activites=${client.escape(req.body.id_activites)};`,(err,result)=>{
+
+      client.query(`DELETE  FROM   media_activites where  id_activites=${client.escape(req.body.id_activites)};`,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err.message,
                 status: res.statusCode,
               });
         }else{
-            res.status(res.statusCode).json({
-                message: "activites ",
-                data:result
-              });
+          client.query(`DELETE  FROM   activites where idclub=${client.escape(req.body.idclub)} AND id_activites=${client.escape(req.body.id_activites)};`,(err,result)=>{
+            if (err){
+                res.status(res.statusCode).json({
+                    errorCode: err.message,
+                    status: res.statusCode,
+                  });
+            }else{
+                res.status(res.statusCode).json({
+                    message: "deleted activites ",
+                    data:result
+                  });
+            }
+        })
         }
     })
+
+
 }

@@ -29,6 +29,18 @@ const auth_evenementiel_route_activites=require('./api/routes/evenementiel/activ
 /********************************/
 /***group stage pfe routers******/
 /********************************/
+const entrepriseRouter = require('./api/routes/stagepfe/entreprise');
+const domaineeRouter = require('./api/routes/stagepfe/domaine');
+const offreStageRouter = require('./api/routes/stagepfe/offrestage');
+const experienceRouter = require('./api/routes/stagepfe/experience');
+const cvRouter = require('./api/routes/stagepfe/cv');
+const demandeStageEtudiantRouter = require('./api/routes/stagepfe/demande_stage_etudiant');
+const deamndeStageEntrepriseRouter = require('./api/routes/stagepfe/demande_stage_entreprise');
+
+const competenceRouter = require('./api/routes/stagepfe/competence');
+const confirmationDemandeRouter = require('./api/routes/stagepfe/confirmationDemande');
+const etudiantComp=require('./api/routes/stagepfe/etudiant');
+const stagiaires=require('./api/routes/stagepfe/stagiaires');
 
 /********************************/
 /***group scolarite routers******/
@@ -41,6 +53,30 @@ const add_file= require('./api/routes/scolarite/AddFile')
 /********************************/
 /****group admision routers******/
 /********************************/
+const adminRouter = require('./api/routes/admision/admin');
+const classeRouter = require('./api/routes/admision/classe');
+const demandeMasterRouter = require('./api/routes/admision/demandeMaster');
+const departementRouter = require('./api/routes/admision/departement');
+const domaineRouter = require('./api/routes/admision/domaine');
+const etablissementRouter = require('./api/routes/admision/etablissement');
+const etudiantRouter = require('./api/routes/admision/etudiant');
+const masterRouter = require('./api/routes/admision/master');
+const niveauRouter = require('./api/routes/admision/niveau');
+const responsableGroupRouter = require('./api/routes/admision/responsableGroup');
+const roleRouter = require('./api/routes/admision/role');
+const specialiteRouter = require('./api/routes/admision/specialite');
+const userRouter = require('./api/routes/admision/user');
+const situationRouter = require('./api/routes/admision/situationEtudiant');
+const etatRouter = require('./api/routes/admision/etatDemandeMaster');
+const paysRouter = require('./api/routes/admision/pays');
+const gouvernRouter = require('./api/routes/admision/gouvernerat');
+const villeRouter = require('./api/routes/admision/ville');
+const AdminMaster = require('./api/routes/admision/adminMaster');
+
+const cursusRouter = require('./api/routes/admision/cursus');
+const bacRouter = require('./api/routes/admision/bacclaureat');
+const CursusGRouter = require('./api/routes/admision/cursusG');
+const diplomeRouter = require('./api/routes/admision/diplome');
 
 /********************************/
 /**group communication routers***/
@@ -75,7 +111,9 @@ const add_file= require('./api/routes/scolarite/AddFile')
   app.use(express.json())
   
   app.use('/uploads',express.static('./uploads'))
-
+app.use(express.static('public'));
+app.use('/demande-master', express.static('demande-master'));
+app.use('/etablissement_logo', express.static('etablissement_logo'));
 
   app.use(morgan('dev'))
 /*************************************************/
@@ -105,6 +143,17 @@ const add_file= require('./api/routes/scolarite/AddFile')
 /************************************/
 /***use group stage pfe routers******/
 /************************************/
+app.use('/entreprise',entrepriseRouter);
+app.use('/offrestage',offreStageRouter);
+app.use('/domaine',domaineeRouter);
+app.use('/experience',experienceRouter);
+app.use('/cv',cvRouter);
+app.use('/demandeEtudiantStageEntreprise',demandeStageEtudiantRouter);
+app.use('/demandeEntreprise',deamndeStageEntrepriseRouter);
+app.use('/competence',competenceRouter);
+app.use('/confirmationDemande',confirmationDemandeRouter);
+app.use('/etudiantComp',etudiantComp);
+app.use('/stagiaires',stagiaires);
 
 /************************************/
 /***use group scolarite routers******/
@@ -117,6 +166,29 @@ app.use("/addfile",add_file)
 /************************************/
 /****use group admision routers******/
 /************************************/
+app.use('/admin', adminRouter);
+app.use('/classe', classeRouter);
+app.use('/demandeMaster', demandeMasterRouter);
+app.use('/departement', departementRouter);
+app.use('/domaine', domaineRouter);
+app.use('/etablissement', etablissementRouter);
+app.use('/etudiant', etudiantRouter);
+app.use('/master', masterRouter);
+app.use('/niveau', niveauRouter);
+app.use('/responsableGroup', responsableGroupRouter);
+app.use('/role', roleRouter);
+app.use('/specialite', specialiteRouter);
+app.use('/users', userRouter);
+app.use('/situation', situationRouter);
+app.use('/etatDemande', etatRouter);
+app.use('/pays', paysRouter);
+app.use('/ville', villeRouter); 
+app.use('/gouvernerat', gouvernRouter);
+app.use('/adminMaster', AdminMaster);
+app.use('/diplome', diplomeRouter);
+app.use('/cursus', cursusRouter);
+app.use('/bacclaureat', bacRouter);
+app.use('/cursusG', CursusGRouter);
 
 /************************************/
 /***use group communication routers**/

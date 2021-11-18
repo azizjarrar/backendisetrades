@@ -63,6 +63,8 @@ router.post('/getevents', event_controler.getevents)
 router.post('/addevent',checkauth_event,checkUploadPath,uploadMulter.single('file'),event_controler.addevent)
 router.post('/getClubEvents',checkauth_event,event_controler.getClubEvents)
 router.post('/deleteEvent',checkauth_event,event_controler.deleteEvent)
+router.post('/getOneEvent',event_controler.getOneEvent)
+router.post('/updateEvent',checkauth_event,event_controler.updateEvent)
 
 
 module.exports = router

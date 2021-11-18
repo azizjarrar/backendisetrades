@@ -1,7 +1,10 @@
 var client = require('../../../db_connection')
-
+const validator = require('../../middleware/validator')
+/**************************************************************************/
+/**************this part is responsible of all club API********************/
+/**************************************************************************/
 exports.getclubs=(req,res)=>{
-    client.query(`SELECT *  FROM  club `,(err,result)=>{
+    client.query(`SELECT *  FROM  club ;`,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err.message,
@@ -18,7 +21,7 @@ exports.getclubs=(req,res)=>{
 }
 
 exports.getuserClubs=(req,res)=>{
-        client.query(`SELECT club.id_club,club.nom_club,club.id_membre  AS idadminclub FROM  membre JOIN liste_membre on  liste_membre.cin_membre=membre.cin JOIN club on club.id_club=liste_membre.id_club WHERE membre.id_membre='${req.verified.user_auth.id_membre}'`,(err,result)=>{
+        client.query(`SELECT club.id_club,club.nom_club,club.id_membre  AS idadminclub FROM  membre JOIN liste_membre on  liste_membre.cin_membre=membre.cin JOIN club on club.id_club=liste_membre.id_club WHERE membre.id_membre='${req.verified.user_auth.id_membre}';`,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err.message,
@@ -34,7 +37,7 @@ exports.getuserClubs=(req,res)=>{
 }
 /*not Used */
 exports.getClubYouAreAdminIn=(req,res)=>{
-    client.query(`SELECT club.id_club,club.nom_club  FROM  club join membre on membre.id_membre=club.id_membre where club.id_membre=${client.escape(req.verified.user_auth.id_membre)} `,(err,result)=>{
+    client.query(`SELECT club.id_club,club.nom_club  FROM  club join membre on membre.id_membre=club.id_membre where club.id_membre=${client.escape(req.verified.user_auth.id_membre)};`,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err.message,
@@ -51,15 +54,10 @@ exports.getClubYouAreAdminIn=(req,res)=>{
 }
 
 exports.isAdmin=(req,res)=>{
-    if (req.body.id_club == undefined) {
-        res.status(res.statusCode).json({
-          message: "id_club not found",
-          error: true,
-          status: res.statusCode,
-        });
+      if(validator(req.body,["id_club"],res)){
         return
       }
-    client.query(`SELECT *  FROM  club join membre on membre.id_membre=club.id_membre where club.id_membre=${client.escape(req.verified.user_auth.id_membre)} && club.id_club=${client.escape(req.body.id_club)} `,(err,result)=>{
+    client.query(`SELECT *  FROM  club join membre on membre.id_membre=club.id_membre where club.id_membre=${client.escape(req.verified.user_auth.id_membre)} && club.id_club=${client.escape(req.body.id_club)};`,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err.message,

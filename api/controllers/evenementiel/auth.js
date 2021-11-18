@@ -1,25 +1,15 @@
 var client = require('../../../db_connection')
 const jwt = require("jsonwebtoken");
+const validator = require('../../middleware/validator')
 
-
+/**************************************************************************/
+/**************this part is responsible of all auth API********************/
+/**************************************************************************/
 exports.singin=(req,res)=>{
-  if(req.body.email==undefined){
-    res.status(res.statusCode).json({
-      message: "email not found",
-      error:true,
-      status: res.statusCode,
-    });
+  if(validator(req.body,["password","email"],res)){
     return
   }
-  if(req.body.password==undefined){
-    res.status(res.statusCode).json({
-      message: "password not found",
-      error:true,
-      status: res.statusCode,
-    });
-    return
-  }
-  client.query(`SELECT * ,membre.email FROM  membre JOIN role_membre on role_membre.id_role=membre.role JOIN user on user.cin=membre.cin WHERE membre.email=${client.escape(req.body.email)} && membre.motdepasse=${client.escape(req.body.password)} `, function  (err, result) {
+  client.query(`SELECT * ,membre.email FROM  membre JOIN role_membre on role_membre.id_role=membre.role JOIN user on user.cin=membre.cin WHERE membre.email=${client.escape(req.body.email)} && membre.motdepasse=${client.escape(req.body.password)} ;`, function  (err, result) {
     if (err){
         res.status(res.statusCode).json({
             errorCode: err,
@@ -34,6 +24,7 @@ exports.singin=(req,res)=>{
           status: res.statusCode,
         });
       }else{
+        //token generation
          jwt.sign({ user_auth: {nom:result[0].nom,email:result[0].email,cin:result[0].cin,id_membre:result[0].id_membre} },process.env.secret_key_token_auth_event,
         async (err, token) => {
            if(err){

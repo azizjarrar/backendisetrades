@@ -2,9 +2,15 @@ var client = require('../../../db_connection')
 var jwt = require('jsonwebtoken');
 const crypto = require("crypto");
 var nodemailer = require('nodemailer');
-
+const validator = require('../../middleware/validator')
+/**************************************************************************/
+/**************this part is responsible for forgeting password*************/
+/**************************************************************************/
 exports.sendEmailForgetPassword=(req,res)=>{
-    client.query(`SELECT *  FROM  membre WHERE email='${req.body.email}'`,async (err,result)=>{
+  if (validator(req.body, ["email"], res)) {
+    return
+  }
+    client.query(`SELECT *  FROM  membre WHERE email='${req.body.email}';`,async (err,result)=>{
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err.message,
@@ -22,8 +28,8 @@ exports.sendEmailForgetPassword=(req,res)=>{
                     var transporter = nodemailer.createTransport({
                         service: 'gmail',
                         auth: {
-                          user: 'Cclub621@gmail.com',
-                          pass: 'club123456789'
+                          user: 'clubcelva89@gmail.com',
+                          pass: 'Celva123'
                         }
                       });
                         var mailOptions = {
@@ -52,6 +58,9 @@ exports.sendEmailForgetPassword=(req,res)=>{
     })
 }
 exports.restartPassword=(req,res)=>{
+  if (validator(req.body, ["password"], res)) {
+    return
+  }
     try{
         const decoded = jwt.verify(req.body.token, process.env.secret_key_token_auth_event)
         client.query(`UPDATE membre  SET motdepasse='${req.body.password}'  WHERE email='${decoded.email}'`,async (err,result)=>{

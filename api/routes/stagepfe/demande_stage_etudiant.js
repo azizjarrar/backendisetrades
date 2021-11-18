@@ -12,6 +12,6 @@ router.get('/getAllDemandesEtudiant/:id/:etat/:year',demandeStageController.getA
 
 router.get('/getAllPostulationsEtudiant/:id',demandeStageController.getAllPostulationsEtudiant);//same as getAllDemandesEtudiant
 
-
+router.get('/getAllDemandesYears',demandeStageController.getAllDemandesYears);//same as getAllDemandesEtudiant
 
 module.exports=router;

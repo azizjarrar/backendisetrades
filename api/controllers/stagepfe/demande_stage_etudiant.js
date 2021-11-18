@@ -108,3 +108,9 @@ module.exports.getAllPostulationsEtudiant=(req,res)=> {
     d on e.id_etudiant=d.id_etudiant and d.id_offre_stage=o.id_offre_stage WHERE e.id_etudiant= ?`; 
         query.sql_request(sql,[id],res);    
 };
+
+module.exports.getAllDemandesYears=(req,res)=> {
+ 
+    const sql="SELECT DISTINCT YEAR(STR_TO_DATE(`date_demande`,'%Y-%m-%d')) as year from demande_stage_entreprise";
+    query.sql_request(sql,null,res);
+  };

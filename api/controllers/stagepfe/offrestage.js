@@ -251,3 +251,8 @@ module.exports.loadAllOffres=(req,res)=>{
   query.sql_request(sql,[req.params.id_responsable],res);   
 }
 
+module.exports.getAllOffresYears=(req,res)=> {
+ 
+  const sql="SELECT DISTINCT YEAR(STR_TO_DATE(`date_debut`,'%Y-%m-%d')) as year from offre_stage";
+  query.sql_request(sql,null,res);
+};

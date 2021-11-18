@@ -42,7 +42,7 @@ router.get('/getOffresEtudiantsContactes/:id_responsable/:id_etudiant',offrestag
 
 router.patch('/offreExpired',offrestageController.offreExpired);
 
-
+router.get('/getOffresYears',offrestageController.getAllOffresYears);
 
 
 module.exports=router

@@ -29,6 +29,18 @@ const auth_evenementiel_route_activites=require('./api/routes/evenementiel/activ
 /********************************/
 /***group stage pfe routers******/
 /********************************/
+const entrepriseRouter = require('./api/routes/stagepfe/entreprise');
+const domaineeRouter = require('./api/routes/stagepfe/domaine');
+const offreStageRouter = require('./api/routes/stagepfe/offrestage');
+const experienceRouter = require('./api/routes/stagepfe/experience');
+const cvRouter = require('./api/routes/stagepfe/cv');
+const demandeStageEtudiantRouter = require('./api/routes/stagepfe/demande_stage_etudiant');
+const deamndeStageEntrepriseRouter = require('./api/routes/stagepfe/demande_stage_entreprise');
+
+const competenceRouter = require('./api/routes/stagepfe/competence');
+const confirmationDemandeRouter = require('./api/routes/stagepfe/confirmationDemande');
+const etudiantComp=require('./api/routes/stagepfe/etudiant');
+const stagiaires=require('./api/routes/stagepfe/stagiaires');
 
 /********************************/
 /***group scolarite routers******/
@@ -131,6 +143,17 @@ app.use('/etablissement_logo', express.static('etablissement_logo'));
 /************************************/
 /***use group stage pfe routers******/
 /************************************/
+app.use('/entreprise',entrepriseRouter);
+app.use('/offrestage',offreStageRouter);
+app.use('/domaine',domaineeRouter);
+app.use('/experience',experienceRouter);
+app.use('/cv',cvRouter);
+app.use('/demandeEtudiantStageEntreprise',demandeStageEtudiantRouter);
+app.use('/demandeEntreprise',deamndeStageEntrepriseRouter);
+app.use('/competence',competenceRouter);
+app.use('/confirmationDemande',confirmationDemandeRouter);
+app.use('/etudiantComp',etudiantComp);
+app.use('/stagiaires',stagiaires);
 
 /************************************/
 /***use group scolarite routers******/

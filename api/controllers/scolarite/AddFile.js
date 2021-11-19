@@ -2,7 +2,7 @@
 var client = require('../../../db_connection')
 ////////////we going to create a function that will be insert the data  this methode will insert the data from json  object 
 ///////////this function will be exported 
-exports.addReclamation=(req,res)=>{
+exports.add=(req,res)=>{
   /////////// this the database query to add the data
  ////////// req equale for parameter from the body or the url parameter 
  //////////res mean the result from the query  

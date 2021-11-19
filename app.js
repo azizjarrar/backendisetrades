@@ -2,14 +2,6 @@ const express = require('express')
 const morgan = require('morgan')
 const app = express()
 const dotenv = require('dotenv');
-<<<<<<< HEAD
-const nodemailer = require('nodemailer');
-const bodyParser = require('body-parser');
-const id_Server = "192.168.118.228";
-
-var mysql = require('mysql');
-=======
->>>>>>> 278eb0aa24c1cbec7101cd27f24bcc5b8677dfe5
 dotenv.config();
 var client = require('./db_connection');
 const path = require('path');
@@ -54,7 +46,7 @@ const stagiaires=require('./api/routes/stagepfe/stagiaires');
 /***group scolarite routers******/
 /********************************/
 /////////////File ////////////////////////
-const add_file= require('./api/routes/scolarite/AddFile')
+const add= require('./api/routes/scolarite/AddFile')
 const update_file= require('./api/routes/scolarite/AddFile')
 const update_file2= require('./api/routes/scolarite/AddFile')
 const deletefile= require('./api/routes/scolarite/AddFile')
@@ -134,34 +126,6 @@ const diplomeRouter = require('./api/routes/admision/diplome');
 
 
 /*********date base connection it will shut down every 5min you need to restart it*************************/
-<<<<<<< HEAD
-// var con = mysql.createConnection({
-//   host: "remotemysql.com",
-//   user: "5mrruYpkTT",
-//   password: "MbMXb71BlA"
-// });
-con.connect(function(err) {
-  if (err){
-      console.log(err.message)
-  }else{
-    console.log("Connected!");
-  };
-  con.on('error', function(err) {
-    console.log('db error', err);
-    if(err.code === 'PROTOCOL_CONNECTION_LOST') {
-      con.connect(function(err) {
-        if (err){
-          console.log(err.message)
-        }else{
-          console.log("Connected!");
-        }             
-      })
-    } else {
-      throw err;
-    }
-  });
- /***************************************/
-=======
   client.connect(function(err) {
     if (err){
         console.log(err.message)
@@ -170,7 +134,6 @@ con.connect(function(err) {
     };
   });
   /***************************************/
->>>>>>> 278eb0aa24c1cbec7101cd27f24bcc5b8677dfe5
   /*************cors handler**************/
   /***************************************/
   app.use((req, res, next) => {
@@ -189,13 +152,9 @@ con.connect(function(err) {
   app.use(express.json())
   
   app.use('/uploads',express.static('./uploads'))
-<<<<<<< HEAD
-
-=======
 app.use(express.static('public'));
 app.use('/demande-master', express.static('demande-master'));
 app.use('/etablissement_logo', express.static('etablissement_logo'));
->>>>>>> 278eb0aa24c1cbec7101cd27f24bcc5b8677dfe5
 
   app.use(morgan('dev'))
 /****************use routes here******************/
@@ -224,13 +183,6 @@ app.use('/etablissement_logo', express.static('etablissement_logo'));
 /************************************/
 /***use group stage pfe routers******/
 /************************************/
-<<<<<<< HEAD
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
-=======
 app.use('/entreprise',entrepriseRouter);
 app.use('/offrestage',offreStageRouter);
 app.use('/domaine',domaineeRouter);
@@ -243,12 +195,11 @@ app.use('/confirmationDemande',confirmationDemandeRouter);
 app.use('/etudiantComp',etudiantComp);
 app.use('/stagiaires',stagiaires);
 
->>>>>>> 278eb0aa24c1cbec7101cd27f24bcc5b8677dfe5
 /************************************/
 /***use group scolarite routers******/
 /************************************/
 ////////////File///////////////////
-app.use("/addfile",add_file)
+app.use("/addfile",add)
 app.use("/updatefile",update_file)
 app.use("/updatefile",update_file2)
 app.use("/DeleteFile",deletefile)
@@ -323,7 +274,6 @@ app.use('/cursusG', CursusGRouter);
 /***use group communication routers**/
 /************************************/
 app.use(function(req, res, next) {
-  // update to match the domain you will make the request from
   res.header('Access-Control-Allow-Origin: *');
   res.header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
   res.header('Access-Control-Allow-Headers: Content-Type');
@@ -332,8 +282,8 @@ app.use(function(req, res, next) {
 
 ////////////////////////NOde mailer////////////////////////////
 // Body Parser Middleware
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 app.get('/hello', (req, res) => {
   res.json({ error: err })
 });

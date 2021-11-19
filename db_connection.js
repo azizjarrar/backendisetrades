@@ -5,7 +5,7 @@ module.exports = require('mysql').createConnection({
     database : 'finalv0'
     // user: "5mrruYpkTT",
     // password: "MbMXb71BlA",
-    // database: "5mrruYpkTT"
+    // database: "5mrruYpkTT"npm
 /*
     host: "remotemysql.com",
     user: "BiKEJdTxsS",

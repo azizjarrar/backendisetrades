@@ -4,5 +4,5 @@ const diplomeController=require('../../controllers/admision/diplome')
 
 const { checkToken } = require("../../middleware/token_validation")
 
-router.get("/", checkToken, diplomeController.getListDiplomes);
+router.get("/", diplomeController.getListDiplomes);
 module.exports = router;

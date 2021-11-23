@@ -104,30 +104,55 @@ module.exports.getListDemandeMaster = (req, res) => {
         })
 };
 
-module.exports.getListDemandeByMaster = (req, res) => {
+module.exports.getListDemandeByMaster = async (req, res) => {
     const id_master = req.params.id;
-    connexion.query(
+  await  connexion.query(
         "SELECT *, etablissement.libelle as libelleEtablissement, master.nom as nomMaster,etat_demande_master.libelle as edmlibelle FROM demande_master, master,etat_demande_master, etudiant, etablissement,departement,user,adresse,bacclaureat,cursusgenerale WHERE demande_master.id_master = master.id_master and master.id_departement=departement.id_departement and cursusgenerale.etablissement=etablissement.id_etablissement and demande_master.id_etudiant = etudiant.id_etudiant and etudiant.id_user = user.id_user and bacclaureat.id_bacc  = etudiant.id_bacc and cursusgenerale.id_cursusgenerale = etudiant.id_cursusgenerale and adresse.id_user=user.id_user and etat_demande_master.id_etat_demande_master = demande_master.id_etat_demande_master and master.id_master = ?",
         [id_master],
-        (err, results) => {
+       async (err, results) => {
             if (err) {
                 res.status(500).json({
                     err: true,
                     results: []
                 });
+                return;
             }
 
             if (results)
+              { let resolvednumber=0;
+                new Promise ((done, reject) => {
+                for (let i=0;i<results.length ;i++) {
+                    results[i].lstCursus=[];
+                    new Promise ((resolve, reject) => {
+                        connexion.query("SELECT *,niveau.libelle as nlibelle FROM cursus,domaine,etablissement,etudiant,niveau,user WHERE cursus.id_domaine=domaine.id_domaine and cursus.id_etablissement=etablissement.id_etablissement and cursus.id_niveau=niveau.id_niveau and cursus.id_etudiant = etudiant.id_etudiant and etudiant.id_user=user.id_user and user.id_user =?",
+                        [results[i].id_user],async (err, res)=>{
+                            results[i].lstCursus=res;
+                            resolve(res);
+                        });
+                    }).then(()=>{
+                        console.log('in progress',results[i].lstCursus[0].mention);
+                        resolvednumber++;
+                        if(Number(results.length)===Number(resolvednumber))
+                        { 
+                         done();
+                        }
+                    });
+                }
+            }).then(()=>{
                 res.status(200).json({
                     err: false,
                     results: results,
-                })
+                });
+            });
+
+            return;}
             else
-                res.status(404).json({
+               { res.status(404).json({
                     err: false,
                     results: [],
                     message: "choix n'existe pas",
-                })
+                });
+            return;}
         })
 }
 

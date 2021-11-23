@@ -224,9 +224,8 @@ module.exports.getUserByUserEmail = (req, res) => {
         });
         return;
       }
-
-      if (results) {
-        const result = bcrypt.compareSync(body.password, results[0].password);
+      if (results.length>0) {
+        const result = bcrypt.compareSync(body.password, results[0]?.password);
         console.log(result)
         if (result) {
           results.password = undefined;

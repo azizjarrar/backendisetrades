@@ -22,7 +22,7 @@ module.exports.getUsers = (req, res) => {
         return;
       }
 
-      if (results?.length)
+      if (results.length)
        { res.status(200).json({
           err: false,
           results: results,

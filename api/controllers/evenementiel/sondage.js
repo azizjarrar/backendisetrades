@@ -121,8 +121,8 @@ exports.getVotes=(req,res)=>{
             else{
                 res.status(res.statusCode).json({
                     message: "votes",
-                    NumberOfVotesFalse:result[0]==undefined?0:result[0].NumberOfVotes??0,
-                    NumberOfVotesTrue:result[1]==undefined?0:result[1].NumberOfVotes??0
+                    NumberOfVotesFalse:result[0]==undefined?0:result[0].NumberOfVotes,
+                    NumberOfVotesTrue:result[1]==undefined?0:result[1].NumberOfVotes
                   });
             }
 

@@ -113,7 +113,7 @@ const paysRouter = require('./api/routes/admision/pays');
 const gouvernRouter = require('./api/routes/admision/gouvernerat');
 const villeRouter = require('./api/routes/admision/ville');
 const AdminMaster = require('./api/routes/admision/adminMaster');
-
+const AbPr= require('./api/routes/AbsencePresence/customer.routes')
 const cursusRouter = require('./api/routes/admision/cursus');
 const bacRouter = require('./api/routes/admision/bacclaureat');
 const CursusGRouter = require('./api/routes/admision/cursusG');
@@ -273,6 +273,12 @@ app.use('/cursusG', CursusGRouter);
 /************************************/
 /***use group communication routers**/
 /************************************/
+
+/************************************/
+/***use group Absence et Présence******/
+/************************************/
+app.use('/absencepresence',AbPr)
+
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin: *');
   res.header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
@@ -323,6 +329,7 @@ app.post('/send/:emailfrom', (req, res) => {
     
   });
   });
+
 
 
 

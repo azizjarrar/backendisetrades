@@ -1,4 +1,5 @@
  module.exports = require('mysql').createConnection({
+
     host: "remotemysql.com",
     user: "XQp55NTp8q",
     password: "lQGebO4UU4",
@@ -9,6 +10,7 @@
     // password: "",
     // database: "iset_rades",
     // port:3306
+
 
 /*
     host: '127.0.0.1',

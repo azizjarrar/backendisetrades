@@ -19,12 +19,28 @@ const auth_evenementiel_route_auth_event= require('./api/routes/evenementiel/aut
 /********************************/
 /***group stage pfe routers******/
 /********************************/
+const entrepriseRouter = require('./api/routes/stagepfe/entreprise');
+const domaineeRouter = require('./api/routes/stagepfe/domaine');
+const offreStageRouter = require('./api/routes/stagepfe/offrestage');
+const experienceRouter = require('./api/routes/stagepfe/experience');
+const cvRouter = require('./api/routes/stagepfe/cv');
+const demandeStageEtudiantRouter = require('./api/routes/stagepfe/demande_stage_etudiant');
+const deamndeStageEntrepriseRouter = require('./api/routes/stagepfe/demande_stage_entreprise');
+
+const competenceRouter = require('./api/routes/stagepfe/competence');
+const confirmationDemandeRouter = require('./api/routes/stagepfe/confirmationDemande');
+const etudiantComp=require('./api/routes/stagepfe/etudiant');
+const stagiaires=require('./api/routes/stagepfe/stagiaires');
 
 /********************************/
 /***group scolarite routers******/
 /********************************/
 /////////////File ////////////////////////
+<<<<<<< HEAD
 const add_file= require('./api/routes/scolarite/AddFile')
+=======
+const add= require('./api/routes/scolarite/AddFile')
+>>>>>>> c4158e267732db0c983ac79c79abc35d5b99d902
 const update_file= require('./api/routes/scolarite/AddFile')
 const update_file2= require('./api/routes/scolarite/AddFile')
 const deletefile= require('./api/routes/scolarite/AddFile')
@@ -72,6 +88,30 @@ const con=require('./db_connection')
 /********************************/
 /****group admision routers******/
 /********************************/
+const adminRouter = require('./api/routes/admision/admin');
+const classeRouter = require('./api/routes/admision/classe');
+const demandeMasterRouter = require('./api/routes/admision/demandeMaster');
+const departementRouter = require('./api/routes/admision/departement');
+const domaineRouter = require('./api/routes/admision/domaine');
+const etablissementRouter = require('./api/routes/admision/etablissement');
+const etudiantRouter = require('./api/routes/admision/etudiant');
+const masterRouter = require('./api/routes/admision/master');
+const niveauRouter = require('./api/routes/admision/niveau');
+const responsableGroupRouter = require('./api/routes/admision/responsableGroup');
+const roleRouter = require('./api/routes/admision/role');
+const specialiteRouter = require('./api/routes/admision/specialite');
+const userRouter = require('./api/routes/admision/user');
+const situationRouter = require('./api/routes/admision/situationEtudiant');
+const etatRouter = require('./api/routes/admision/etatDemandeMaster');
+const paysRouter = require('./api/routes/admision/pays');
+const gouvernRouter = require('./api/routes/admision/gouvernerat');
+const villeRouter = require('./api/routes/admision/ville');
+const AdminMaster = require('./api/routes/admision/adminMaster');
+const AbPr= require('./api/routes/AbsencePresence/customer.routes')
+const cursusRouter = require('./api/routes/admision/cursus');
+const bacRouter = require('./api/routes/admision/bacclaureat');
+const CursusGRouter = require('./api/routes/admision/cursusG');
+const diplomeRouter = require('./api/routes/admision/diplome');
 
 /********************************/
 /**group communication routers***/
@@ -124,7 +164,9 @@ con.connect(function(err) {
   app.use(express.json())
   
   app.use('/uploads',express.static('./uploads'))
-
+app.use(express.static('public'));
+app.use('/demande-master', express.static('demande-master'));
+app.use('/etablissement_logo', express.static('etablissement_logo'));
 
   app.use(morgan('dev'))
 /****************use routes here******************/
@@ -138,16 +180,35 @@ con.connect(function(err) {
 /************************************/
 /***use group stage pfe routers******/
 /************************************/
+<<<<<<< HEAD
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+=======
+app.use('/entreprise',entrepriseRouter);
+app.use('/offrestage',offreStageRouter);
+app.use('/domaine',domaineeRouter);
+app.use('/experience',experienceRouter);
+app.use('/cv',cvRouter);
+app.use('/demandeEtudiantStageEntreprise',demandeStageEtudiantRouter);
+app.use('/demandeEntreprise',deamndeStageEntrepriseRouter);
+app.use('/competence',competenceRouter);
+app.use('/confirmationDemande',confirmationDemandeRouter);
+app.use('/etudiantComp',etudiantComp);
+app.use('/stagiaires',stagiaires);
+
+>>>>>>> c4158e267732db0c983ac79c79abc35d5b99d902
 /************************************/
 /***use group scolarite routers******/
 /************************************/
 ////////////File///////////////////
+<<<<<<< HEAD
 app.use("/addfile",add_file)
+=======
+app.use("/addfile",add)
+>>>>>>> c4158e267732db0c983ac79c79abc35d5b99d902
 app.use("/updatefile",update_file)
 app.use("/updatefile",update_file2)
 app.use("/DeleteFile",deletefile)
@@ -194,6 +255,29 @@ app.use("/getDates",getDates)
 /************************************/
 /****use group admision routers******/
 /************************************/
+app.use('/admin', adminRouter);
+app.use('/classe', classeRouter);
+app.use('/demandeMaster', demandeMasterRouter);
+app.use('/departement', departementRouter);
+app.use('/domaine', domaineRouter);
+app.use('/etablissement', etablissementRouter);
+app.use('/etudiant', etudiantRouter);
+app.use('/master', masterRouter);
+app.use('/niveau', niveauRouter);
+app.use('/responsableGroup', responsableGroupRouter);
+app.use('/role', roleRouter);
+app.use('/specialite', specialiteRouter);
+app.use('/users', userRouter);
+app.use('/situation', situationRouter);
+app.use('/etatDemande', etatRouter);
+app.use('/pays', paysRouter);
+app.use('/ville', villeRouter); 
+app.use('/gouvernerat', gouvernRouter);
+app.use('/adminMaster', AdminMaster);
+app.use('/diplome', diplomeRouter);
+app.use('/cursus', cursusRouter);
+app.use('/bacclaureat', bacRouter);
+app.use('/cursusG', CursusGRouter);
 
 /************************************/
 /**use group communication routers***/
@@ -236,6 +320,51 @@ app.post('/send/:emailfrom', (req, res) => {
       html: req.body.contenu // html body
   };
 
+<<<<<<< HEAD
+=======
+/************************************/
+/***use group Absence et Présence******/
+/************************************/
+app.use('/absencepresence',AbPr)
+
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin: *');
+  res.header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+  res.header('Access-Control-Allow-Headers: Content-Type');
+  next();
+});
+
+////////////////////////NOde mailer////////////////////////////
+// Body Parser Middleware
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+app.get('/hello', (req, res) => {
+  res.json({ error: err })
+});
+
+app.post('/send/:emailfrom', (req, res) => {
+  
+  // create reusable transporter object using the default SMTP transport
+  let transporter = nodemailer.createTransport({
+    host: "imap.gmail.com",
+    Port: 993,
+    secure: true, // upgrade later with STARTTLS
+    auth: {
+      user: "ilyeshrizi60@gmail.com",
+      pass: "zgfedrzlqtjgppfy",
+    },
+  });
+
+  // setup email data with unicode symbols
+  let mailOptions = {
+      from: '"req.params.emailfrom"', // sender address
+      to: req.body.mailto, // list of receivers
+      subject: 'Confirmation', // Subject line
+      text: 'hello email', // plain text body
+      html: req.body.contenu // html body
+  };
+
+>>>>>>> c4158e267732db0c983ac79c79abc35d5b99d902
   // send mail with defined transport object
   transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
@@ -249,6 +378,10 @@ app.post('/send/:emailfrom', (req, res) => {
     
   });
   });
+<<<<<<< HEAD
+=======
+
+>>>>>>> c4158e267732db0c983ac79c79abc35d5b99d902
 
 
 

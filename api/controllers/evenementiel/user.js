@@ -1,17 +1,14 @@
 var client = require('../../../db_connection')
-
+const validator = require('../../middleware/validator')
+/**************************************************************************/
+/**************this part is responsible for all users APIS ****************/
+/**************************************************************************/
 
 exports.getOneUser=(req,res)=>{
-    if(req.body.id_membre==undefined){
-        res.status(res.statusCode).json({
-          message: "id_membre not found",
-          error:true,
-          status: res.statusCode,
-        });
+      if (validator(req.body, ["id_membre"], res)) {
         return
       }
-    client.query(`SELECT membre.id_membre ,membre.cin ,membre.email ,membre.membreimage,user.age ,user.sexe ,user.date_naissance  FROM  membre  JOIN  user  ON user.cin=membre.cin WHERE id_membre='${req.body.id_membre}'`,(err,result)=>{
-      console.log(result)
+    client.query(`SELECT membre.id_membre ,membre.cin ,membre.email ,membre.membreimage,user.age ,user.sexe ,user.date_naissance ,membre.tel FROM  membre  JOIN  user  ON user.cin=membre.cin WHERE id_membre=${client.escape(req.body.id_membre)};`,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err.message,
@@ -34,15 +31,10 @@ exports.getOneUser=(req,res)=>{
     })
 }
 exports.getMembres=(req,res)=>{
-  if(req.body.idclub==undefined){
-      res.status(res.statusCode).json({
-        message: "idclub not found",
-        error:true,
-        status: res.statusCode,
-      });
+    if (validator(req.body, ["idclub"], res)) {
       return
     }
-  client.query(`SELECT user.nom,user.prenom,membre.id_membre,membre.email,equipes.equipe  FROM  club JOIN liste_membre on club.id_club=liste_membre.id_club  JOIN membre on membre.cin=liste_membre.cin_membre JOIN user on user.cin=membre.cin JOIN equipes on id_equipe=liste_membre.equipe where club.id_club='${req.body.idclub}'and membre.role=1` ,(err,result)=>{
+  client.query(`SELECT user.nom,user.prenom,membre.id_membre,membre.email,equipes.equipe  FROM  club JOIN liste_membre on club.id_club=liste_membre.id_club  JOIN membre on membre.cin=liste_membre.cin_membre JOIN user on user.cin=membre.cin JOIN equipes on id_equipe=liste_membre.equipe where club.id_club=${client.escape(req.body.idclub)} and membre.role=1 ;` ,(err,result)=>{
       if (err){
           res.status(res.statusCode).json({
               errorCode: err.message,
@@ -57,15 +49,10 @@ exports.getMembres=(req,res)=>{
   })
 }
 exports.getResponsables=(req,res)=>{
-  if(req.body.idclub==undefined){
-      res.status(res.statusCode).json({
-        message: "idclub not found",
-        error:true,
-        status: res.statusCode,
-      });
+    if (validator(req.body, ["idclub"], res)) {
       return
     }
-  client.query(`SELECT user.nom,user.prenom,membre.id_membre,membre.email,equipes.equipe  FROM  club JOIN liste_membre on club.id_club=liste_membre.id_club  JOIN membre on membre.cin=liste_membre.cin_membre JOIN user on user.cin=membre.cin JOIN equipes on id_equipe=liste_membre.equipe where club.id_club='${req.body.idclub}'and membre.role=2` ,(err,result)=>{
+  client.query(`SELECT user.nom,user.prenom,membre.id_membre,membre.email,equipes.equipe  FROM  club JOIN liste_membre on club.id_club=liste_membre.id_club  JOIN membre on membre.cin=liste_membre.cin_membre JOIN user on user.cin=membre.cin JOIN equipes on id_equipe=liste_membre.equipe where club.id_club=${client.escape(req.body.idclub)} and membre.role=2;` ,(err,result)=>{
       if (err){
           res.status(res.statusCode).json({
               errorCode: err.message,
@@ -80,15 +67,10 @@ exports.getResponsables=(req,res)=>{
   })
 }
 exports.getClubUsers=(req,res)=>{
-    if(req.body.idclub==undefined){
-        res.status(res.statusCode).json({
-          message: "idclub not found",
-          error:true,
-          status: res.statusCode,
-        });
+      if (validator(req.body, ["idclub"], res)) {
         return
       }
-    client.query(`SELECT membre.membreimage,user.nom,user.prenom,membre.id_membre,membre.email,equipes.equipe  FROM  club JOIN liste_membre on club.id_club=liste_membre.id_club  JOIN membre on membre.cin=liste_membre.cin_membre JOIN user on user.cin=membre.cin JOIN equipes on id_equipe=liste_membre.equipe where club.id_club='${req.body.idclub}'` ,(err,result)=>{
+    client.query(`SELECT membre.membreimage,user.nom,user.prenom,membre.id_membre,membre.email,membre.tel,equipes.equipe  FROM  club JOIN liste_membre on club.id_club=liste_membre.id_club  JOIN membre on membre.cin=liste_membre.cin_membre JOIN user on user.cin=membre.cin JOIN equipes on id_equipe=liste_membre.equipe where club.id_club=${client.escape(req.body.idclub)};` ,(err,result)=>{
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err.message,
@@ -103,9 +85,10 @@ exports.getClubUsers=(req,res)=>{
     })
 }
 exports.updateUserInfo=(req,res)=>{
-  const email =req.body.email;
-  const motdepasse=req.body.motdepasse;
-  const tel=req.body.tel;
+  if (validator(req.body, ["email","motdepasse","tel"], res)) {
+    return
+  }
+  const {email,motdepasse,tel}=req.body
   let queryString=`${email!=undefined?"email="+"'"+email+"'":''} ${motdepasse!=undefined?"motdepasse="+"'"+motdepasse+"'":''} ${tel!=undefined?"tel="+"'"+tel+"'":''}`
   for(let i =0;i<queryString.length-1;i++){
     if(queryString[i]==" "&&queryString[i+1]!=" "&&queryString[0]!=" "){
@@ -113,7 +96,7 @@ exports.updateUserInfo=(req,res)=>{
     }
    }
 
-  let query=`UPDATE membre SET ${queryString} where id_membre='${req.verified.user_auth.id_membre}'`;
+  let query=`UPDATE membre SET ${queryString} where id_membre='${req.verified.user_auth.id_membre}';`;
   client.query(query ,(err,result)=>{
     if (err){
       res.status(res.statusCode).json({
@@ -138,7 +121,7 @@ for(let i = 0;i<req.file.path.length;i++){
     url+=req.file.path[i]
   }
 }
-client.query(`UPDATE membre SET membreimage='${url}' where id_membre='${req.verified.user_auth.id_membre}'` ,(err,result)=>{
+client.query(`UPDATE membre SET membreimage='${url}' where id_membre='${req.verified.user_auth.id_membre}';` ,(err,result)=>{
   if (err){
     res.status(res.statusCode).json({
         errorCode: err.message,

@@ -1,48 +1,15 @@
 
 var client = require('../../../db_connection')
-
+const validator = require('../../middleware/validator')
+/**************************************************************************/
+/**************this part is responsible of all calander API****************/
+/**************************************************************************/
 exports.addcalender=(req,res)=>{
-    if (req.body.id_club == undefined) {
-        res.status(res.statusCode).json({
-          message: "id_club not found",
-          error: true,
-          status: res.statusCode,
-        });
+      if(validator(req.body,["titre","description","date","temps","id_club"],res)){
         return
       }
-      if (req.body.temps == undefined) {
-        res.status(res.statusCode).json({
-          message: "temps not found",
-          error: true,
-          status: res.statusCode,
-        });
-        return
-      }
-      if (req.body.date == undefined) {
-        res.status(res.statusCode).json({
-          message: "date not found",
-          error: true,
-          status: res.statusCode,
-        });
-        return
-      }
-      if (req.body.description == undefined) {
-        res.status(res.statusCode).json({
-          message: "description not found",
-          error: true,
-          status: res.statusCode,
-        });
-        return
-      }
-      if (req.body.titre == undefined) {
-        res.status(res.statusCode).json({
-          message: "description not found",
-          error: true,
-          status: res.statusCode,
-        });
-        return
-      }
-    client.query(`INSERT INTO calendrier(titre,description,date,temps,id_club) VALUES(${client.escape(req.body.titre)},'${client.escape(req.body.description)}','${client.escape(req.body.date)}','${client.escape(req.body.temps)}','${client.escape(req.body.id_club)}')`,(err,result)=>{
+    client.query(`INSERT INTO calendrier(titre,description,date,temps,id_club) VALUES(${client.escape(req.body.titre)},${client.escape(req.body.description)},${client.escape(req.body.date)},${client.escape(req.body.temps)},${client.escape(req.body.id_club)});`,(err,result)=>{
+  
         if (err){
             res.status(res.statusCode).json({
                 errorCode: err.message,
@@ -57,15 +24,10 @@ exports.addcalender=(req,res)=>{
 
 }
 exports.getcalender=(req,res)=>{
-    if (req.body.id_club == undefined) {
-        res.status(res.statusCode).json({
-          message: "id_club not found",
-          error: true,
-          status: res.statusCode,
-        });
+      if(validator(req.body,["id_club"],res)){
         return
       }
-    client.query(`SELECT *  FROM calendrier where id_club=${client.escape(req.body.id_club)} ORDER BY calendrier.date DESC , calendrier.temps DESC`,(err,result)=>{
+    client.query(`SELECT *  FROM calendrier where id_club=${client.escape(req.body.id_club)} ORDER BY calendrier.date DESC , calendrier.temps DESC;`,(err,result)=>{
         if (err){
     res.status(res.statusCode).json({
         errorCode: err.message,
@@ -80,17 +42,10 @@ exports.getcalender=(req,res)=>{
 })
 }
 exports.deletecalender=(req,res)=>{
-  if (req.body.id_calendrier == undefined) {
-    res.status(res.statusCode).json({
-      message: "id_calendrier not found",
-      error: true,
-      status: res.statusCode,
-    });
+  if(validator(req.body,["id_calendrier"],res)){
     return
   }
-  
-
-  client.query(`DELETE calendrier FROM calendrier JOIN club ON calendrier.id_club=club.id_club WHERE id_calendrier='${client.escape(req.body.id_calendrier)}' AND club.id_membre='${req.verified.user_auth.id_membre}'`,(err,result)=>{
+  client.query(`DELETE calendrier FROM calendrier JOIN club ON calendrier.id_club=club.id_club WHERE id_calendrier='${client.escape(req.body.id_calendrier)}' AND club.id_membre='${req.verified.user_auth.id_membre}';`,(err,result)=>{
     if (err){
             res.status(res.statusCode).json({
             errorCode: err.message,
@@ -105,7 +60,6 @@ exports.deletecalender=(req,res)=>{
       }else{
         res.status(res.statusCode).json({
           message: " calendrier data not found or you are not authorized  to deleted"
-     
       });
       }
     }

@@ -60,7 +60,7 @@ module.exports.getListEtudiant = (req, res) => {
 module.exports.getEtudiantById = (req, res) => {
     const id_user = req.params.id;
     connexion.query(
-        "SELECT * FROM etudiant,user,adresse WHERE  etudiant.id_user=user.id_user and user.id_user=adresse.id_user and etudiant.id_user=?",
+        "SELECT * FROM etudiant RIGHT JOIN user ON (user.id_user=etudiant.id_user) LEFT JOIN adresse ON (adresse.id_user=user.id_user) WHERE  user.id_user=?",
         [id_user],
         (err, results) => {
 

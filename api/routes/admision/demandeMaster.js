@@ -34,7 +34,7 @@ const upload = multer({
 
 router.post("/", checkToken, upload.single('fichier'), demandeMasterController.createDemandeMaster);
 
-router.get("/", checkToken, demandeMasterController.getListDemandeMaster);
+router.post("/confirmer", checkToken, demandeMasterController.confimerpreselection);
 router.get("/Adminmaster/:id", demandeMasterController.getListDemandeByMaster);
 
 router.get("/:id", checkToken, demandeMasterController.getDemandeMasterById);

@@ -386,7 +386,7 @@ async function resetPasswordMail(email, token) {
     subject: 'Réinitialisation du mot de passe',
     html: `
             <h2>Pour changer votre mot de passe cliquer sur le lien ci-dessous : </h2>
-        <p>http://localhost:4200/resetpassword/${token}</p>
+        <p>http://localhost:5010/resetpassword/${token}</p>
         `
   });
   return json;
@@ -411,7 +411,7 @@ async function confirmInscriPlatform(email, mdp, token) {
     html: 'Bonjour,<br>'
       + "Merci cher utilisateur d'avoir rejoint notre plateforme."
       + "<br> Nous aimerions vous confirmer que votre compte a été créé avec succès. Pour accéder à la plateforme, cliquez sur le lien ci-dessous."
-      + `<br><a href="http://localhost:4200/verifierInscription/${email +"?"+ token}">Connexion</a>`
+      + `<br><a href="http://localhost:5010/verifierInscription/${email +"?"+ token}">Connexion</a>`
       + '<br>Voici Votre Identifiant & mot de passe'
       + '<br><label>Identifiant  : ' + email + '</label>'
       + '<br><label>Mot de passe : ' + mdp + '</label>'

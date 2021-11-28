@@ -220,7 +220,7 @@ async function EnvoyerConfirmation(email,mdp,master) {
       html: 'Bonjour,<br>'
       +"Merci cher admin d'avoir rejoint notre plateforme."
       +"<br> Nous aimerions vous confirmer que votre compte a été créé avec succès. Pour accéder au plateforme, cliquez sur le lien ci-dessous."
-      +'<br><a href="http://localhost:4200/auth">Connexion</a>'
+      +'<br><a href="http://localhost:5010/auth">Connexion</a>'
       +'<br>Voici Votre Identifiant & mot de passe'
       +'<br><label>Identifiant  : '+email+'</label>'
       +'<br><label>Mot de passe : '+mdp+'</label>'

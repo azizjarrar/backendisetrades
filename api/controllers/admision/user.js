@@ -12,7 +12,7 @@ const smtp = require('nodemailer-smtp-transport');
 
 module.exports.getUsers = (req, res) => {
 
-  connexion.query('select * from user,  situation_professionnel, pays, ville,gouvernerat where user.id_situation_professionnel= situation_professionnel.id_situation_professionnel and id_role=9',
+  connexion.query('select * from  adresse Right JOIN gouvernerat on (adresse.gouvernorat_adresse=gouvernerat.id_gouvernerat) RIGHT JOIN ville on (ville.id_ville=adresse.ville) RIGHT JOIN pays on (pays.id_pays=adresse.pays) RIGHT JOIN   user on(user.id_user=adresse.id_user)  RIGHT JOIN situation_professionnel on (user.id_situation_professionnel= situation_professionnel.id_situation_professionnel) where  id_role=9;',
     (err, results) => {
       if (err) {
         res.status(500).json({
@@ -82,7 +82,7 @@ module.exports.create = (req, res) => {
         });
       }
 
-      if (results.affectedRows > 0) {
+      else if (results.affectedRows > 0) {
         if (createAdresse(data, results.insertId));
         const tokenInscri = jwt.sign({ _id: results._id }, process.env.INSCRI_KEY);
           confirmInscriPlatform(data.email, pass, tokenInscri).then(result => {
@@ -129,7 +129,7 @@ function createAdresse(data, id_user) {
 
 module.exports.getUserByUserId = (req, res, next) => {
   const id_user = req.params.id;
-  const sql = 'select * from user, adresse, situation_professionnel, pays, ville,gouvernerat where user.id_user = adresse.id_user and adresse.pays = pays.id_pays and adresse.ville =ville.id_ville and adresse.gouvernorat_adresse = gouvernerat.id_gouvernerat and user.id_situation_professionnel= situation_professionnel.id_situation_professionnel and user.id_user=? and user.id_role!=4';
+  const sql = 'select * from  adresse Right JOIN gouvernerat on (adresse.gouvernorat_adresse=gouvernerat.id_gouvernerat) RIGHT JOIN ville on (ville.id_ville=adresse.ville) RIGHT JOIN pays on (pays.id_pays=adresse.pays) RIGHT JOIN   user on(user.id_user=adresse.id_user)  RIGHT JOIN situation_professionnel on (user.id_situation_professionnel= situation_professionnel.id_situation_professionnel) where  id_role!=4 and user.id_user=?;';
 
   connexion.query(sql, [id_user], (err, row, fields) => {
     if (!err) {
@@ -182,7 +182,7 @@ module.exports.updateUser = (req, res) => {
         });
       }
 
-      if (results.affectedRows > 0) {
+      else  if (results.affectedRows > 0) {
         updateAdresse(data)
         res.status(200).json({
           err: false,
@@ -224,7 +224,7 @@ module.exports.getUserByUserEmail = (req, res) => {
         });
         return;
       }
-      if (results.length>0) {
+      else if (results.length>0) {
         const result = bcrypt.compareSync(body.password, results[0]?.password);
         console.log(result)
         if (result) {
@@ -238,6 +238,7 @@ module.exports.getUserByUserEmail = (req, res) => {
             message: "login successfully",
             token: jsontoken,
             id_user: results[0].id_user,
+            id:results[0].id_user,
             role: results[0].id_role,
           })
           return;
@@ -271,7 +272,7 @@ module.exports.forgotPassword = (req, res) => {
           results: []
         });
       }
-      if (results.length > 0) {
+      else  if (results.length > 0) {
         const token = jwt.sign({ _id: results._id }, process.env.RESET_PASSWORD_KEY, { expiresIn: '20m' });
 
         resetPasswordMail(body.email, token).then(result => {
@@ -284,10 +285,7 @@ module.exports.forgotPassword = (req, res) => {
           });
         })
 
-        res.status(200).json({
-          err: false,
-          Token: token,
-        })
+       
 
       } else {
         res.status(404).json({
@@ -342,7 +340,7 @@ module.exports.activeInscription = (req, res) => {
         });
       }
 
-      if (results.affectedRows > 0) {
+      else  if (results.affectedRows > 0) {
         res.status(200).json({
           err: true,
           results: "etat changer"
@@ -388,7 +386,7 @@ async function resetPasswordMail(email, token) {
     subject: 'Réinitialisation du mot de passe',
     html: `
             <h2>Pour changer votre mot de passe cliquer sur le lien ci-dessous : </h2>
-        <p>http://localhost:4200/resetpassword/${token}</p>
+        <p>http://localhost:5010/resetpassword/${token}</p>
         `
   });
   return json;
@@ -413,7 +411,7 @@ async function confirmInscriPlatform(email, mdp, token) {
     html: 'Bonjour,<br>'
       + "Merci cher utilisateur d'avoir rejoint notre plateforme."
       + "<br> Nous aimerions vous confirmer que votre compte a été créé avec succès. Pour accéder à la plateforme, cliquez sur le lien ci-dessous."
-      + `<br><a href="http://localhost:4200/verifierInscription/${email +"?"+ token}">Connexion</a>`
+      + `<br><a href="http://localhost:5010/verifierInscription/${email +"?"+ token}">Connexion</a>`
       + '<br>Voici Votre Identifiant & mot de passe'
       + '<br><label>Identifiant  : ' + email + '</label>'
       + '<br><label>Mot de passe : ' + mdp + '</label>'

@@ -13,7 +13,7 @@ module.exports.createNiveau = (req, res) => {
                 });
             }
 
-            if(results.affectedRows>0)
+           else if(results.affectedRows>0)
                 res.status(200).json({
                     err:false,
                     results:results,
@@ -37,7 +37,7 @@ module.exports.getListNiveau = (req, res) => {
             });
         }
         
-        if(results.length>0)
+      else  if(results.length>0)
             res.status(200).json({
                 err:false,
                 results:results,
@@ -64,7 +64,7 @@ module.exports.getNiveauById = (req, res) => {
                 });
             }
             
-            if(results.length>0)
+           else if(results.length>0)
                 res.status(200).json({
                     err:false,
                     results:results,
@@ -91,7 +91,7 @@ module.exports.updateNiveau = (req, res) => {
                 });
             }
 
-        if(results.affectedRows>0)
+        else if(results.affectedRows>0)
             res.status(200).json({
                 err:false,
                 results:results.affectedRows,
@@ -116,19 +116,20 @@ module.exports.deleteNiveau = (req, res) => {
                     err:true,
                     results:[]
                 });
+                return;
             }
 
             if(results.affectedRows>0)
-                res.status(200).json({
+              {  res.status(200).json({
                     err:false,
                     results:results.affectedRows,
-                })
+                }); return;}
             else
-                res.status(404).json({
+               { res.status(404).json({
                     err:true,
                     results:[],
-                    message:"echec lors de suppression",
-                }) 
+                 
+                }) ; return;}
         })
 };
 

@@ -17,7 +17,7 @@ module.exports.createEtudiant = (req, res) => {
                 });
             }
 
-            if (results.affectedRows > 0)
+            else if (results.affectedRows > 0)
                 res.status(200).json({
                     err: false,
                     results: results,
@@ -43,7 +43,7 @@ module.exports.getListEtudiant = (req, res) => {
                 });
             }
 
-            if (results.length > 0)
+            else  if (results.length > 0)
                 res.status(200).json({
                     err: false,
                     results: results,
@@ -71,7 +71,7 @@ module.exports.getEtudiantById = (req, res) => {
                 });
             }
             
-            if (results.length > 0)
+            else  if (results.length > 0)
                 res.status(200).json({
                     err: false,
                     results: results,
@@ -98,7 +98,7 @@ module.exports.updateEtudiant = (req, res) => {
                 });
             }
 
-            if (results.affectedRows > 0)
+            else if (results.affectedRows > 0)
                 res.status(200).json({
                     err: false,
                     results: results.affectedRows,
@@ -111,34 +111,3 @@ module.exports.updateEtudiant = (req, res) => {
                 })
         })
 };
-
-/*
-module.exports.deleteEtudiant = (req, res) => {
-    const id_etudiant = req.params.id;
-    connexion.query(
-        "DELETE FROM etudiant WHERE id_etudiant=?",
-        [id_etudiant],
-        (err, results) => {
-            if (err) {
-                res.status(500).json({
-                    err: true,
-                    results: []
-                });
-            }
-
-            if (results.affectedRows > 0){
-                res.status(200).json({
-                    err: false,
-                    results: results.affectedRows,
-                })
-            }else{
-                res.status(404).json({
-                    err: true,
-                    results: [],
-                    message: "echec lors de suppression",
-                })
-            }
-        })
-};
-
-*/

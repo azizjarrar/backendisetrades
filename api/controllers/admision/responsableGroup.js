@@ -17,7 +17,7 @@ module.exports.create = (req, res) => {
                 });
             }
 
-            if (results.affectedRows > 0) {
+            else  if (results.affectedRows > 0) {
                 createResponsableGroup(data, results.insertId);
 
                 res.status(200).json({
@@ -54,7 +54,7 @@ module.exports.getListResponsableGroup = (req, res) => {
                 });
             }
 
-            if (results.length > 0)
+            else   if (results.length > 0)
                 res.status(200).json({
                     err: false,
                     results: results,
@@ -82,7 +82,7 @@ module.exports.getResponsableGroupById = (req, res) => {
                 });
             }
 
-            if (results.length > 0)
+            else if (results.length > 0)
                 res.status(200).json({
                     err: false,
                     results: results,
@@ -122,7 +122,7 @@ module.exports.update = (req, res) => {
                 });
             }
 
-            if (results.affectedRows > 0) {
+            else  if (results.affectedRows > 0) {
                 updateResponsableGroup(data);
                 res.status(200).json({
                     err: false,
@@ -158,7 +158,7 @@ module.exports.deleteResponsableGroup = (req, res) => {
                 });
             }
 
-            if (results.affectedRows > 0)
+            else  if (results.affectedRows > 0)
                 res.status(200).json({
                     err: false,
                     results: results.affectedRows,

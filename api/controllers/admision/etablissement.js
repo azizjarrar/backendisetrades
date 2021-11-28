@@ -15,26 +15,30 @@ module.exports.createEtablissement = (req, res) => {
                         err: true,
                         message: err.sqlMessage,
                     });
+                    return;
                 }
 
                 if (results.affectedRows > 0)
-                    res.status(200).json({
+                   { res.status(200).json({
                         err: false,
                         results: results,
-                    })
+                    });
+                    return;}
                 else
-                    res.status(404).json({
+                    {res.status(404).json({
                         err: true,
                         results: [],
                         message: "echec lors du stockage",
-                    })
+                    });
+                    return;}
             }
         )
     } else {
         res.status(404).json({
             err: true,
             message: "file non existe",
-        })
+        });
+        return;
     }
 };
 
@@ -47,19 +51,21 @@ module.exports.getListEtablissement = (req, res) => {
                     err: true,
                     results: []
                 });
+                return;
             }
 
             if (results.length > 0)
-                res.status(200).json({
+               { res.status(200).json({
                     err: false,
                     results: results,
-                })
+                });
+                return;}
             else
-                res.status(404).json({
+                {res.status(404).json({
                     err: false,
                     results: [],
-                    message: "choix n'existe pas",
-                })
+                });
+                return;}
         })
 };
 
@@ -75,19 +81,22 @@ module.exports.getEtablissementById = (req, res) => {
                     err:true,
                     results:[]
                 });
+                return;
             }
             
             if(results.length>0)
-                res.status(200).json({
+          {       res.status(200).json({
                     err:false,
                     results:results,
-                })
+                });
+                return;}
             else
-                res.status(404).json({
+               { res.status(404).json({
                     err:false,
                     results:[],
                     message:"choix n'existe pas",
-                }) 
+                }) ;
+                return;}
         })
 };
 
@@ -104,26 +113,30 @@ module.exports.updateEtablissement = (req, res) => {
                         err:true,
                         results:[]
                     });
+                    return;
                 }
 
             if(results.affectedRows>0)
-                res.status(200).json({
+                {res.status(200).json({
                     err:false,
                     results:results.affectedRows,
-                })
+                });
+                return;}
             else
-                res.status(404).json({
+                {res.status(404).json({
                     err:true,
                     results:[],
                     message:"echec lors du stockage",
-                }) 
+                }) ;
+                return;}
         })
 
     } else {
         res.status(404).json({
             err: true,
             message: "file non existe",
-        })
+        });
+        return;
     }
 };
 
@@ -138,19 +151,22 @@ module.exports.deleteEtablissement = (req, res) => {
                     err:true,
                     results:[]
                 });
+                return;
             }
 
             if(results.affectedRows>0)
-                res.status(200).json({
+               { res.status(200).json({
                     err:false,
                     results:results.affectedRows,
-                })
+                });
+                return;}
             else
-                res.status(404).json({
+                {res.status(404).json({
                     err:true,
                     results:[],
                     message:"echec lors de suppression",
-                }) 
+                }) ;
+                return;}
         })
 };
 

@@ -38,6 +38,7 @@ module.exports.createAdminMaster = (req, res) => {
                     err: true,
                     message: err.sqlMessage,
                 });
+                return;
             }
 
             if (results.affectedRows > 0) {
@@ -46,23 +47,26 @@ module.exports.createAdminMaster = (req, res) => {
                     res.status(200).json({
                         //result:result
                     });
+                    return;
                   }).catch(err=>{
                     res.status(404).json({
                         result:err
                         });
+                        return;
                   })
 
                     res.status(200).json({
                         err: false,
                         results: results,
                     })
-
+                    return;
             } else {
                 res.status(404).json({
                     err: true,
                     results: [],
                     message: "echec lors du stockage",
-                })
+                });
+                return;
             }
         }
     )
@@ -77,19 +81,22 @@ module.exports.getAdminsMaster = (req, res) => {
                     err: true,
                     results: []
                 });
+                return;
             }
 
             if (results.length > 0)
-                res.status(200).json({
+               { res.status(200).json({
                     err: false,
                     results: results,
-                })
+                });
+                return;}
             else
-                res.status(404).json({
+                {res.status(404).json({
                     err: false,
                     results: [],
                     message: "choix n'existe pas",
-                })
+                });
+                return;}
         }
     )
 };
@@ -102,19 +109,22 @@ module.exports.checkmasterInscrit = (req, res) => {
                     err: true,
                     results: []
                 });
+                return;
             }
 
             if (results.length > 0)
-                res.status(200).json({
+               { res.status(200).json({
                     err: false,
                     results: results,
-                })
+                });
+                return;}
             else
-                res.status(404).json({
+              {  res.status(404).json({
                     err: false,
                     results: [],
                     message: "choix n'existe pas",
-                })
+                });
+                return;}
         }
     )
 };
@@ -128,20 +138,23 @@ module.exports.checkemailInscrit = (req, res) => {
                     err: true,
                     results: []
                 });
+                return;
             }
 
             if(results!=undefined){
                 if (results)
-                res.status(200).json({
+               { res.status(200).json({
                     err: false,
                     results: results,
-                })
+                });
+                return;}
             else
-                res.status(404).json({
+                {res.status(404).json({
                     err: false,
                     results: [],
                     message: "choix n'existe pas",
-                })
+                });
+                return;}
             }
         }
     )
@@ -153,24 +166,27 @@ module.exports.getAdminsMasterId = (req, res, next) => {
     connexion.query(sql, [id_user], (err, row, fields) => {
         if (!err) {
             if (row.length > 0)
-                res.status(200).json({
+                {res.status(200).json({
                     err: false,
                     results: row,
-                })
+                });
+                return;}
             else
-                res.status(404).json({
+                {res.status(404).json({
                     err: true,
                     results: [],
                     result:row,
                     fields:fields,
                     message: "user non enregistre",
-                })
+                });
+                return;}
         }
         else
-            res.status(500).json({
+           { res.status(500).json({
                 err: true,
                 message: err.sqlMessage
             });
+            return;}
     })
 };
 function createAdresse(data, id_user) {
@@ -204,7 +220,7 @@ async function EnvoyerConfirmation(email,mdp,master) {
       html: 'Bonjour,<br>'
       +"Merci cher admin d'avoir rejoint notre plateforme."
       +"<br> Nous aimerions vous confirmer que votre compte a été créé avec succès. Pour accéder au plateforme, cliquez sur le lien ci-dessous."
-      +'<br><a href="http://localhost:4200/auth">Connexion</a>'
+      +'<br><a href="http://localhost:5010/auth">Connexion</a>'
       +'<br>Voici Votre Identifiant & mot de passe'
       +'<br><label>Identifiant  : '+email+'</label>'
       +'<br><label>Mot de passe : '+mdp+'</label>'
@@ -242,6 +258,7 @@ async function EnvoyerConfirmation(email,mdp,master) {
                     err: true,
                     results: err
                 });
+                return;
             }
 
             if (results.affectedRows > 0) {
@@ -249,13 +266,15 @@ async function EnvoyerConfirmation(email,mdp,master) {
                 res.status(200).json({
                     err: false,
                     results: results.affectedRows,
-                })
+                });
+                return;
             } else {
                 res.status(404).json({
                     err: true,
                     results: err,
                     message: "echec lors du stockage",
-                })
+                });
+                return;
             }
         })
 };
@@ -286,16 +305,18 @@ module.exports.updateMaster = (req, res) => {
             }
 
             if (results.affectedRows > 0)
-                res.status(200).json({
+               { res.status(200).json({
                     err: false,
                     results: results.affectedRows,
-                })
+                });
+                return;}
             else
-                res.status(404).json({
+               { res.status(404).json({
                     err: true,
                     results: [],
                     message: "echec lors du stockage",
-                })
+                });
+                return;}
         })
 };
 module.exports.createScore2= (req, res) => {
@@ -310,19 +331,22 @@ module.exports.createScore2= (req, res) => {
                     err:true,
                     message:err.sqlMessage,
                 });
+                return;
             }
 
             if(results)
-                res.status(200).json({
+              {  res.status(200).json({
                     err:false,
                     results:results,
-                })
+                });
+                return;}
             else
-                res.status(404).json({
+                {res.status(404).json({
                     err:true,
                     results:[],
                     message:"echec lors du stockage",
-                })
+                });
+                return;}
         })
 };
 module.exports.createScore=(req,res)=>{
@@ -359,18 +383,19 @@ module.exports.getScore = (req, res, next) => {
     connexion.query(sql, [id_user], (err, row, fields) => {
         if (!err) {
             if (row.length > 0)
-                res.status(200).json({
+               { res.status(200).json({
                     err: false,
                     results: row,
-                })
+                });
+                return;}
             else
-                res.status(404).json({
+                {res.status(404).json({
                     err: true,
                     results: [],
                     result:row,
                     fields:fields,
-                    message: "user non enregistre",
-                })
+                });
+                return;}
         }
         else
             res.status(500).json({
@@ -390,6 +415,7 @@ module.exports.updateScore2 = (req, res) => {
                     err: true,
                     results: err
                 });
+                return;
             }
 
             if (results.affectedRows > 0) {
@@ -397,13 +423,15 @@ module.exports.updateScore2 = (req, res) => {
                 res.status(200).json({
                     err: false,
                     results: results.affectedRows,
-                })
+                });
+                return;
             } else {
                 res.status(404).json({
                     err: true,
                     results: err,
                     message: "echec lors du stockage",
-                })
+                });
+                return;
             }
         })
 };

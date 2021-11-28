@@ -13,7 +13,7 @@ module.exports.getnbApplicantsById = (req, res) => {
                 });
             }
 
-            if (results.length > 0)
+           else if (results.length > 0)
                 res.status(200).json({
                     err: false,
                     results: results,
@@ -39,7 +39,7 @@ module.exports.createMaster = (req, res) => {
                 });
             }
 
-            if (results.affectedRows > 0)
+            else  if (results.affectedRows > 0)
                 res.status(200).json({
                     err: false,
                     results: results,
@@ -65,7 +65,7 @@ module.exports.getListMaster = (req, res) => {
                 });
             }
 
-            if (results.length > 0)
+            else   if (results.length > 0)
                 res.status(200).json({
                     err: false,
                     results: results,
@@ -92,7 +92,7 @@ module.exports.getMasterById = (req, res) => {
                 });
             }
 
-            if (results.length > 0)
+            else  if (results.length > 0)
                 res.status(200).json({
                     err: false,
                     results: results,
@@ -119,7 +119,7 @@ module.exports.updateMaster = (req, res) => {
                 });
             }
 
-            if (results.affectedRows > 0)
+            else  if (results.affectedRows > 0)
                 res.status(200).json({
                     err: false,
                     results: results.affectedRows,
@@ -146,7 +146,7 @@ module.exports.deleteSpecialite = (req, res) => {
                 });
             }
 
-            if (results.affectedRows > 0)
+            else  if (results.affectedRows > 0)
                 res.status(200).json({
                     err: false,
                     results: results.affectedRows,

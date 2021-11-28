@@ -11,13 +11,46 @@ const mailer = require('nodemailer');
 const smtp = require('nodemailer-smtp-transport');
 
 
+module.exports.confimerpreselection = async (req, res) => {
+    const body = req.body;
+    const transport = mailer.createTransport(
+        smtp({
+            host: 'in.mailjet.com',
+            port: 2525,
+            auth: {
+                user: process.env.API_KEY,
+                pass: process.env.API_SECRET,
+            },
+        })
+    );
 
+    const json = await transport.sendMail({
+      from: process.env.EMAIL,
+      to: [body.email],
+      subject: 'Confirmation d\inscription au master '+body.master,
+      html: 'Bonjour,<br>'
+      +"Merci cher utilisateur d'avoir postulé au master "+"<b>"+body.master+"</b>"
+      +"<br> Suite à votre présélection, nous vous invite a confirmer votre décision de passer à un entretien"
+      +'<br> Cliquer ici pour confirmer votre candidature :'
+      +`<br>   <p>http://localhost:5010/resetpassword/</p>`
+      +'&nbsp;<br>'
+      +'&nbsp;<br>'
+      +'Cordialement,'
+
+    }).then(
+        val=>{
+            res.send(val)
+        },
+        err=>{res.send(err)});
+
+    return json;
+}
 module.exports.createDemandeMaster = (req, res) => {
 
     if (req.file) {
         const file = "http://localhost:3000/demande-master/" + req.file.filename;
         const data = req.body;
-        envoyerDemande('bilelhedhli@gmail.com',data.nomMaster);
+        envoyerDemande(data.email,data.nomMaster);
         connexion.query(
             "INSERT INTO demande_master(date_inscrit, id_etat_demande_master, id_master, id_etudiant, fichier) VALUES (?,?,?,?,?)",
             [data.date_inscrit, data.id_etat_demande_master, data.id_master, data.id_etudiant, file],
@@ -27,26 +60,30 @@ module.exports.createDemandeMaster = (req, res) => {
                         err: true,
                         message: err.sqlMessage,
                     });
+                    return;
                 }
 
                 if (results.affectedRows > 0)
-                    res.status(200).json({
+                   { res.status(200).json({
                         err: false,
                         results: results,
-                    })
+                    });
+                    return;}
                 else
-                    res.status(404).json({
+                    {res.status(404).json({
                         err: true,
                         results: [],
                         message: "echec lors du stockage",
-                    })
+                    });
+                    return;}
             }
         )
     } else {
         res.status(404).json({
             err: true,
             message: "file non existe",
-        })
+        });
+        return;
     }
 };
 
@@ -81,33 +118,36 @@ async function envoyerDemande(email,master) {
 module.exports.getListDemandeMaster = (req, res) => {
 
     connexion.query(
-        "SELECT *, etablissement.libelle as libelleEtablissement, master.nom as nomMaster,etat_demande_master.libelle as edmlibelle FROM demande_master, master,etat_demande_master, etudiant, etablissement,departement,user,adresse,bacclaureat,cursusgenerale WHERE demande_master.id_master = master.id_master and master.id_departement=departement.id_departement and master.id_etablissement=etablissement.id_etablissement and demande_master.id_etudiant = etudiant.id_etudiant and etudiant.id_user = user.id_user and bacclaureat.id_bacc  = etudiant.id_bacc and cursusgenerale.id_cursusgenerale = etudiant.id_cursusgenerale and adresse.id_user=user.id_user and etat_demande_master.id_etat_demande_master = demande_master.id_etat_demande_master",
+        "SELECT *, etablissement.libelle as libelleEtablissement, master.nom as nomMaster,etat_demande_master.libelle as edmlibelle FROM demande_master RIGHT OUTER JOIN master on (demande_master.id_master = master.id_master) Right OUTER join etat_demande_master on(etat_demande_master.id_etat_demande_master=demande_master.id_etat_demande_master) RIGHT OUTER JOIN etudiant on (etudiant.id_etudiant = demande_master.id_etudiant)RIGHT OUTER JOIN  etablissement ON (master.id_etablissement=etablissement.id_etablissement)RIGHT OUTER JOIN  user ON (etudiant.id_user = user.id_user)  RIGHT OUTER JOIN  departement ON (master.id_departement=departement.id_departement)RIGHT OUTER JOIN bacclaureat ON (bacclaureat.id_bacc  =etudiant.id_bacc)  RIGHT OUTER JOIN cursusgenerale ON (cursusgenerale.id_cursusgenerale = etudiant.id_cursusgenerale) ",
         (err, results) => {
             if (err) {
                 res.status(500).json({
                     err: true,
                     results: []
                 });
+                return;
             }
 
             if (results.length > 0)
-                res.status(200).json({
+                {res.status(200).json({
                     err: false,
                     results: results,
-                })
+                });
+                return;}
             else
-                res.status(404).json({
+                {res.status(404).json({
                     err: false,
                     results: [],
                     message: "choix n'existe pas",
-                })
+                });
+                return;}
         })
 };
 
 module.exports.getListDemandeByMaster = async (req, res) => {
     const id_master = req.params.id;
   await  connexion.query(
-        "SELECT *, etablissement.libelle as libelleEtablissement, master.nom as nomMaster,etat_demande_master.libelle as edmlibelle FROM demande_master, master,etat_demande_master, etudiant, etablissement,departement,user,adresse,bacclaureat,cursusgenerale WHERE demande_master.id_master = master.id_master and master.id_departement=departement.id_departement and cursusgenerale.etablissement=etablissement.id_etablissement and demande_master.id_etudiant = etudiant.id_etudiant and etudiant.id_user = user.id_user and bacclaureat.id_bacc  = etudiant.id_bacc and cursusgenerale.id_cursusgenerale = etudiant.id_cursusgenerale and adresse.id_user=user.id_user and etat_demande_master.id_etat_demande_master = demande_master.id_etat_demande_master and master.id_master = ?",
+        "SELECT *, etablissement.libelle as libelleEtablissement, master.nom as nomMaster,etat_demande_master.libelle as edmlibelle FROM demande_master RIGHT OUTER JOIN master on (demande_master.id_master = master.id_master) Right OUTER join etat_demande_master on(etat_demande_master.id_etat_demande_master=demande_master.id_etat_demande_master) RIGHT OUTER JOIN etudiant on (etudiant.id_etudiant = demande_master.id_etudiant)RIGHT OUTER JOIN  etablissement ON (master.id_etablissement=etablissement.id_etablissement)RIGHT OUTER JOIN  user ON (etudiant.id_user = user.id_user)  RIGHT OUTER JOIN  departement ON (master.id_departement=departement.id_departement)RIGHT OUTER JOIN bacclaureat ON (bacclaureat.id_bacc  =etudiant.id_bacc)  RIGHT OUTER JOIN cursusgenerale ON (cursusgenerale.id_cursusgenerale = etudiant.id_cursusgenerale)  WHERE    master.id_master = ?",
         [id_master],
        async (err, results) => {
             if (err) {
@@ -168,19 +208,22 @@ module.exports.getDemandeMasterById = (req, res) => {
                     err: true,
                     results: []
                 });
+                return;
             }
 
             if (results.length > 0)
-                res.status(200).json({
+               { res.status(200).json({
                     err: false,
                     results: results,
-                })
+                });
+                return;}
             else
-                res.status(404).json({
+               { res.status(404).json({
                     err: false,
                     results: [],
                     message: "choix n'existe pas",
-                })
+                });
+                return;}
         })
 };
 
@@ -197,19 +240,22 @@ module.exports.ChangerEtatDemandeMaster = (req, res) => {
                         err: true,
                         results: []
                     });
+                    return;
                 }
 
                 if (results.affectedRows > 0)
-                    res.status(200).json({
+                   { res.status(200).json({
                         err: false,
                         results: results.affectedRows,
-                    })
+                    });
+                    return;}
                 else
-                    res.status(404).json({
+                   { res.status(404).json({
                         err: true,
                         results: [],
                         message: "echec lors du stockage",
-                    })
+                    });
+                    return;}
             })
 
 
@@ -229,19 +275,22 @@ module.exports.addNoteDemande = (req, res) => {
                   err: true,
                   results: []
               });
+              return;
           }
 
           if (results.affectedRows > 0)
-              res.status(200).json({
+              {res.status(200).json({
                   err: false,
                   results: results.affectedRows,
-              })
+              });
+              return;}
           else
-              res.status(404).json({
+              {res.status(404).json({
                   err: true,
                   results: [],
                   message: "echec lors du stockage",
-              })
+              });
+              return;}
       })
 
 
@@ -259,26 +308,30 @@ module.exports.updateDemandeMaster = (req, res) => {
                         err: true,
                         results: []
                     });
+                    return;
                 }
 
                 if (results.affectedRows > 0)
-                    res.status(200).json({
+                    {res.status(200).json({
                         err: false,
                         results: results.affectedRows,
-                    })
+                    });
+                    return;}
                 else
-                    res.status(404).json({
+                   { res.status(404).json({
                         err: true,
                         results: [],
                         message: "echec lors du stockage",
-                    })
+                    });
+                    return;}
             })
 
     } else {
         res.status(404).json({
             err: true,
             message: "file non existe",
-        })
+        });
+        return;
     }
 };
 
@@ -293,19 +346,22 @@ module.exports.deleteDemandeMaster = (req, res) => {
                     err: true,
                     results: []
                 });
+                return;
             }
 
             if (results.affectedRows > 0)
-                res.status(200).json({
+               { res.status(200).json({
                     err: false,
                     results: results.affectedRows,
-                })
+                });
+                return;}
             else
-                res.status(404).json({
+                {res.status(404).json({
                     err: true,
                     results: [],
                     message: "echec lors de suppression",
-                })
+                });
+                return;}
         })
 };
 

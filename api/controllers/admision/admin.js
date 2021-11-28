@@ -16,19 +16,21 @@ module.exports.getAdmin = (req, res) => {
           err: true,
           results: []
         });
+        return;
       }
 
       if (results)
-        res.status(200).json({
+       { res.status(200).json({
           err: false,
           results: results,
-        })
+        });
+      return;}
       else
-        res.status(404).json({
+        {res.status(404).json({
           err: false,
           results: [],
           message: "choix n'existe pas",
-        })
+        });return;}
     })
 };
 
@@ -56,6 +58,7 @@ module.exports.updateAdmin = (req, res) => {
           err: true,
           results: err
         });
+        return;
       }
 
       if (results.affectedRows > 0) {
@@ -63,13 +66,15 @@ module.exports.updateAdmin = (req, res) => {
         res.status(200).json({
           err: false,
           results: results.affectedRows,
-        })
+        });
+        return;
       } else {
         res.status(404).json({
           err: true,
           results: err,
           message: "echec lors du stockage",
-        })
+        });
+        return;
       }
     })
 };
@@ -98,6 +103,7 @@ module.exports.getAdminByEmail = (req, res) => {
           err: true,
           results: []
         });
+        return;
       }
 
       if (results.length > 0) {
@@ -113,19 +119,22 @@ module.exports.getAdminByEmail = (req, res) => {
             message: "login successfully",
             token: jsontoken,
             id_user: results.id_user,
-          })
+          });
+          return;
         } else {
           res.status(404).json({
             err: false,
             message: "Invalidpassword",
-          })
+          });
+          return;
         }
 
       } else {
         res.status(404).json({
           err: false,
           message: "User with this mail does not exist",
-        })
+        });
+        return;
       }
     })
 };

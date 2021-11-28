@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-exports.singin=(req,res)=>{
-=======
 var client = require('../../../db_connection')
 const jwt = require("jsonwebtoken");
 const validator = require('../../middleware/validator')
@@ -51,9 +48,8 @@ exports.singin=(req,res)=>{
   });
 }
 
->>>>>>> c4158e267732db0c983ac79c79abc35d5b99d902
 
-}
+
 exports.singup=(req,res)=>{
     
 }

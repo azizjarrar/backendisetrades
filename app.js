@@ -36,11 +36,7 @@ const stagiaires=require('./api/routes/stagepfe/stagiaires');
 /***group scolarite routers******/
 /********************************/
 /////////////File ////////////////////////
-<<<<<<< HEAD
-const add_file= require('./api/routes/scolarite/AddFile')
-=======
 const add= require('./api/routes/scolarite/AddFile')
->>>>>>> c4158e267732db0c983ac79c79abc35d5b99d902
 const update_file= require('./api/routes/scolarite/AddFile')
 const update_file2= require('./api/routes/scolarite/AddFile')
 const deletefile= require('./api/routes/scolarite/AddFile')
@@ -146,6 +142,8 @@ con.connect(function(err) {
       throw err;
     }
   });
+
+});
  /***************************************/
   /*************cors handler**************/
   /***************************************/
@@ -181,13 +179,11 @@ app.use('/etablissement_logo', express.static('etablissement_logo'));
 /************************************/
 /***use group stage pfe routers******/
 /************************************/
-<<<<<<< HEAD
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
-=======
 app.use('/entreprise',entrepriseRouter);
 app.use('/offrestage',offreStageRouter);
 app.use('/domaine',domaineeRouter);
@@ -200,16 +196,11 @@ app.use('/confirmationDemande',confirmationDemandeRouter);
 app.use('/etudiantComp',etudiantComp);
 app.use('/stagiaires',stagiaires);
 
->>>>>>> c4158e267732db0c983ac79c79abc35d5b99d902
 /************************************/
 /***use group scolarite routers******/
 /************************************/
 ////////////File///////////////////
-<<<<<<< HEAD
-app.use("/addfile",add_file)
-=======
 app.use("/addfile",add)
->>>>>>> c4158e267732db0c983ac79c79abc35d5b99d902
 app.use("/updatefile",update_file)
 app.use("/updatefile",update_file2)
 app.use("/DeleteFile",deletefile)
@@ -323,8 +314,6 @@ app.post('/send/:emailfrom', (req, res) => {
       html: req.body.contenu // html body
   };
 
-<<<<<<< HEAD
-=======
 /************************************/
 /***use group Absence et Présence******/
 /************************************/
@@ -367,7 +356,6 @@ app.post('/send/:emailfrom', (req, res) => {
       html: req.body.contenu // html body
   };
 
->>>>>>> c4158e267732db0c983ac79c79abc35d5b99d902
   // send mail with defined transport object
   transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
@@ -381,10 +369,6 @@ app.post('/send/:emailfrom', (req, res) => {
     
   });
   });
-<<<<<<< HEAD
-=======
-
->>>>>>> c4158e267732db0c983ac79c79abc35d5b99d902
 
 
 

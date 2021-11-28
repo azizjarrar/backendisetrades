@@ -20,6 +20,7 @@ router.get("/exist/:email", adminMaster.checkemailInscrit);
 //update master
 router.post("/master", adminMaster.updateMaster);
 //create score
+router.post("/exportdetaille", adminMaster.exportlstStudentsDetaille);  
 router.post("/score", adminMaster.createScore);
 router.post("/export", adminMaster.exportlstStudents);
 router.get("/score/:id",checkToken, adminMaster.getScore);

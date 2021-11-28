@@ -2,6 +2,7 @@ const connexion = require('../../../db_connection');
 const bcrypt = require("bcrypt");
 const { sign } = require("jsonwebtoken");
 const jwt = require("jsonwebtoken");
+const CreateRD=require('./Rapportdetaille')
 const CreatePDF=require('./CreateListeOfStudents')
 const mailgun = require("mailgun-js");
 const DOMAIN = 'sandbox8cbfcafa2ff54adfabcbdba4ce193360.mailgun.org';
@@ -419,4 +420,19 @@ module.exports.exportlstStudents =(req,res)=>{
       },3000);
 
     })
+    
 }
+module.exports.exportlstStudentsDetaille =(req,res)=>{
+    const data = req.body;
+  
+    Promise.resolve().then(async()=>{
+      await CreateRD.createReport(data,"invoice.pdf");
+  
+      }).then(()=>{
+        setTimeout(()=>{
+  
+        res.download("invoice.pdf");
+        },3000);
+  
+      })
+  }

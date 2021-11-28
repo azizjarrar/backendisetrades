@@ -2,11 +2,19 @@
 var client = require('../../../db_connection')
 ////////////we going to create a function that will be insert the data  this methode will insert the data from json  object 
 ///////////this function will be exported 
-<<<<<<< HEAD
 exports.addReclamation=(req,res)=>{
-=======
-exports.add=(req,res)=>{
->>>>>>> c4158e267732db0c983ac79c79abc35d5b99d902
+  client.query(`INSERT INTO papier_administratif (date,raison, id_type_papier,id_user,id_statut_papier) VALUES ('${req.body.date}','${req.body.raison}','${req.body.id_type_papier}','${req.body.id_user}','${req.body.id_statut_papier}')`, function (err, result) {
+      if (err){
+          res.status(res.statusCode).json({
+              errorCode: err.message,
+              status: res.statusCode,
+            });
+      }else{
+        res.status(200).json({
+          added:true,
+          result
+        })
+
   /////////// this the database query to add the data
  ////////// req equale for parameter from the body or the url parameter 
  //////////res mean the result from the query  
@@ -29,8 +37,7 @@ exports.add=(req,res)=>{
         res.json(result);
         res.status(res.statusCode);
       }
-    }
-  );
+    });
 
 }
 ////////////we going to create a function that will be Update the data  change the status if the file demande 
@@ -111,6 +118,24 @@ exports.getById=(req,res)=>{
           res.status(res.statusCode)
       }
     });
+
+}
+
+exports.getByIdPapier=(req,res)=>{
+  client.query( 'select  id_papier,id_type_papier,date,email ,nom,prenom , cin from  user,papier_administratif where user.id_user=papier_administratif.id_user and id_papier=?',
+  [req.params.id],
+  function (err, result) {
+    if (err){
+        res.status(res.statusCode).json({
+            errorCode: err.message,
+            status: res.statusCode,
+            
+          });
+    }else{
+      res.json(result);
+        res.status(res.statusCode)
+    }
+  });
 
 }
 //////////////////////////////////Selection les papiers simple //////////////////////

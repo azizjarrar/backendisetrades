@@ -27,26 +27,30 @@ module.exports.createDemandeMaster = (req, res) => {
                         err: true,
                         message: err.sqlMessage,
                     });
+                    return;
                 }
 
                 if (results.affectedRows > 0)
-                    res.status(200).json({
+                   { res.status(200).json({
                         err: false,
                         results: results,
-                    })
+                    });
+                    return;}
                 else
-                    res.status(404).json({
+                    {res.status(404).json({
                         err: true,
                         results: [],
                         message: "echec lors du stockage",
-                    })
+                    });
+                    return;}
             }
         )
     } else {
         res.status(404).json({
             err: true,
             message: "file non existe",
-        })
+        });
+        return;
     }
 };
 
@@ -88,19 +92,22 @@ module.exports.getListDemandeMaster = (req, res) => {
                     err: true,
                     results: []
                 });
+                return;
             }
 
             if (results.length > 0)
-                res.status(200).json({
+                {res.status(200).json({
                     err: false,
                     results: results,
-                })
+                });
+                return;}
             else
-                res.status(404).json({
+                {res.status(404).json({
                     err: false,
                     results: [],
                     message: "choix n'existe pas",
-                })
+                });
+                return;}
         })
 };
 
@@ -168,19 +175,22 @@ module.exports.getDemandeMasterById = (req, res) => {
                     err: true,
                     results: []
                 });
+                return;
             }
 
             if (results.length > 0)
-                res.status(200).json({
+               { res.status(200).json({
                     err: false,
                     results: results,
-                })
+                });
+                return;}
             else
-                res.status(404).json({
+               { res.status(404).json({
                     err: false,
                     results: [],
                     message: "choix n'existe pas",
-                })
+                });
+                return;}
         })
 };
 
@@ -197,19 +207,22 @@ module.exports.ChangerEtatDemandeMaster = (req, res) => {
                         err: true,
                         results: []
                     });
+                    return;
                 }
 
                 if (results.affectedRows > 0)
-                    res.status(200).json({
+                   { res.status(200).json({
                         err: false,
                         results: results.affectedRows,
-                    })
+                    });
+                    return;}
                 else
-                    res.status(404).json({
+                   { res.status(404).json({
                         err: true,
                         results: [],
                         message: "echec lors du stockage",
-                    })
+                    });
+                    return;}
             })
 
 
@@ -229,19 +242,22 @@ module.exports.addNoteDemande = (req, res) => {
                   err: true,
                   results: []
               });
+              return;
           }
 
           if (results.affectedRows > 0)
-              res.status(200).json({
+              {res.status(200).json({
                   err: false,
                   results: results.affectedRows,
-              })
+              });
+              return;}
           else
-              res.status(404).json({
+              {res.status(404).json({
                   err: true,
                   results: [],
                   message: "echec lors du stockage",
-              })
+              });
+              return;}
       })
 
 
@@ -259,26 +275,30 @@ module.exports.updateDemandeMaster = (req, res) => {
                         err: true,
                         results: []
                     });
+                    return;
                 }
 
                 if (results.affectedRows > 0)
-                    res.status(200).json({
+                    {res.status(200).json({
                         err: false,
                         results: results.affectedRows,
-                    })
+                    });
+                    return;}
                 else
-                    res.status(404).json({
+                   { res.status(404).json({
                         err: true,
                         results: [],
                         message: "echec lors du stockage",
-                    })
+                    });
+                    return;}
             })
 
     } else {
         res.status(404).json({
             err: true,
             message: "file non existe",
-        })
+        });
+        return;
     }
 };
 
@@ -293,19 +313,22 @@ module.exports.deleteDemandeMaster = (req, res) => {
                     err: true,
                     results: []
                 });
+                return;
             }
 
             if (results.affectedRows > 0)
-                res.status(200).json({
+               { res.status(200).json({
                     err: false,
                     results: results.affectedRows,
-                })
+                });
+                return;}
             else
-                res.status(404).json({
+                {res.status(404).json({
                     err: true,
                     results: [],
                     message: "echec lors de suppression",
-                })
+                });
+                return;}
         })
 };
 

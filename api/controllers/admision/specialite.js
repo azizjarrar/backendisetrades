@@ -13,7 +13,7 @@ module.exports.createSpecialite = (req, res) => {
                 });
             }
 
-            if(results.affectedRows>0)
+            else   if(results.affectedRows>0)
                 res.status(200).json({
                     err:false,
                     results:results,
@@ -39,7 +39,7 @@ module.exports.getListSpecialite = (req, res) => {
             });
         }
         
-        if(results.length>0)
+        else if(results.length>0)
             res.status(200).json({
                 err:false,
                 results:results,
@@ -67,7 +67,7 @@ module.exports.getSpecialiteById = (req, res) => {
                 });
             }
             
-            if(results.length>0)
+            else  if(results.length>0)
                 res.status(200).json({
                     err:false,
                     results:results,
@@ -94,7 +94,7 @@ module.exports.updateSpecialite = (req, res) => {
                     });
                 }
 
-            if(results.affectedRows>0)
+                else  if(results.affectedRows>0)
                 res.status(200).json({
                     err:false,
                     results:results.affectedRows,
@@ -121,7 +121,7 @@ module.exports.deleteSpecialite = (req, res) => {
                 });
             }
 
-            if(results.affectedRows>0)
+            else  if(results.affectedRows>0)
                 res.status(200).json({
                     err:false,
                     results:results.affectedRows,

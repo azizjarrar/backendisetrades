@@ -3,7 +3,7 @@ module.exports = require('mysql').createConnection({
     host : 'localhost',
     user : 'root',
     password : '',
-    database : 'finalv0'
+    database : 'iset_rades_deploiment'
     // user: "5mrruYpkTT",
     // password: "MbMXb71BlA",
     // database: "5mrruYpkTT"
@@ -27,5 +27,5 @@ module.exports = require('mysql').createConnection({
     user: "root",
     password: '',
     database: "5mrruypktt"*/
-});
+
 

@@ -24,29 +24,22 @@
     "crypto": "^1.0.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "fs": "0.0.1-security",
     "jsonwebtoken": "^8.5.1",
-<<<<<<< HEAD
-=======
     "mailgun-js": "^0.22.0",
     "mkdirp": "^1.0.4",
     "moment": "^2.29.1",
->>>>>>> c4158e267732db0c983ac79c79abc35d5b99d902
     "morgan": "^1.10.0",
+    "multer": "^1.4.2",
     "mysql": "^2.18.1",
-<<<<<<< HEAD
-    "nodemailer": "^6.6.5"
-=======
     "node-mailjet": "^3.3.4",
     "nodemailer": "^6.6.0",
     "nodemailer-smtp-transport": "^2.7.4",
-    "nodemon": "^2.0.15",
-
     "path": "^0.12.7",
     "pdfkit": "^0.12.3"
   },
   "devDependencies": {
     "cypress": "^8.7.0",
     "cypress-file-upload": "^5.0.8"
->>>>>>> c4158e267732db0c983ac79c79abc35d5b99d902
   }
 }

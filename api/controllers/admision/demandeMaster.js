@@ -170,7 +170,7 @@ module.exports.getListDemandeByMaster = async (req, res) => {
                             resolve(res);
                         });
                     }).then(()=>{
-                        console.log('in progress',results[i].lstCursus[0].mention);
+                        
                         resolvednumber++;
                         if(Number(results.length)===Number(resolvednumber))
                         { 

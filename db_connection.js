@@ -9,7 +9,7 @@
        host: "localhost",
     user: "root",
     password: "",
-    database: "iset_rades3",
+    database: "iset_rades_deploiment",
     port:3306
 
 /*

@@ -3,30 +3,20 @@ var client = require('../../../db_connection')
 ////////////we going to create a function that will be insert the data  this methode will insert the data from json  object 
 ///////////this function will be exported 
 exports.add=(req,res)=>{
-  /////////// this the database query to add the data
- ////////// req equale for parameter from the body or the url parameter 
- //////////res mean the result from the query  
-  client.query(
-    ` INSERT INTO reclamation (id_type_reclamation, id_statut_reclamation ,date_reclamation ,id_user ,oldSpeciality ,newSpeciality ,oldClass ,newClass ,oldSection ,newSection ,class_note ,sem_note ,mat_note ,class_exam ,sem_exam ,mat_exam ,class_inscr ,sem_inscr ,mat_inscr ) 
-      VALUES ('${req.body.id_type_reclamation}','${req.body.id_statut_reclamation}','${req.body.date_reclamation}','${req.body.id_user}','${req.body.oldSpeciality}','${req.body.newSpeciality}','${req.body.oldClass}','${req.body.newClass}','${req.body.oldSection}','${req.body.newSection}','${req.body.class_note}','${req.body.sem_note}','${req.body.mat_note}','${req.body.class_exam}','${req.body.sem_exam}','${req.body.mat_exam}','${req.body.class_inscr}','${req.body.sem_inscr}','${req.body.mat_inscr}')`,
-    function (err, result) {
-          /////// if we get error we will get it from query   
-
-      if (err) {
-        //// this methode in nodeJs role is to get the result and add her parameter is the errore message
-      ///// statusCode can be any error you did so node js get the code and 
-        res.status(res.statusCode).json({
-          errorCode: err.message,
-          status: res.statusCode,
-        });
-      } else {
-        //// part is when you get statu 200 that mean the query is excuted 
-
-        res.json(result);
-        res.status(res.statusCode);
+ 
+  client.query(`INSERT INTO papier_administratif (date,raison, id_type_papier,id_user,id_statut_papier) VALUES ('${req.body.date}','${req.body.raison}','${req.body.id_type_papier}','${req.body.id_user}','${req.body.id_statut_papier}')`, function (err, result) {
+      if (err){
+          res.status(res.statusCode).json({
+              errorCode: err.message,
+              status: res.statusCode,
+            });
+      }else{
+        res.status(200).json({
+          added:true,
+          result
+        })
       }
-    }
-  );
+    });
 
 }
 ////////////we going to create a function that will be Update the data  change the status if the file demande 
@@ -107,6 +97,24 @@ exports.getById=(req,res)=>{
           res.status(res.statusCode)
       }
     });
+
+}
+
+exports.getByIdPapier=(req,res)=>{
+  client.query( 'select  id_papier,id_type_papier,date,email ,nom,prenom , cin from  user,papier_administratif where user.id_user=papier_administratif.id_user and id_papier=?',
+  [req.params.id],
+  function (err, result) {
+    if (err){
+        res.status(res.statusCode).json({
+            errorCode: err.message,
+            status: res.statusCode,
+            
+          });
+    }else{
+      res.json(result);
+        res.status(res.statusCode)
+    }
+  });
 
 }
 //////////////////////////////////Selection les papiers simple //////////////////////

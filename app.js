@@ -54,6 +54,7 @@ const { getById,getAllPaperTypes } = require('./api/controllers/scolarite/AddFil
 const { getPapierNonRaison } = require('./api/controllers/scolarite/AddFile');
 const { getAll } = require('./api/controllers/scolarite/AddFile');
 const getByIdUser  = require('./api/routes/scolarite/AddFile');
+const getByIdFile = require('./api/routes/scolarite/AddFile');
 
 const getAccepter  = require('./api/routes/scolarite/AddFile');
 const getEnAttente  = require('./api/routes/scolarite/AddFile');
@@ -207,6 +208,8 @@ app.use("/getEtudiant",getById)
 app.use("/getPapierRaison",getPapierNonRaison)
 app.use("/getAllFile",getAll)
 app.use("/getuser",getByIdUser)
+
+app.use("/getPapierIdFile",getByIdFile)
 
 app.use("/getFileAccepter",getAccepter)
 app.use("/getFileEnAttente",getEnAttente)

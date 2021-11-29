@@ -2,6 +2,9 @@ var client = require('../../../db_connection')
 const crypto = require("crypto");
 var nodemailer = require('nodemailer');
 const validator = require('../../middleware/validator')
+const { NOT_FOUND, DELETED, AUTHORIZED_OR_NOT_FOUND, DONE, ALREADY_EXISTS } = require('./messages')
+const responseSender = require("../../middleware/responseSender")
+
 /**************************************************************************/
 /**************this part is responsible of all demmandes API***************/
 /**************************************************************************/
@@ -12,72 +15,46 @@ exports.sendRequest = (req, res) => {
   // reverse in image url '\'  to '/'
   if (req.file != undefined) {
     for (let i = 0; i < req.file.path.length; i++) {
-      if (req.file.path[i] ==='\\') {
+      if (req.file.path[i] === '\\') {
         newurlString += "/"
       } else {
         newurlString += req.file.path[i]
       }
     }
   }
-  req.body.tel="52"
-  if(validator(req.body,["tel","motivation","club","equipe","cin","email"],res)){
+  req.body.tel = "52"
+  if (validator(req.body, ["tel", "motivation", "club", "equipe", "cin", "email"], res)) {
     return
   }
   client.query(`SELECT * FROM  user  WHERE cin=${client.escape(req.body.cin)}`, function (err, resultEtudiant) {
     if (err) {
-      res.status(res.statusCode).json({
-        errorCode: err.message,
-        status: res.statusCode,
-
-      });
-      return
+      responseSender(res, { error: true, errorMessage: err.message })
     } else {
-      if (resultEtudiant.length ===0) {
-        res.status(res.statusCode).json({
-          message: "cin  not found",
-          status: res.statusCode,
-
-        });
+      if (resultEtudiant.length === 0) {
+        responseSender(res, { message: "cin  " + NOT_FOUND, error: true })
       } else {
-        
+
         client.query(`SELECT * FROM  demande_club  WHERE cin=${client.escape(req.body.cin)} && id_club=${client.escape(req.body.club)};`, function (err, result) {
           if (err) {
-            res.status(res.statusCode).json({
-              errorCode: err,
-
-              status: res.statusCode,
-            });
+            responseSender(res, { error: true, errorMessage: err.message })
             return
           }
-          if (result.length ===0) {
+          if (result.length === 0) {
             //create current date
             var date = new Date()
-            const datee=date.getFullYear()+"-"+(date.getMonth()+1-0)+"-"+date.getDate();
-            const heure=date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
-            const newDateFormated=datee+" "+heure;
-            client.query(` INSERT INTO demande_club (id_demande,cin,statut,id_etudiant,equipe,id_club,motivation,date,email,tel) 
-          VALUES ('${id}',${client.escape(req.body.cin)},"en attend",${client.escape(resultEtudiant[0].id_user)},${client.escape(req.body.equipe)},${client.escape(req.body.club)},${client.escape(req.body.motivation)} , ${client.escape(newDateFormated)} , ${client.escape(req.body.email)} ,${client.escape(req.body.tel)});`,
+            const datee = date.getFullYear() + "-" + (date.getMonth() + 1 - 0) + "-" + date.getDate();
+            const heure = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+            const newDateFormated = datee + " " + heure;
+            client.query(` INSERT INTO demande_club (id_demande,cin,statut,id_etudiant,equipe,id_club,motivation,date,email,tel) VALUES ('${id}',${client.escape(req.body.cin)},"en attend",${client.escape(resultEtudiant[0].id_user)},${client.escape(req.body.equipe)},${client.escape(req.body.club)},${client.escape(req.body.motivation)} , ${client.escape(newDateFormated)} , ${client.escape(req.body.email)} ,${client.escape(req.body.tel)});`,
               function (err, result) {
                 if (err) {
-                  res.status(res.statusCode).json({
-                    errorCode: err,
-                    status: res.statusCode,
-
-                  });
+                  responseSender(res, { error: true, errorMessage: err.message })
                 } else {
-                  res.status(res.statusCode).json({
-                    message: "done",
-                    data: result,
-                    status: res.statusCode,
-                  });
+                  responseSender(res, { message: DONE, data: result })
                 }
               });
           } else {
-            res.status(res.statusCode).json({
-              message: "user already have request",
-              error: true,
-              status: res.statusCode,
-            });
+            responseSender(res, { message: ALREADY_EXISTS, error: true, })
           }
         })
       }
@@ -94,54 +71,34 @@ exports.getRequests = (req, res) => {
     WHERE demande_club.id_club=${req.body.id_club} and club.id_membre=${req.verified.user_auth.id_membre}
     ;`, function (err, result) {
     if (err) {
-      res.status(res.statusCode).json({
-        errorCode: err.message,
-        status: res.statusCode,
-
-      });
-
+      responseSender(res, { error: true, errorMessage: err.message })
     } else {
-      res.status(res.statusCode).json({
-        message: "list of Requests",
-        data: result,
-        status: res.statusCode,
-      });
+      responseSender(res, { data: result, status: res.statusCode })
     }
   })
 }
 exports.acceptOrDeleteRequests = (req, res) => {
   var randompassword = crypto.randomBytes(16).toString('hex');
 
-  if(validator(req.body,["idDemande","option"],res)){
+  if (validator(req.body, ["idDemande", "option"], res)) {
     return
   }
   const idmembre = Math.floor(Math.random() * 1000000000);
-  if (req.body.option ==="delete") {
+  if (req.body.option === "delete") {
     //;
-    if(validator(req.body,["idDemande"],res)){
+    if (validator(req.body, ["idDemande"], res)) {
       return
     }
     client.query(`DELETE demande_club FROM demande_club JOIN club on club.id_club=demande_club.id_club   WHERE club.id_membre='${req.verified.user_auth.id_membre}' && id_demande=${client.escape(req.body.idDemande)};`, function (err, result) {
       if (err) {
-        res.status(res.statusCode).json({
-          errorCode: err,
-          status: res.statusCode,
-        });
-
+        responseSender(res, { error: true, errorMessage: err.message })
       } else {
-        if (result.affectedRows ===0) {
-          res.status(res.statusCode).json({
-            errorCode: "demande_club not found or you dont have acces to delete it",
-            status: res.statusCode,
-          });
+        if (result.affectedRows === 0) {
+          responseSender(res, { error: true, message: AUTHORIZED_OR_NOT_FOUND })
         } else {
           sendmail(req.body.email, "rejected")
-          res.status(res.statusCode).json({
-            errorCode: "demande_club is deleted",
-            status: res.statusCode,
-          });
+          responseSender(res, { errorCode: DELETED, status: res.statusCode, })
         }
-
       }
     })
 
@@ -149,79 +106,44 @@ exports.acceptOrDeleteRequests = (req, res) => {
 
     client.query(`SELECT * FROM  demande_club JOIN club on club.id_club=demande_club.id_club   WHERE club.id_membre='${req.verified.user_auth.id_membre}' && id_demande=${client.escape(req.body.idDemande)};`, function (err, result) {
       if (err) {
-        res.status(res.statusCode).json({
-          errorCode: err.message,
-          status: res.statusCode,
-
-        });
-
+        responseSender(res, { error: true, errorMessage: err.message })
       } else {
-        if (result.length ===0 || result[0] ===undefined) {
-          res.status(res.statusCode).json({
-            errorCode: "demande_club not found or you dont have acces to delete it",
-            status: res.statusCode,
-          });
+        if (result.length === 0 || result[0] === undefined) {
+          responseSender(res, { error: true, message: AUTHORIZED_OR_NOT_FOUND })
         } else {
           client.query(`SELECT * FROM  membre  WHERE cin='${result[0].cin}';`, function (err, resultzero) {
             if (err) {
-              res.status(res.statusCode).json({
-                errorCode: err.message,
-                status: res.statusCode,
-              });
+              responseSender(res, { error: true, errorMessage: err.message })
             } else {
-              if (resultzero.length ===0 || resultzero[0] ===undefined) {
+              if (resultzero.length === 0 || resultzero[0] === undefined) {
                 //if this is the first time for user in any club we will create new membre
                 client.query(`SELECT * FROM role_membre WHERE role='membre';`, (err, resultrole) => {
                   if (err) {
-                    res.status(res.statusCode).json({
-                      errorCode: err.message,
-                      status: res.statusCode,
-                    });
+                    responseSender(res, { error: true, errorMessage: err.message })
                     return
                   }
-                  if (resultrole ===undefined) {
-                    res.status(res.statusCode).json({
-                      errorCode: "role membre 404",
-                      status: res.statusCode,
-                    });
+                  if (resultrole === undefined) {
+                    responseSender(res, { error: true, message: NOT_FOUND })
                     return
                   }
                   //create user
-                  
-                  client.query(`INSERT INTO membre (tel,id_membre,role,email,motdepasse,membreimage,cin) 
-                                      VALUES('${result[0].tel}',(select id_user from user where cin=${result[0].cin}),${resultrole[0].id_role},'${result[0].email}',${client.escape(randompassword)},'imageurl',${result[0].cin});`, function (err, resultone) {
+
+                  client.query(`INSERT INTO membre (tel,id_membre,role,email,motdepasse,membreimage,cin) VALUES('${result[0].tel}',(select id_user from user where cin=${result[0].cin}),${resultrole[0].id_role},'${result[0].email}',${client.escape(randompassword)},'imageurl',${result[0].cin});`, function (err, resultone) {
                     if (err) {
-                      res.status(res.statusCode).json({
-                        errorIn: "INSERT INTO membre",
-                        errorCode: err,
-                        status: res.statusCode,
-                      });
+                      responseSender(res, { error: true, errorMessage: err.message })
                     } else {
                       //add user to list_membre here we found all users of  giving club
-                      client.query(`INSERT INTO liste_membre
-                                              (id_club,cin_membre,role,equipe)
-                                              VALUES('${result[0].id_club}','${result[0].cin}','${resultrole[0].id_role}','${result[0].equipe}')
-                                              `, (err, resulttwo) => {
+                      client.query(`INSERT INTO liste_membre (id_club,cin_membre,role,equipe) VALUES('${result[0].id_club}','${result[0].cin}','${resultrole[0].id_role}','${result[0].equipe}')`, (err, resulttwo) => {
                         if (err) {
-                          res.status(res.statusCode).json({
-                            errorIn: "INSERT INTO liste_membre",
-                            errorCode: err.message,
-                            status: res.statusCode,
-                          });
+                          responseSender(res, { error: true, errorMessage: err.message })
                         } else {
                           //delete demmande after adding user
                           client.query(`DELETE demande_club FROM demande_club JOIN club on club.id_club=demande_club.id_club   WHERE club.id_membre='${req.verified.user_auth.id_membre}' && id_demande='${req.body.idDemande}';`, function (err, resultdelete) {
                             if (err) {
-                              res.status(res.statusCode).json({
-                                errorCode: err.message,
-                                status: res.statusCode,
-                              });
+                              responseSender(res, { error: true, errorMessage: err.message })
                             } else {
-                              sendmail(result[0].email, "aproved",randompassword)
-                              res.status(res.statusCode).json({
-                                message: "membre accepted",
-                                status: res.statusCode,
-                              });
+                              sendmail(result[0].email, "aproved", randompassword)
+                              responseSender(res, { message: DONE })
                             }
                           })
                         }
@@ -235,34 +157,19 @@ exports.acceptOrDeleteRequests = (req, res) => {
                 //if its not his first time we will just add him to club
                 client.query(`SELECT * FROM role_membre WHERE role='membre'`, (err, resultrole) => {
                   if (err) {
-                    res.status(res.statusCode).json({
-                      errorCode: err.message,
-                      status: res.statusCode,
-                    });
+                    responseSender(res, { error: true, errorMessage: err.message })
                     return
                   }
-                  client.query(`INSERT INTO liste_membre
-                                      (id_club,cin_membre,role,equipe)
-                                      VALUES(${result[0].id_club},'${result[0].cin}','${resultrole[0].id_role}','${result[0].equipe}')
-                                      `, (err, resulttwo) => {
+                  client.query(`INSERT INTO liste_membre (id_club,cin_membre,role,equipe) VALUES(${result[0].id_club},'${result[0].cin}','${resultrole[0].id_role}','${result[0].equipe}')`, (err, resulttwo) => {
                     if (err) {
-                      res.status(res.statusCode).json({
-                        errorCode: err,
-                        status: res.statusCode,
-                      });
+                      responseSender(res, { error: true, errorMessage: err.message })
                     } else {
                       client.query(`DELETE demande_club FROM demande_club JOIN club on club.id_club=demande_club.id_club   WHERE club.id_membre='${req.verified.user_auth.id_membre}' && id_demande='${req.body.idDemande}';`, function (err, resultdelete) {
                         if (err) {
-                          res.status(res.statusCode).json({
-                            errorCode: err.message,
-                            status: res.statusCode,
-                          });
+                          responseSender(res, { error: true, errorMessage: err.message })
                         } else {
-                          sendmail(result[0].email, "aproved" , randompassword)
-                          res.status(res.statusCode).json({
-                            message: "membre accepted",
-                            status: res.statusCode,
-                          });
+                          sendmail(result[0].email, "aproved", randompassword)
+                          responseSender(res, { message: DONE })
                         }
                       })
                     }
@@ -279,7 +186,7 @@ exports.acceptOrDeleteRequests = (req, res) => {
   }
 }
 
-const sendmail = (email, state , password) => {
+const sendmail = (email, state, password) => {
   var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -287,12 +194,12 @@ const sendmail = (email, state , password) => {
       pass: 'Celva123'
     }
   });
-  if (state ==="aproved") {
+  if (state === "aproved") {
     var mailOptions = {
       from: 'isetrades@gmail.com',
       to: email,
       subject: 'result',
-      text: "you are aproved to join our club your default password is "+password +"and login is your email if you alredy have account just sing in with your info"
+      text: "you are aproved to join our club your default password is " + password + "and login is your email if you alredy have account just sing in with your info"
     };
   } else {
     var mailOptions = {
@@ -302,8 +209,6 @@ const sendmail = (email, state , password) => {
       text: "you are rejected to join  club"
     };
   }
-
-
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
       console.log(error);

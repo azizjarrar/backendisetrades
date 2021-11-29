@@ -16,6 +16,17 @@ dotenv.config();
 /***group evenementiel routers***/
 /********************************/
 const auth_evenementiel_route_auth_event= require('./api/routes/evenementiel/auth')
+const auth_evenementiel_route_demande_event= require('./api/routes/evenementiel/demande')
+const auth_evenementiel_route_roles_and_teams = require('./api/routes/evenementiel/roles_and_teams')
+const auth_evenementiel_route_user = require('./api/routes/evenementiel/user')
+const auth_evenementiel_route_club = require('./api/routes/evenementiel/club')
+const auth_evenementiel_route_forgetpassword = require('./api/routes/evenementiel/forgetpassword')
+const auth_evenementiel_route_sondage = require('./api/routes/evenementiel/sondage')
+const auth_evenementiel_route_post=require('./api/routes/evenementiel/post')
+const auth_evenementiel_route_evenment=require('./api/routes/evenementiel/evenment')
+const auth_evenementiel_route_calendrier=require('./api/routes/evenementiel/calendrier')
+const auth_evenementiel_route_participation=require('./api/routes/evenementiel/participation')
+const auth_evenementiel_route_activites=require('./api/routes/evenementiel/activites')
 /********************************/
 /***group stage pfe routers******/
 /********************************/
@@ -175,7 +186,21 @@ app.use('/etablissement_logo', express.static('etablissement_logo'));
 /************************************/
 /***use group evenementiel routers***/
 /************************************/
-  app.use("/auth_event",auth_evenementiel_route_auth_event)
+app.use("/auth_event",auth_evenementiel_route_auth_event)
+app.use("/demande_event",auth_evenementiel_route_demande_event)
+app.use("/roles_and_teams",auth_evenementiel_route_roles_and_teams)
+app.use("/user",auth_evenementiel_route_user)
+app.use("/event",auth_evenementiel_route_evenment)
+app.use("/club",auth_evenementiel_route_club)
+app.use("/forgetpassword",auth_evenementiel_route_forgetpassword)
+app.use("/sondage",auth_evenementiel_route_sondage)
+app.use("/post",auth_evenementiel_route_post)
+app.use("/calendar",auth_evenementiel_route_calendrier)
+app.use("/participation",auth_evenementiel_route_participation)
+app.use("/activites",auth_evenementiel_route_activites)
+app.get('/resetpassword/:token',function(req,res){
+  res.sendFile(path.join(__dirname+'/api/routes/evenementiel/resetpassword.html'));
+});
 /************************************/
 /***use group stage pfe routers******/
 /************************************/

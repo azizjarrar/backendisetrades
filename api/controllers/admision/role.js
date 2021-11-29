@@ -14,7 +14,7 @@ module.exports.createRole = (req, res) => {
                 });
             }
 
-            if(results.affectedRows>0)
+            else   if(results.affectedRows>0)
                 res.status(200).json({
                     err:false,
                     results:results,
@@ -38,7 +38,7 @@ module.exports.getListRole = (req, res) => {
             });
         }
         
-        if(results.length>0)
+        else if(results.length>0)
             res.status(200).json({
                 err:false,
                 results:results,
@@ -65,7 +65,7 @@ module.exports.getRoleById = (req, res) => {
                 });
             }
             
-            if(results.length>0)
+            else   if(results.length>0)
                 res.status(200).json({
                     err:false,
                     results:results,
@@ -92,7 +92,7 @@ module.exports.updateRole = (req, res) => {
                 });
             }
 
-        if(results.affectedRows>0)
+            else if(results.affectedRows>0)
             res.status(200).json({
                 err:false,
                 results:results.affectedRows,
@@ -119,7 +119,7 @@ module.exports.deleteRole = (req, res) => {
                 });
             }
 
-            if(results.affectedRows>0)
+            else  if(results.affectedRows>0)
                 res.status(200).json({
                     err:false,
                     results:results.affectedRows,

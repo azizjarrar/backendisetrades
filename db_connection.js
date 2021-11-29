@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3931a74731c1e8779e3ce4a44218c63847bc108e
 module.exports = require('mysql').createConnection({
     host : 'localhost',
     user : 'root',
@@ -25,4 +29,10 @@ module.exports = require('mysql').createConnection({
     host: "localhost",
     user: "root",
     password: '',
+<<<<<<< HEAD
     database: "5mrruypktt"*/
+=======
+    database: "5mrruypktt"*/
+
+
+>>>>>>> 3931a74731c1e8779e3ce4a44218c63847bc108e

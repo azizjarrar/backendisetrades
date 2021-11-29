@@ -11,7 +11,7 @@ module.exports.getListGouvern = (req, res) => {
             });
         }
         
-        if(results.length>0)
+        else if(results.length>0)
             res.status(200).json({
                 err:false,
                 results:results,

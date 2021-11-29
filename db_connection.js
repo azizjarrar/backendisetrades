@@ -1,15 +1,19 @@
- module.exports = require('mysql').createConnection({
-
+module.exports = require('mysql').createConnection({
+    host : 'localhost',
+    user : 'root',
+    password : '',
+    database : 'iset_rades_deploiment'
+    // user: "5mrruYpkTT",
+    // password: "MbMXb71BlA",
+    // database: "5mrruYpkTT"
+/*
     host: "remotemysql.com",
-    user: "XQp55NTp8q",
-    password: "lQGebO4UU4",
-    database: "XQp55NTp8q"
-    /*
-    //    host: "localhost",
-    // user: "root",
-    // password: "",
-    // database: "iset_rades",
-    // port:3306
+    user: "BiKEJdTxsS",
+    password: "TJZje6quF4",
+    database: "BiKEJdTxsS"
+    */
+});
+
 
 
 /*
@@ -22,4 +26,3 @@
     user: "root",
     password: '',
     database: "5mrruypktt"*/
-});

@@ -110,6 +110,8 @@ exports.getRequests = (req, res) => {
   })
 }
 exports.acceptOrDeleteRequests = (req, res) => {
+  var randompassword = crypto.randomBytes(16).toString('hex');
+
   if(validator(req.body,["idDemande","option"],res)){
     return
   }
@@ -177,7 +179,6 @@ exports.acceptOrDeleteRequests = (req, res) => {
                     });
                     return
                   }
-                  var randompassword = crypto.randomBytes(16).toString('hex');
                   if (resultrole ===undefined) {
                     res.status(res.statusCode).json({
                       errorCode: "role membre 404",
@@ -186,11 +187,12 @@ exports.acceptOrDeleteRequests = (req, res) => {
                     return
                   }
                   //create user
+                  
                   client.query(`INSERT INTO membre (tel,id_membre,role,email,motdepasse,membreimage,cin) 
-                                      VALUES('${result[0].tel}','${idmembre}',${resultrole[0].id_role},'${result[0].email}',${client.escape(randompassword)},'imageurl',${result[0].cin});`, function (err, resultone) {
+                                      VALUES('${result[0].tel}',(select id_user from user where cin=${result[0].cin}),${resultrole[0].id_role},'${result[0].email}',${client.escape(randompassword)},'imageurl',${result[0].cin});`, function (err, resultone) {
                     if (err) {
                       res.status(res.statusCode).json({
-                        errorIn: "INSERT INTO membre 1",
+                        errorIn: "INSERT INTO membre",
                         errorCode: err,
                         status: res.statusCode,
                       });

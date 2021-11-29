@@ -127,7 +127,7 @@ exports.getOneEvent = (req, res) => {
     return
   }
 
-  client.query(`SELECT  *  from event join club on club.id_club=event.id_club where id_event=${client.escape(req.body.id_event)};`, (err, result) => {
+  client.query(`SELECT  *,event.description  from event join club on club.id_club=event.id_club where id_event=${client.escape(req.body.id_event)};`, (err, result) => {
     if (err) {
       res.status(res.statusCode).json({
         errorCode: err,
@@ -155,13 +155,13 @@ exports.updateEvent = (req, res) => {
     } else {
       if (req.verified.user_auth.id_membre === result[0].idAdminClub || req.verified.user_auth.id_membre === result[0].idOfCreatorOfEvent) {
         const { titre_event, description, date_debut, date_fin, heure_debut, heure_fin, statu, url_event, url_image } = req.body
-        let queryString = `${titre_event != undefined ? "titre_event=" + "'" + titre_event + "'" : ''} ${description != undefined ? "description=" + "'" + description + "'" : ''}  ${date_debut != undefined ? "date_debut=" + "'" + date_debut + "'" : ''} ${date_fin != undefined ? "date_fin=" + "'" + date_fin + "'" : ''} ${heure_debut != undefined ? "heure_debut=" + "'" + heure_debut + "'" : ''} ${heure_fin != undefined ? "heure_fin=" + "'" + heure_fin + "'" : ''} ${statu != undefined ? "statut=" + "'" + statu + "'" : ''} ${url_event != undefined ? "url_event=" + "'" + url_event + "'" : ''} ${url_image != undefined ? "url_image=" + "'" + url_image + "'" : ''} ;`
+        let queryString = `${titre_event != undefined ? "titre_event=" + "'" + titre_event + "'" : ''} ${description != undefined ? "description=" + "'" + description + "'" : ''}  ${date_debut != undefined ? "date_debut=" + "'" + date_debut + "'" : ''} ${date_fin != undefined ? "date_fin=" + "'" + date_fin + "'" : ''} ${heure_debut != undefined ? "heure_debut=" + "'" + heure_debut + "'" : ''} ${heure_fin != undefined ? "heure_fin=" + "'" + heure_fin + "'" : ''} ${statu != undefined ? "statut=" + "'" + statu + "'" : ''} ${url_event != undefined ? "url_event=" + "'" + url_event + "'" : ''} ${url_image != undefined ? "url_image=" + "'" + url_image + "'" : ''}`
         for (let i = 0; i < queryString.length - 1; i++) {
           if (queryString[i] == " " && queryString[i + 1] != " " && queryString[0] != " ") {
             queryString = queryString.replace(" ", ",")
           }
         }
-        let query = `UPDATE event SET ${queryString} where id_event=${client.escape(req.body.id_event)}`;
+        let query = `UPDATE event SET ${queryString} where id_event=${client.escape(req.body.id_event)};`;
         client.query(query, (err, result) => {
           if (err) {
             res.status(res.statusCode).json({

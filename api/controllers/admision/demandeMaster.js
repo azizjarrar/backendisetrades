@@ -10,7 +10,30 @@ const mg = mailgun({ apiKey: process.env.MAILGUN_APIKEY, domain: DOMAIN })
 const mailer = require('nodemailer');
 const smtp = require('nodemailer-smtp-transport');
 
+module.exports.setToConfirmed = async (req, res) => {
+  const token=  req.params.token
+  connexion.query("UPDATE demande_master SET id_etat_demande_master=5 WHERE token_demande=?",
+  [token],(err,results)=>{
+    if (err) {
+     
+     
+       res.redirect('http://localhost:4200/auth')
+        return;
+    }
 
+    if (results.affectedRows > 0)
+       { 
+        res.redirect('http://localhost:4200/auth')
+        
+        return;}
+    else
+        {
+            res.redirect('http://localhost:4200/auth')
+        return;}
+
+  }
+  )
+}
 module.exports.confimerpreselection = async (req, res) => {
     const body = req.body;
     const transport = mailer.createTransport(
@@ -23,7 +46,13 @@ module.exports.confimerpreselection = async (req, res) => {
             },
         })
     );
-
+    const jsontoken = sign({ result: body.id_demande }, process.env.JWT_KEY, {
+    });
+    connexion.query("UPDATE demande_master SET token_demande=? WHERE id_demande=?"
+    ,[jsontoken,body.id_demande],(err,res)=>{
+        console.log(err);
+        console.log(res);
+    })
     const json = await transport.sendMail({
       from: process.env.EMAIL,
       to: [body.email],
@@ -31,8 +60,8 @@ module.exports.confimerpreselection = async (req, res) => {
       html: 'Bonjour,<br>'
       +"Merci cher utilisateur d'avoir postulé au master "+"<b>"+body.master+"</b>"
       +"<br> Suite à votre présélection, nous vous invite a confirmer votre décision de passer à un entretien"
-      +'<br> Cliquer ici pour confirmer votre candidature :'
-      +`<br>   <p>http://localhost:5010/resetpassword/</p>`
+      +'<br> Cliquer ici ci dessous pour confirmer votre candidature :'
+      +`<br>   <p>http://localhost:5010/demandeMaster/confirm/${jsontoken}</p>`
       +'&nbsp;<br>'
       +'&nbsp;<br>'
       +'Cordialement,'
@@ -40,6 +69,7 @@ module.exports.confimerpreselection = async (req, res) => {
     }).then(
         val=>{
             res.send(val)
+
         },
         err=>{res.send(err)});
 
@@ -98,7 +128,7 @@ async function envoyerDemande(email,master) {
             },
         })
     );
-
+   
     const json = await transport.sendMail({
       from: process.env.EMAIL,
       to: [email],
@@ -111,7 +141,8 @@ async function envoyerDemande(email,master) {
       +'Cordialement,'
 
     });
-
+ 
+   
     return json;
   }
 

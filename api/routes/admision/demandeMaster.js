@@ -38,6 +38,7 @@ router.post("/confirmer", checkToken, demandeMasterController.confimerpreselecti
 router.get("/Adminmaster/:id", demandeMasterController.getListDemandeByMaster);
 
 router.get("/:id", checkToken, demandeMasterController.getDemandeMasterById);
+router.get("/confirm/:token", demandeMasterController.setToConfirmed);
 router.get("/", checkToken, demandeMasterController.getListDemandeMaster);
 
 router.patch("/", checkToken, upload.single('fichier'), demandeMasterController.updateDemandeMaster);

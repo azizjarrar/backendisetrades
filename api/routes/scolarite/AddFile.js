@@ -36,6 +36,7 @@ router.get('/getAllNumberA',addFile_controler.getAllNumberA)
 
 router.get('/getAllNumberE',addFile_controler.getAllNumberE)
 /////////// this url used to get file by in number refused of the file demande  file 
+router.get('/getDocNbByMonth',addFile_controler.getDocNbByMonth)
 
 router.get('/getAllNumberR',addFile_controler.getAllNumberR)
 ///////////  now we going to export all those methode 

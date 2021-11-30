@@ -295,3 +295,18 @@ exports.getAllNumberR=(req,res)=>{
     }
   });
 }
+exports.getDocNbByMonth=(req,res)=>{
+  client.query( 'SELECT MONTH(date) AS month, count(id_papier) AS nb_reclam FROM papier_administratif GROUP BY MONTH(date);'
+           , function (err, result) {
+    if (err){
+        res.status(res.statusCode).json({
+            errorCode: err.message,
+            status: res.statusCode,
+
+          });
+    }else{
+      res.json(result);
+        res.status(res.statusCode)
+    }
+  });
+}

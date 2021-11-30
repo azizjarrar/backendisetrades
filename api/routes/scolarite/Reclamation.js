@@ -47,3 +47,4 @@ router.get('/getNumberReclamationE',Reclamation_controler.getNumberReclamationE)
 router.get('/getNumberReclamationR',Reclamation_controler.getNumberReclamationR)
 /////////////////////// get dates of reclamation
 router.get('/getDates',Reclamation_controler.getDates)
+router.get('/getRecNbByMonth',Reclamation_controler.getRecNbByMonth)

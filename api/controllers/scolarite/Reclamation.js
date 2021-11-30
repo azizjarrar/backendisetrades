@@ -396,3 +396,18 @@ exports.getDates=(req,res)=>{
     }
   });
 }
+exports.getRecNbByMonth=(req,res)=>{
+  client.query( 'SELECT MONTH(date_reclamation) AS month, count(id_reclamation) AS nb_reclamation FROM reclamation GROUP BY MONTH(date_reclamation);'
+           , function (err, result) {
+    if (err){
+        res.status(res.statusCode).json({
+            errorCode: err.message,
+            status: res.statusCode,
+
+          });
+    }else{
+      res.json(result);
+        res.status(res.statusCode)
+    }
+  });
+}

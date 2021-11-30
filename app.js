@@ -38,41 +38,11 @@ const auth_evenementiel_route_activites=require('./api/routes/evenementiel/activ
 /***group scolarite routers******/
 /********************************/
 /////////////File ////////////////////////
-const add_file= require('./api/routes/scolarite/AddFile')
-const update_file= require('./api/routes/scolarite/AddFile')
-const update_file2= require('./api/routes/scolarite/AddFile')
-const deletefile= require('./api/routes/scolarite/AddFile')
-const { getById,getAllPaperTypes } = require('./api/controllers/scolarite/AddFile');
-const { getPapierNonRaison } = require('./api/controllers/scolarite/AddFile');
-const { getAll } = require('./api/controllers/scolarite/AddFile');
-const getByIdUser  = require('./api/routes/scolarite/AddFile');
+const File= require('./api/routes/scolarite/AddFile')
 
-const getAccepter  = require('./api/routes/scolarite/AddFile');
-const getEnAttente  = require('./api/routes/scolarite/AddFile');
-const getRefuser  = require('./api/routes/scolarite/AddFile');
-const getAllNumber = require('./api/routes/scolarite/AddFile')
-const getAllNumberA = require('./api/routes/scolarite/AddFile')
-const getAllNumberE = require('./api/routes/scolarite/AddFile')
-const getAllNumberR = require('./api/routes/scolarite/AddFile')
 /////////////reclamation////////////////
-const add_Reclamation= require('./api/routes/scolarite/Reclamation')
-const update_Reclamation= require('./api/routes/scolarite/Reclamation')
-const delete_Reclamation= require('./api/routes/scolarite/Reclamation');
-const get_Reclamation = require('./api/routes/scolarite/Reclamation')
-const { getAllReclamation}= require('./api/controllers/scolarite/Reclamation')
-const getReclamationByIdUser = require('./api/routes/scolarite/Reclamation')
-const getReclamationById = require('./api/routes/scolarite/Reclamation')
-const getRecAccepter  = require('./api/routes/scolarite/Reclamation');
-const getRecEnAttente  = require('./api/routes/scolarite/Reclamation');
-const getRecRefuser  = require('./api/routes/scolarite/Reclamation');
-const update_Reclamation2= require('./api/routes/scolarite/Reclamation')
-const getAllReclamTypes= require('./api/routes/scolarite/Reclamation')
-const relancerReclamtion= require('./api/routes/scolarite/Reclamation')
-const getNumberReclamation = require('./api/routes/scolarite/Reclamation')
-const getNumberReclamationA = require('./api/routes/scolarite/Reclamation')
-const getNumberReclamationE = require('./api/routes/scolarite/Reclamation')
-const getNumberReclamationR = require('./api/routes/scolarite/Reclamation')
-const getDates = require('./api/routes/scolarite/Reclamation')
+const Reclamation= require('./api/routes/scolarite/Reclamation')
+
 ////////////////////////////////////Get all field of select box//////////////////////////////
 const getAllClass = require('./api/routes/scolarite/Reclamation')
 const getClassByIdEtudiant = require('./api/routes/scolarite/Reclamation')
@@ -158,47 +128,51 @@ app.use(function(req, res, next) {
 /***use group scolarite routers******/
 /************************************/
 ////////////File///////////////////
-app.use("/addfile",add_file)
-app.use("/updatefile",update_file)
-app.use("/updatefile",update_file2)
-app.use("/DeleteFile",deletefile)
-app.use("/getEtudiant",getById)
-app.use("/getPapierRaison",getPapierNonRaison)
-app.use("/getAllFile",getAll)
-app.use("/getuser",getByIdUser)
+app.use("/addfile",File)
+app.use("/updatefile",File)
+app.use("/updatefile",File)
+app.use("/DeleteFile",File)
+app.use("/getEtudiant",File)
+app.use("/getPapierRaison",File)
+app.use("/getAllFile",File)
+app.use("/getuser",File)
 
-app.use("/getFileAccepter",getAccepter)
-app.use("/getFileEnAttente",getEnAttente)
-app.use("/getFileRefuser",getRefuser)
+app.use("/getFileAccepter",File)
+app.use("/getFileEnAttente",File)
+app.use("/getFileRefuser",File)
 
-app.use("/getPaperTypes",getAllPaperTypes)
-app.use("/getAllNumber",getAllNumber)
-app.use("/getAllNumberA",getAllNumberA)
-app.use("/getAllNumberE",getAllNumberE)
-app.use("/getAllNumberR",getAllNumberR)
+app.use("/getPaperTypes",File)
+app.use("/getAllNumber",File)
+app.use("/getAllNumberA",File)
+app.use("/getAllNumberE",File)
+app.use("/getAllNumberR",File)
+app.use("/getDocNbByMonth",File)
+
 ///////////Reclamation///////////////
-app.use("/addReclamation",add_Reclamation)
-app.use("/updateReclamation",update_Reclamation)
-app.use("/DeleteReclamation",delete_Reclamation)
-app.use("/getReclamtion",get_Reclamation)
-app.use("/getAllReclamtion",getAllReclamation)
-app.use("/getByIdUser",getReclamationByIdUser)
-app.use("/getReclamtionById",getReclamationById)
-app.use("/updateReclamation",update_Reclamation2)
-app.use("/relancerReclamtion",relancerReclamtion)
+app.use("/addReclamation",Reclamation)
+app.use("/updateReclamation",Reclamation)
+app.use("/DeleteReclamation",Reclamation)
+app.use("/getReclamtion",Reclamation)
+app.use("/getAllReclamtion",Reclamation)
+app.use("/getByIdUser",Reclamation)
+app.use("/getReclamtionById",Reclamation)
+app.use("/updateReclamation",Reclamation)
+app.use("/relancerReclamtion",Reclamation)
 
-app.use("/getReclamtionAccepter",getRecAccepter)
-app.use("/getReclamtionEnAttente",getRecEnAttente)
-app.use("/getReclamtionRefuser",getRecRefuser)
-app.use("/getAllReclamTypes",getAllReclamTypes)
-app.use("/getAllClass",getAllClass)
-app.use("/getClassByIdEtudiant",getClassByIdEtudiant)
-app.use("/getAllSpecialite",getAllSpecialite)
-app.use("/getNumberReclamation",getNumberReclamation)
-app.use("/getNumberReclamationA",getNumberReclamationA)
-app.use("/getNumberReclamationE",getNumberReclamationE)
-app.use("/getNumberReclamationR",getNumberReclamationR)
-app.use("/getDates",getDates)
+app.use("/getReclamtionAccepter",Reclamation)
+app.use("/getReclamtionEnAttente",Reclamation)
+app.use("/getReclamtionRefuser",Reclamation)
+app.use("/getAllReclamTypes",Reclamation)
+app.use("/getAllClass",Reclamation)
+app.use("/getClassByIdEtudiant",Reclamation)
+app.use("/getAllSpecialite",Reclamation)
+app.use("/getNumberReclamation",Reclamation)
+app.use("/getNumberReclamationA",Reclamation)
+app.use("/getNumberReclamationE",Reclamation)
+app.use("/getNumberReclamationR",Reclamation)
+app.use("/getDates",Reclamation)
+app.use("/getRecNbByMonth",Reclamation)
+
 /**use group administration routers**/
 /************************************/
 

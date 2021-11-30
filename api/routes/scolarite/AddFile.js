@@ -13,6 +13,10 @@ router.put('/updateRefuse/:id',addFile_controler.update2)
 router.delete('/delete/:id',addFile_controler.delete)
 /////////// this url used to get data file via id  file 
 router.get('/getPapier',addFile_controler.getById)
+
+///////////this will return the file by id file
+router.get('/getPapierIdFile/:id',addFile_controler.getByIdPapier)
+
 /////////// this url used to get without reason  file 
 router.get('/getR',addFile_controler.getPapierNonRaison)
 /////////// this url used to get  all files file 
@@ -36,7 +40,9 @@ router.get('/getAllNumberA',addFile_controler.getAllNumberA)
 
 router.get('/getAllNumberE',addFile_controler.getAllNumberE)
 /////////// this url used to get file by in number refused of the file demande  file 
+
 router.get('/getDocNbByMonth',addFile_controler.getDocNbByMonth)
+
 
 router.get('/getAllNumberR',addFile_controler.getAllNumberR)
 ///////////  now we going to export all those methode 

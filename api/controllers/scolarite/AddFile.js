@@ -224,7 +224,7 @@ exports.getAllPaperTypes=(req,res)=>{
 //////////////////////////////////GetAll //////////////////////
 /////
 exports.getAllNumber=(req,res)=>{
-  client.query( 'SELECT count(*) FROM papier_administratif pa ,user u, etudiant e ,presence_etudiant pe ,enseignement eng ,classe cls,type_papier tp, statut_papier sp where u.id_user=pa.id_user and u.id_user=e.id_user and e.id_etudiant=pe.id_etudiant and pe.id_enseignement=eng.id_enseignement and eng.id_classe=cls.id_classe and pa.id_type_papier = tp.id_type_papier and pa.id_statut_papier = sp.id_statut_papier ORDER BY id_papier DESC'
+  client.query( 'SELECT count(*) as nb FROM papier_administratif pa ,user u, etudiant e ,presence_etudiant pe ,enseignement eng ,classe cls,type_papier tp, statut_papier sp where u.id_user=pa.id_user and u.id_user=e.id_user and e.id_etudiant=pe.id_etudiant and pe.id_enseignement=eng.id_enseignement and eng.id_classe=cls.id_classe and pa.id_type_papier = tp.id_type_papier and pa.id_statut_papier = sp.id_statut_papier ORDER BY id_papier DESC'
   , function (err, result) {
     if (err){
         res.status(res.statusCode).json({
@@ -242,7 +242,7 @@ exports.getAllNumber=(req,res)=>{
 
 //////////////////////////////////getbyStatutAccepter //////////////////////
 exports.getAllNumberA=(req,res)=>{
-  client.query( 'select  count(*) from papier_administratif pa,type_papier tp where pa.id_type_papier = tp.id_type_papier and id_statut_papier=1 ORDER BY id_papier DESC'
+  client.query( 'select  count(*) as nb from papier_administratif pa,type_papier tp where pa.id_type_papier = tp.id_type_papier and id_statut_papier=1 ORDER BY id_papier DESC'
            , function (err, result) {
     if (err){
         res.status(res.statusCode).json({
@@ -260,7 +260,7 @@ exports.getAllNumberA=(req,res)=>{
 
 //////////////////////////////////getbyStatutEnAttente //////////////////////
 exports.getAllNumberE=(req,res)=>{
-  client.query( 'select  count(*) from papier_administratif pa,type_papier tp where pa.id_type_papier = tp.id_type_papier and id_statut_papier=3 ORDER BY id_papier DESC'
+  client.query( 'select  count(*) as nb from papier_administratif pa,type_papier tp where pa.id_type_papier = tp.id_type_papier and id_statut_papier=3 ORDER BY id_papier DESC'
            , function (err, result) {
     if (err){
         res.status(res.statusCode).json({
@@ -276,7 +276,7 @@ exports.getAllNumberE=(req,res)=>{
 }
 //////////////////////////////////getbyStatutRefuser //////////////////////
 exports.getAllNumberR=(req,res)=>{
-  client.query( 'select  count(*) from papier_administratif pa,type_papier tp where pa.id_type_papier = tp.id_type_papier and id_statut_papier=2 ORDER BY id_papier DESC'
+  client.query( 'select  count(*) as nb from papier_administratif pa,type_papier tp where pa.id_type_papier = tp.id_type_papier and id_statut_papier=2 ORDER BY id_papier DESC'
            , function (err, result) {
     if (err){
         res.status(res.statusCode).json({

@@ -315,7 +315,7 @@ res.status(res.statusCode)
   ////////////////////// getAllReclamation ////////////////////////////////////////////////
 
 exports.getNumberReclamation=(req,res)=>{
-  client.query( 'SELECT count (*) FROM reclamation rec ,user u, etudiant e ,presence_etudiant pe ,enseignement eng ,classe cls ,type_reclamation tr, statut_reclamation sr  where rec.id_user =u.id_user  and u.id_user=e.id_user and e.id_etudiant=pe.id_etudiant and pe.id_enseignement=eng.id_enseignement and eng.id_classe=cls.id_classe and rec.id_type_reclamation=tr.id_type_reclamation and rec.id_statut_reclamation=sr.id_statut_reclamation ORDER BY id_reclamation DESC',
+  client.query( 'SELECT count (*) as nb FROM reclamation rec ,user u, etudiant e ,presence_etudiant pe ,enseignement eng ,classe cls ,type_reclamation tr, statut_reclamation sr  where rec.id_user =u.id_user  and u.id_user=e.id_user and e.id_etudiant=pe.id_etudiant and pe.id_enseignement=eng.id_enseignement and eng.id_classe=cls.id_classe and rec.id_type_reclamation=tr.id_type_reclamation and rec.id_statut_reclamation=sr.id_statut_reclamation ORDER BY id_reclamation DESC',
             [req.params.id] , function (err, result) {
     if (err){
         res.status(res.statusCode).json({
@@ -330,7 +330,7 @@ exports.getNumberReclamation=(req,res)=>{
 }
 //////////////////////////////////getbyStatutAccepter //////////////////////
 exports.getNumberReclamationA=(req,res)=>{
-  client.query( 'SELECT count (*)  FROM reclamation rec ,user u, etudiant e ,presence_etudiant pe ,enseignement eng ,classe cls , statut_reclamation sr where rec.id_user =u.id_user  and u.id_user=e.id_user and e.id_etudiant=pe.id_etudiant and pe.id_enseignement=eng.id_enseignement and eng.id_classe=cls.id_classe and rec.id_statut_reclamation=sr.id_statut_reclamation and rec.id_statut_reclamation=1 ORDER BY id_reclamation DESC'
+  client.query( 'SELECT count (*) as nb FROM reclamation rec ,user u, etudiant e ,presence_etudiant pe ,enseignement eng ,classe cls , statut_reclamation sr where rec.id_user =u.id_user  and u.id_user=e.id_user and e.id_etudiant=pe.id_etudiant and pe.id_enseignement=eng.id_enseignement and eng.id_classe=cls.id_classe and rec.id_statut_reclamation=sr.id_statut_reclamation and rec.id_statut_reclamation=1 ORDER BY id_reclamation DESC'
            , function (err, result) {
     if (err){
         res.status(res.statusCode).json({
@@ -348,7 +348,7 @@ exports.getNumberReclamationA=(req,res)=>{
 
 //////////////////////////////////getbyStatutEnAttente //////////////////////
 exports.getNumberReclamationE=(req,res)=>{
-  client.query( 'SELECT count (*)  FROM reclamation rec ,user u, etudiant e ,presence_etudiant pe ,enseignement eng ,classe cls, statut_reclamation sr  where rec.id_user =u.id_user  and u.id_user=e.id_user and e.id_etudiant=pe.id_etudiant and pe.id_enseignement=eng.id_enseignement and eng.id_classe=cls.id_classe and rec.id_statut_reclamation=sr.id_statut_reclamation and rec.id_statut_reclamation=2 ORDER BY id_reclamation DESC'
+  client.query( 'SELECT count (*) as nb FROM reclamation rec ,user u, etudiant e ,presence_etudiant pe ,enseignement eng ,classe cls, statut_reclamation sr  where rec.id_user =u.id_user  and u.id_user=e.id_user and e.id_etudiant=pe.id_etudiant and pe.id_enseignement=eng.id_enseignement and eng.id_classe=cls.id_classe and rec.id_statut_reclamation=sr.id_statut_reclamation and rec.id_statut_reclamation=2 ORDER BY id_reclamation DESC'
            , function (err, result) {
     if (err){
         res.status(res.statusCode).json({
@@ -365,7 +365,7 @@ exports.getNumberReclamationE=(req,res)=>{
 }
 //////////////////////////////////getbyStatutRefuser //////////////////////
 exports.getNumberReclamationR=(req,res)=>{
-  client.query( 'SELECT count (*)  FROM reclamation rec ,user u, etudiant e ,presence_etudiant pe ,enseignement eng ,classe cls, statut_reclamation sr  where rec.id_user =u.id_user  and u.id_user=e.id_user and e.id_etudiant=pe.id_etudiant and pe.id_enseignement=eng.id_enseignement and eng.id_classe=cls.id_classe and rec.id_statut_reclamation=sr.id_statut_reclamation and  rec.id_statut_reclamation=3 ORDER BY id_reclamation DESC'
+  client.query( 'SELECT count (*) as nb FROM reclamation rec ,user u, etudiant e ,presence_etudiant pe ,enseignement eng ,classe cls, statut_reclamation sr  where rec.id_user =u.id_user  and u.id_user=e.id_user and e.id_etudiant=pe.id_etudiant and pe.id_enseignement=eng.id_enseignement and eng.id_classe=cls.id_classe and rec.id_statut_reclamation=sr.id_statut_reclamation and  rec.id_statut_reclamation=3 ORDER BY id_reclamation DESC'
            , function (err, result) {
     if (err){
         res.status(res.statusCode).json({

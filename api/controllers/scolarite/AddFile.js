@@ -1,5 +1,6 @@
 /////////////// require connection to server we need 
 var client = require('../../../db_connection')
+
 ////////////we going to create a function that will be insert the data  this methode will insert the data from json  object 
 ///////////this function will be exported 
 exports.add=(req,res)=>{
@@ -102,6 +103,7 @@ exports.getById=(req,res)=>{
 
 }
 
+
 exports.getByIdPapier=(req,res)=>{
   client.query( 'select * FROM papier_administratif pa ,user u, etudiant e ,presence_etudiant pe ,enseignement eng ,classe cls, statut_papier sp, type_papier tp  where pa.id_user =u.id_user  and u.id_user=e.id_user and e.id_etudiant=pe.id_etudiant and pe.id_enseignement=eng.id_enseignement and eng.id_classe=cls.id_classe and pa.id_statut_papier=sp.id_statut_papier and pa.id_type_papier=tp.id_type_papier and id_papier=?',
   [req.params.id],
@@ -119,6 +121,7 @@ exports.getByIdPapier=(req,res)=>{
   });
 
 }
+
 //////////////////////////////////Selection les papiers simple //////////////////////
 exports.getPapierNonRaison=(req,res)=>{
   client.query( 'select  id_papier,id_type_papier,date,email ,nom,prenom , cin from  user,papier_administratif where user.id_user=papier_administratif.id_user and raison IS NOT NULL  ', function (err, result) {
@@ -305,4 +308,20 @@ exports.getAllNumberR=(req,res)=>{
     }
   });
 }
-  
+
+exports.getDocNbByMonth=(req,res)=>{
+  client.query( 'SELECT MONTH(date) AS month, count(id_papier) AS nb_reclam FROM papier_administratif GROUP BY MONTH(date);'
+           , function (err, result) {
+    if (err){
+        res.status(res.statusCode).json({
+            errorCode: err.message,
+            status: res.statusCode,
+
+          });
+    }else{
+      res.json(result);
+        res.status(res.statusCode)
+    }
+  });
+}
+

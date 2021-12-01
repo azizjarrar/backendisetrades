@@ -5,6 +5,13 @@ const dotenv = require('dotenv');
 const nodemailer = require('nodemailer');
 const bodyParser = require('body-parser');
 const id_Server = "192.168.118.228";
+
+var mysql = require('mysql');
+dotenv.config();
+var client = require('./db_connection');
+const path = require('path');
+
+
 var mysql = require('mysql');
 dotenv.config();
 /******************************************************/
@@ -50,6 +57,7 @@ const File= require('./api/routes/scolarite/AddFile')
 
 /////////////reclamation////////////////
 const Reclamation= require('./api/routes/scolarite/Reclamation')
+
 
 ////////////////////////////////////Get all field of select box//////////////////////////////
 const getAllClass = require('./api/routes/scolarite/Reclamation')
@@ -177,6 +185,7 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+
 app.use('/entreprise',entrepriseRouter);
 app.use('/offrestage',offreStageRouter);
 app.use('/domaine',domaineeRouter);
@@ -189,10 +198,15 @@ app.use('/confirmationDemande',confirmationDemandeRouter);
 app.use('/etudiantComp',etudiantComp);
 app.use('/stagiaires',stagiaires);
 
+
 /************************************/
 /***use group scolarite routers******/
 /************************************/
 ////////////File///////////////////
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0408391f86025f17edb612266e558c4278642b18
 app.use("/addfile",File)
 app.use("/updatefile",File)
 app.use("/updatefile",File)
@@ -238,6 +252,7 @@ app.use("/getNumberReclamationR",Reclamation)
 app.use("/getDates",Reclamation)
 app.use("/getRecNbByMonth",Reclamation)
 
+
 /**use group administration routers**/
 /************************************/
 
@@ -279,6 +294,7 @@ app.use(function(req, res, next) {
   next();
 });
 
+
 ////////////////////////NOde mailer////////////////////////////
 // Body Parser Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -286,6 +302,53 @@ app.use(bodyParser.json());
 app.get('/hello', (req, res) => {
   res.json({ error: err })
 });
+
+app.post('/send/:emailfrom', (req, res) => {
+  
+  // create reusable transporter object using the default SMTP transport
+  let transporter = nodemailer.createTransport({
+    host: "imap.gmail.com",
+    Port: 993,
+    secure: true, // upgrade later with STARTTLS
+    auth: {
+      user: "ilyeshrizi60@gmail.com",
+      pass: "zgfedrzlqtjgppfy",
+    },
+  });
+
+  // setup email data with unicode symbols
+  let mailOptions = {
+      from: '"req.params.emailfrom"', // sender address
+      to: req.body.mailto, // list of receivers
+      subject: 'Confirmation', // Subject line
+      text: 'hello email', // plain text body
+      html: req.body.contenu // html body
+  };
+
+  // send mail with defined transport object
+  transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+          return console.log(error);
+      }
+      else{
+        console.log('Message sent: ' + info.res);
+        res.sendStatus(200);
+    };
+    return res.sendStatus(200);  
+    
+  });
+  });
+
+
+////////////////////////NOde mailer////////////////////////////
+// Body Parser Middleware
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.get('/hello', (req, res) => {
+  res.json({ error: err })
+});
+
+
 
 app.post('/send/:emailfrom', (req, res) => {
   
@@ -350,6 +413,7 @@ app.post('/send/:emailfrom', (req, res) => {
       text: 'hello email', // plain text body
       html: req.body.contenu // html body
   };
+
 
   // send mail with defined transport object
   transporter.sendMail(mailOptions, (error, info) => {

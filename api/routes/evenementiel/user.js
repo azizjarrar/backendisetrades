@@ -59,6 +59,8 @@ function checkUploadPath(req, res, next) {
 /*********************************************************************************/
 /*********************************************************************************/
 /*********************************************************************************/
+router.post('/addmemebre', auth_controler.addmemebre)
+router.post('/getAllmember', auth_controler.getAllmember)
 router.post('/getOneUser', auth_controler.getOneUser)
 router.post('/getClubUsers', auth_controler.getClubUsers)
 router.post('/getMembres', auth_controler.getMembres)

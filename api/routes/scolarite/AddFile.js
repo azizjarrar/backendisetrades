@@ -13,6 +13,8 @@ router.put('/updateRefuse/:id',addFile_controler.update2)
 router.delete('/delete/:id',addFile_controler.delete)
 /////////// this url used to get data file via id  file 
 router.get('/getPapier',addFile_controler.getById)
+///////////this will return the file by id file
+router.get('/getPapierIdFile/:id',addFile_controler.getByIdPapier)
 /////////// this url used to get without reason  file 
 router.get('/getR',addFile_controler.getPapierNonRaison)
 /////////// this url used to get  all files file 

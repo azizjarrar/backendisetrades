@@ -75,6 +75,112 @@ module.exports.confimerpreselection = async (req, res) => {
 
     return json;
 }
+module.exports.admismaster = async (req, res) => {
+    const body = req.body;
+    const transport = mailer.createTransport(
+        smtp({
+            host: 'in.mailjet.com',
+            port: 2525,
+            auth: {
+                user: process.env.API_KEY,
+                pass: process.env.API_SECRET,
+            },
+        })
+    );
+
+    const json = await transport.sendMail({
+      from: process.env.EMAIL,
+      to: [body.email],
+      subject: 'Confirmation d\inscription au master '+body.master,
+      html: 'Bonjour,<br>'
+      +"Merci cher utilisateur d'avoir postulé au master "+"<b>"+body.master+"</b>"
+      +"<br> Suite à votre présélection, nous vous invite a confirmer votre décision de passer à un entretien"
+      +'<br> Cliquer ici ci dessous pour confirmer votre candidature :'
+      +`<br>   <p>http://localhost:4200</p>`
+      +'&nbsp;<br>'
+      +'&nbsp;<br>'
+      +'Cordialement,'
+
+    }).then(
+        val=>{
+            res.send(val)
+
+        },
+        err=>{res.send(err)});
+
+    return json;
+}
+module.exports.refusmaster = async (req, res) => {
+    const body = req.body;
+    const transport = mailer.createTransport(
+        smtp({
+            host: 'in.mailjet.com',
+            port: 2525,
+            auth: {
+                user: process.env.API_KEY,
+                pass: process.env.API_SECRET,
+            },
+        })
+    );
+
+    const json = await transport.sendMail({
+      from: process.env.EMAIL,
+      to: [body.email],
+      subject: 'Confirmation d\inscription au master '+body.master,
+      html: 'Bonjour,<br>'
+      +"Merci cher utilisateur d'avoir postulé au master "+"<b>"+body.master+"</b>"
+      +"<br> Après étude  des dossiers qui nous sont parvenus , le comité de sélection a observé"
+      +"<br> que plusieurs d'entre vous ne disposent pas  condition nécessaire pour pouvoir accéder " 
+      +"<br>  au Master "+body.master
+      +`<br>   <p>http://localhost:4200</p>`
+      +'&nbsp;<br>'
+      +"Nous sommes vraiment désolés et nous vous souhaitons bonne chance dans d'éventuelles opportunités."
+      +'Bien Cordialement,'
+
+    }).then(
+        val=>{
+            res.send(val)
+
+        },
+        err=>{res.send(err)});
+
+    return json;
+}
+module.exports.enattentemaster = async (req, res) => {
+    const body = req.body;
+    const transport = mailer.createTransport(
+        smtp({
+            host: 'in.mailjet.com',
+            port: 2525,
+            auth: {
+                user: process.env.API_KEY,
+                pass: process.env.API_SECRET,
+            },
+        })
+    );
+
+    const json = await transport.sendMail({
+      from: process.env.EMAIL,
+      to: [body.email],
+      subject: 'Confirmation d\inscription au master '+body.master,
+      html: 'Bonjour,<br>'
+      +"Merci cher utilisateur d'avoir postulé au master "+"<b>"+body.master+"</b>"
+      +"<br> Suite à votre présélection, nous vous invite a confirmer votre décision de passer à un entretien"
+      +'<br> Cliquer ici ci dessous pour confirmer votre candidature :'
+      +`<br>   <p>http://localhost:4200</p>`
+      +'&nbsp;<br>'
+      +'&nbsp;<br>'
+      +'Cordialement,'
+
+    }).then(
+        val=>{
+            res.send(val)
+
+        },
+        err=>{res.send(err)});
+
+    return json;
+}
 module.exports.createDemandeMaster = (req, res) => {
 
     if (req.file) {
@@ -116,7 +222,6 @@ module.exports.createDemandeMaster = (req, res) => {
         return;
     }
 };
-
 async function envoyerDemande(email,master) {
     const transport = mailer.createTransport(
         smtp({
@@ -144,8 +249,7 @@ async function envoyerDemande(email,master) {
  
    
     return json;
-  }
-
+}
 module.exports.getListDemandeMaster = (req, res) => {
 
     connexion.query(
@@ -174,7 +278,6 @@ module.exports.getListDemandeMaster = (req, res) => {
                 return;}
         })
 };
-
 module.exports.getListDemandeByMaster = async (req, res) => {
     const id_master = req.params.id;
   await  connexion.query(
@@ -226,7 +329,6 @@ module.exports.getListDemandeByMaster = async (req, res) => {
             return;}
         })
 }
-
 module.exports.getDemandeMasterById = (req, res) => {
     const id_demande = req.params.id;
     connexion.query(
@@ -257,7 +359,6 @@ module.exports.getDemandeMasterById = (req, res) => {
                 return;}
         })
 };
-
 module.exports.ChangerEtatDemandeMaster = (req, res) => {
 
 
@@ -291,8 +392,6 @@ module.exports.ChangerEtatDemandeMaster = (req, res) => {
 
 
 };
-
-
 module.exports.addNoteDemande = (req, res) => {
 
 
@@ -365,7 +464,6 @@ module.exports.updateDemandeMaster = (req, res) => {
         return;
     }
 };
-
 module.exports.deleteDemandeMaster = (req, res) => {
     const id_demande = req.params.id;
     connexion.query(

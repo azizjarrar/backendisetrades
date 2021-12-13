@@ -16,12 +16,12 @@ const acces={
           { URL:"/niveau/",METHOD:"GET"},
           { URL:"/pays/",METHOD:"GET"},
           { URL:"/specialite/",METHOD:"GET"},
-          { URL:"/user/login",METHOD:"POST"},
+          { URL:"/users/login",METHOD:"POST"},
           { URL:"/ville/",METHOD:"GET"},
           { URL:"/situationEtudiant/",METHOD:"GET"},
-          { URL:"/user/forgotPassword",METHOD:"PATCH"},
-          { URL:"/user/resetPassword",METHOD:"PATCH"},
-          { URL:"/user/activeVerification",METHOD:"PATCH"}
+          { URL:"/users/forgotPassword",METHOD:"PATCH"},
+          { URL:"/users/resetPassword",METHOD:"PATCH"},
+          { URL:"/users/activeVerification",METHOD:"PATCH"}
 
     ],
     "2":[
@@ -84,12 +84,15 @@ const acces={
         { URL:"/etudiant/",METHOD:"GET"},
         { URL:"/etudiant/:id",METHOD:"GET"},
         { URL:"/etudiant/",METHOD:"PATCH"},
-        { URL:"/user/:id",METHOD:"GET"},
+        { URL:"/users/:id",METHOD:"GET"},
         { URL:"/demandeMaster/",METHOD:"POST"},
         { URL:"/demandeMaster/:id",METHOD:"GET"},
         { URL:"/demandeMaster/confirm/:token",METHOD:"GET"},
         { URL:"/demandeMaster/confirmer",METHOD:"POST"},
-        { URL:"/demandeMaster/:id",METHOD:"DELETE"}
+        { URL:"/demandeMaster/:id",METHOD:"DELETE"},
+        { URL:"/getFileEnAttente/getEnAttente",METHOD:"GET"},
+        { URL:"/getFileAccepter/getAccpeter",METHOD:"GET"},
+        { URL:"/getFileRefuser/getRefuser",METHOD:"GET"}
 
     ],
     "3":[{METHOD:"GET",URL:"/master"}],
@@ -131,10 +134,10 @@ const acces={
    { URL:"/situationEtudiant/:id",METHOD:"GET"},
    { URL:"/situationEtudiant/",METHOD:"PATCH"},
    { URL:"/situationEtudiant/:id",METHOD:"DELETE"},
-   { URL:"/user/",METHOD:"POST"},
-   { URL:"/user/",METHOD:"GET"},
-   { URL:"/user/all",METHOD:"GET"},
-   { URL:"/user/",METHOD:"PATCH"},
+   { URL:"/users/",METHOD:"POST"},
+   { URL:"/users/",METHOD:"GET"},
+   { URL:"/users/all",METHOD:"GET"},
+   { URL:"/users/",METHOD:"PATCH"},
    {METHOD:"POST",URL:"file/add"}
    ,{METHOD:"PUT",URL:"file/updateAccept/:id"}
    ,{METHOD:"PUT",URL:"file/updateRefuse/:id"}
@@ -183,7 +186,7 @@ const acces={
         { URL:"/etudiant/",METHOD:"GET"},
         { URL:"/etudiant/:id",METHOD:"GET"},
         { URL:"/etudiant/",METHOD:"PATCH"},
-        { URL:"/user/:id",METHOD:"GET"},
+        { URL:"/users/:id",METHOD:"GET"},
         { URL:"/demandeMaster/",METHOD:"POST"},
         { URL:"/demandeMaster/:id",METHOD:"GET"},
         { URL:"/demandeMaster/confirm/:token",METHOD:"GET"},
@@ -207,7 +210,10 @@ const acces={
 		{METHOD:"GET",URL:"Reclamation/getAllClass"},
 		{METHOD:"GET",URL:"Reclamation/getClassByIdEtudiant/:id"},
 		{METHOD:"GET",URL:"Reclamation/getAllSpecialite"},
-		{METHOD:"GET",URL:"Reclamation/getAllReclamTypes"}	
+		{METHOD:"GET",URL:"Reclamation/getAllReclamTypes"}	,
+        { URL:"/getFileEnAttente/getEnAttente",METHOD:"GET"},
+        { URL:"/getFileAccepter/getAccpeter",METHOD:"GET"},
+        { URL:"/getFileRefuser/getRefuser",METHOD:"GET"}
     ],
     "9":[
         {METHOD:"GET",URL:"/master"},
@@ -226,7 +232,7 @@ const acces={
     { URL:"/etudiant/",METHOD:"GET"},
     { URL:"/etudiant/:id",METHOD:"GET"},
     { URL:"/etudiant/",METHOD:"PATCH"},
-    { URL:"/user/:id",METHOD:"GET"},
+    { URL:"/users/:id",METHOD:"GET"},
     { URL:"/demandeMaster/",METHOD:"POST"},
     { URL:"/demandeMaster/:id",METHOD:"GET"},
     { URL:"/demandeMaster/confirm/:token",METHOD:"GET"},
@@ -250,7 +256,10 @@ const acces={
     {METHOD:"GET",URL:"Reclamation/getAllClass"},
     {METHOD:"GET",URL:"Reclamation/getClassByIdEtudiant/:id"},
     {METHOD:"GET",URL:"Reclamation/getAllSpecialite"},
-    {METHOD:"GET",URL:"Reclamation/getAllReclamTypes"}],
+    {METHOD:"GET",URL:"Reclamation/getAllReclamTypes"},
+    { URL:"/getFileEnAttente/getEnAttente",METHOD:"GET"},
+    { URL:"/getFileAccepter/getAccpeter",METHOD:"GET"},
+    { URL:"/getFileRefuser/getRefuser",METHOD:"GET"}],
     "10":[
         {METHOD:"GET",URL:"/master"},
         { URL:"/adminMaster/",METHOD:"POST"},

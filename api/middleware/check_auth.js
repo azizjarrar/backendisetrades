@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 module.exports=(req,res,next)=>{
     try{
         let token = req.headers['authorization'] 
+
         if (token.startsWith('Bearer ')) {
             try{
                 token = token.slice(7, token.length);

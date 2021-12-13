@@ -1,8 +1,10 @@
 var client = require('../../../db_connection')
 var jwt = require('jsonwebtoken');
-const crypto = require("crypto");
 var nodemailer = require('nodemailer');
 const validator = require('../../middleware/validator')
+const { NOT_FOUND,UPDATED,INVALIDE_TOKEN } = require('./messages')
+const responseSender = require("../../middleware/responseSender")
+
 /**************************************************************************/
 /**************this part is responsible for forgeting password*************/
 /**************************************************************************/
@@ -12,15 +14,10 @@ exports.sendEmailForgetPassword=(req,res)=>{
   }
     client.query(`SELECT *  FROM  membre WHERE email='${req.body.email}';`,async (err,result)=>{
         if (err){
-            res.status(res.statusCode).json({
-                errorCode: err.message,
-                status: res.statusCode,
-              });
+          responseSender(res, { error: true, errorMessage: err.message })
         }else{
             if(result.length==0){
-                res.status(res.statusCode).json({
-                    message: "user not found",
-                  });
+              responseSender(res, {message: NOT_FOUND})
             }else{
                
 
@@ -65,23 +62,13 @@ exports.restartPassword=(req,res)=>{
         const decoded = jwt.verify(req.body.token, process.env.secret_key_token_auth_event)
         client.query(`UPDATE membre  SET motdepasse='${req.body.password}'  WHERE email='${decoded.email}'`,async (err,result)=>{
             if (err){
-                res.status(res.statusCode).json({
-                    errorCode: err.message,
-                    status: res.statusCode,
-                  });
+              responseSender(res, { error: true, errorMessage: err.message })
             }else{
-                res.status(res.statusCode).json({
-                    message: "password was changed",
-                    status: res.statusCode,
-                  });
+              responseSender(res, {message: UPDATED,})
             }
         })
     }catch(error) {
-        res.status(403).json({
-            errorMessage:error.message,
-            state: false,
-            message: "token in invalide",
-        })
+      responseSender(res, {error: true,errorMessage: INVALIDE_TOKEN})
     }
 
 

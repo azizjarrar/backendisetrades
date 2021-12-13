@@ -92,7 +92,11 @@ const acces={
         { URL:"/demandeMaster/:id",METHOD:"DELETE"},
         { URL:"/getFileEnAttente/getEnAttente",METHOD:"GET"},
         { URL:"/getFileAccepter/getAccpeter",METHOD:"GET"},
-        { URL:"/getFileRefuser/getRefuser",METHOD:"GET"}
+        { URL:"/getFileRefuser/getRefuser",METHOD:"GET"},
+        { URL:"/getAllReclamtion/getAllReclamtion",METHOD:"GET"},
+    { URL:"/getAllReclamTypes/getAllReclamTypes",METHOD:"GET"},
+    { URL:" /getPaperTypes/getAllPaperTypes",METHOD:"GET"},
+
 
     ],
     "3":[{METHOD:"GET",URL:"/master"}],
@@ -213,7 +217,11 @@ const acces={
 		{METHOD:"GET",URL:"Reclamation/getAllReclamTypes"}	,
         { URL:"/getFileEnAttente/getEnAttente",METHOD:"GET"},
         { URL:"/getFileAccepter/getAccpeter",METHOD:"GET"},
-        { URL:"/getFileRefuser/getRefuser",METHOD:"GET"}
+        { URL:"/getFileRefuser/getRefuser",METHOD:"GET"},
+        { URL:"/getAllReclamtion/getAllReclamtion",METHOD:"GET"},
+    { URL:"/getAllReclamTypes/getAllReclamTypes",METHOD:"GET"},
+    { URL:" /getPaperTypes/getAllPaperTypes",METHOD:"GET"},
+
     ],
     "9":[
         {METHOD:"GET",URL:"/master"},
@@ -259,7 +267,12 @@ const acces={
     {METHOD:"GET",URL:"Reclamation/getAllReclamTypes"},
     { URL:"/getFileEnAttente/getEnAttente",METHOD:"GET"},
     { URL:"/getFileAccepter/getAccpeter",METHOD:"GET"},
-    { URL:"/getFileRefuser/getRefuser",METHOD:"GET"}],
+    { URL:"/getFileRefuser/getRefuser",METHOD:"GET"},
+    { URL:"/getAllReclamtion/getAllReclamtion",METHOD:"GET"},
+    { URL:"/getAllReclamTypes/getAllReclamTypes",METHOD:"GET"},
+    { URL:" /getPaperTypes/getAllPaperTypes",METHOD:"GET"},
+   
+    ],
     "10":[
         {METHOD:"GET",URL:"/master"},
         { URL:"/adminMaster/",METHOD:"POST"},

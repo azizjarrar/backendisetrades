@@ -23,7 +23,6 @@ module.exports=(req,res,next)=>{
                     token = token.slice(7, token.length);
                     const decoded = jwt.verify(token, process.env.JWT_KEY)
                     
-
                     role=decoded.result[0].id_role
                     if(checkAcces(role,req.originalUrl,req.get('host'),req.method)==undefined){
                         res.status(405).json({
@@ -68,6 +67,6 @@ module.exports=(req,res,next)=>{
 
 
 const checkAcces=(role,path,hostUrl,method)=>{
-
+    var path = path.replace(/\d+/g, ':id');
     return accesData[role].find(data=>method==data.METHOD&&data.URL==path)
 }

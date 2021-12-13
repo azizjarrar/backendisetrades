@@ -14,6 +14,7 @@ const path = require('path');
 
 var mysql = require('mysql');
 dotenv.config();
+const accesControl = require('./api/middleware/accesControl')
 /******************************************************/
 /***************import routes here*********************/
 /*******************************************************/
@@ -146,6 +147,8 @@ con.connect(function(err) {
     }
     next()
   })
+  /**acces control */
+  app.use(accesControl)
   app.use(express.urlencoded({extended: true}));  
   app.use(express.json())
   
@@ -203,10 +206,6 @@ app.use('/stagiaires',stagiaires);
 /***use group scolarite routers******/
 /************************************/
 ////////////File///////////////////
-<<<<<<< HEAD
-=======
-
->>>>>>> 0408391f86025f17edb612266e558c4278642b18
 app.use("/addfile",File)
 app.use("/updatefile",File)
 app.use("/updatefile",File)

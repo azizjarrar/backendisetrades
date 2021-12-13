@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 6.7.2 2021-11-26
+
+-   Fix proxies for account verification
+
+## 6.7.1 2021-11-15
+
+-   fix verify on ses-transport (stanofsky)
+
+## 6.7.0 2021-10-11
+
+-   Updated DNS resolving logic. If there are multiple responses for a A/AAAA record, then loop these randomly instead of only caching the first one
+
 ## 6.6.5 2021-09-23
 
 -   Replaced Object.values() and Array.flat() with polyfills to allow using Nodemailer in Node v6+

@@ -93,10 +93,9 @@ const acces={
         { URL:"/getFileEnAttente/getEnAttente",METHOD:"GET"},
         { URL:"/getFileAccepter/getAccpeter",METHOD:"GET"},
         { URL:"/getFileRefuser/getRefuser",METHOD:"GET"},
-        { URL:"/getAllReclamtion/getAllReclamtion",METHOD:"GET"},
     { URL:"/getAllReclamTypes/getAllReclamTypes",METHOD:"GET"},
     { URL:" /getPaperTypes/getAllPaperTypes",METHOD:"GET"},
-
+    {METHOD:"GET",URL:"Reclamation/getAllReclamtion"}
 
     ],
     "3":[{METHOD:"GET",URL:"/master"}],
@@ -221,6 +220,7 @@ const acces={
         { URL:"/getAllReclamtion/getAllReclamtion",METHOD:"GET"},
     { URL:"/getAllReclamTypes/getAllReclamTypes",METHOD:"GET"},
     { URL:" /getPaperTypes/getAllPaperTypes",METHOD:"GET"},
+    {METHOD:"GET",URL:"Reclamation/getAllReclamtion"}
 
     ],
     "9":[
@@ -271,7 +271,7 @@ const acces={
     { URL:"/getAllReclamtion/getAllReclamtion",METHOD:"GET"},
     { URL:"/getAllReclamTypes/getAllReclamTypes",METHOD:"GET"},
     { URL:" /getPaperTypes/getAllPaperTypes",METHOD:"GET"},
-   
+    {METHOD:"GET",URL:"Reclamation/getAllReclamtion"}
     ],
     "10":[
         {METHOD:"GET",URL:"/master"},

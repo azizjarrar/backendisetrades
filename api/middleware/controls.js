@@ -271,7 +271,9 @@ const acces={
     { URL:"/getAllReclamtion/getAllReclamtion",METHOD:"GET"},
     { URL:"/getAllReclamTypes/getAllReclamTypes",METHOD:"GET"},
     { URL:" /getPaperTypes/getAllPaperTypes",METHOD:"GET"},
-    {METHOD:"GET",URL:"Reclamation/getAllReclamtion"}
+    {METHOD:"GET",URL:"Reclamation/getAllReclamtion"},
+    {METHOD:"GET",URL:"Reclamation/getById/:id"},
+
     ],
     "10":[
         {METHOD:"GET",URL:"/master"},

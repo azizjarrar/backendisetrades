@@ -410,4 +410,18 @@ exports.getRecNbByMonth=(req,res)=>{
     }
   });
 }
-
+exports.getAllReclamationById=(req,res)=>{
+  client.query( 'SELECT DISTINCT * FROM reclamation rec ,user u, etudiant e ,presence_etudiant pe ,enseignement eng ,classe cls ,type_reclamation tr, statut_reclamation sr  where rec.id_user = ?  and u.id_user=e.id_user and e.id_etudiant=pe.id_etudiant and pe.id_enseignement=eng.id_enseignement and eng.id_classe=cls.id_classe and rec.id_type_reclamation=tr.id_type_reclamation and rec.id_statut_reclamation=sr.id_statut_reclamation ORDER BY id_reclamation DESC',
+            [req.params.id] , function (err, result) {
+    if (err){
+        res.status(res.statusCode).json({
+            errorCode: err.message,
+            status: res.statusCode,
+            
+          });
+    }else{
+      res.json(result);
+        res.status(res.statusCode)
+    }
+  });
+}

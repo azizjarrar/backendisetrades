@@ -50,4 +50,4 @@ router.get('/getNumberReclamationR',Reclamation_controler.getNumberReclamationR)
 router.get('/getDates',Reclamation_controler.getDates)
 router.get('/getRecNbByMonth',Reclamation_controler.getRecNbByMonth)
 router.get('/getAllReclamtion',Reclamation_controler.getAllReclamation)
-
+router.get('/getAllReclamationById/:id',Reclamation_controler.getAllReclamationById)

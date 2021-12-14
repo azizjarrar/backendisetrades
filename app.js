@@ -236,6 +236,7 @@ app.use("/getByIdUser",Reclamation)
 app.use("/getReclamtionById",Reclamation)
 app.use("/updateReclamation",Reclamation)
 app.use("/relancerReclamtion",Reclamation)
+app.use("/getAllReclamationById",Reclamation)
 
 app.use("/getReclamtionAccepter",Reclamation)
 app.use("/getReclamtionEnAttente",Reclamation)

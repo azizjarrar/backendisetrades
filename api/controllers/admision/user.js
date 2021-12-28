@@ -72,7 +72,7 @@ module.exports.create = (req, res) => {
       9,
       data.gouvern_naissance,
       data.id_situation_professionnel,
-      0
+      1
     ],
     (err, results) => {
       if (err) {

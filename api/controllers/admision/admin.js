@@ -118,7 +118,7 @@ module.exports.getAdminByEmail = (req, res) => {
             err: false,
             message: "login successfully",
             token: jsontoken,
-            id_user: results.id_user,
+            id_user: results[0].id_user
           });
           return;
         } else {

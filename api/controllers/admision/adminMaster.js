@@ -162,7 +162,7 @@ module.exports.checkemailInscrit = (req, res) => {
 module.exports.getAdminsMasterId = (req, res, next) => {
     const id_user = req.params.id;
     console.log(id_user)
-    const sql = 'select *,user.nom as admnom from user left join master on user.id_user=master.id_admin_master,  situation_professionnel where  user.id_situation_professionnel= situation_professionnel.id_situation_professionnel and user.id_user=32 and user.id_role=10';
+    const sql = 'select *,user.nom as admnom from user left join master on user.id_user=master.id_admin_master,  situation_professionnel where  user.id_situation_professionnel= situation_professionnel.id_situation_professionnel  and user.id_role=10';
     connexion.query(sql, [id_user], (err, row, fields) => {
         if (!err) {
             if (row.length > 0)

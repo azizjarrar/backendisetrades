@@ -74,6 +74,7 @@ const con=require('./db_connection')
 /****group admision routers******/
 /********************************/
 const adminRouter = require('./api/routes/admision/admin');
+const adminMasterRouter = require('./api/routes/admision/adminMaster');
 const classeRouter = require('./api/routes/admision/classe');
 const demandeMasterRouter = require('./api/routes/admision/demandeMaster');
 const departementRouter = require('./api/routes/admision/departement');

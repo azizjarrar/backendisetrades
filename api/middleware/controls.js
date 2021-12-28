@@ -364,7 +364,7 @@ const acces={
         { URL:"/demandeMaster/",METHOD:"GET"},
         { URL:"/demandeMaster/etat",METHOD:"PATCH"},
         { URL:"/demandeMaster/:id",METHOD:"DELETE"},
-        { URL:"/diplome/",METHOD:"GET"},
+        { URL:"/diplome",METHOD:"GET"},
         { URL:"/etablissement",METHOD:"GET"},
         { URL:"/domaine",METHOD:"GET"},
         { URL:"/classe",METHOD:"GET"},

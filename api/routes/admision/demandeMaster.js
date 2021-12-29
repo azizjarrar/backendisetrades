@@ -35,13 +35,13 @@ const upload = multer({
 router.post("/", checkToken, upload.single('fichier'), demandeMasterController.createDemandeMaster);
 
 router.post("/confirmer", checkToken, demandeMasterController.confimerpreselection);
-router.post("/admis", checkToken, demandeMasterController.confimerpreselection);
-router.post("/refus", checkToken, demandeMasterController.confimerpreselection);
-router.post("/enattente", checkToken, demandeMasterController.confimerpreselection);
+router.post("/admis", checkToken, demandeMasterController.admismaster);
+router.post("/refus", checkToken, demandeMasterController.refusmaster);
+router.post("/enattente", checkToken, demandeMasterController.enattentemaster);
 router.get("/Adminmaster/:id", demandeMasterController.getListDemandeByMaster);
 
 router.get("/:id", checkToken, demandeMasterController.getDemandeMasterById);
-router.get("/confirm/:token", demandeMasterController.setToConfirmed);
+router.get("/confirm/:id", demandeMasterController.setToConfirmed);
 router.get("/", checkToken, demandeMasterController.getListDemandeMaster);
 
 router.patch("/", checkToken, upload.single('fichier'), demandeMasterController.updateDemandeMaster);

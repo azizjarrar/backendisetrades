@@ -11,7 +11,7 @@ const mailer = require('nodemailer');
 const smtp = require('nodemailer-smtp-transport');
 
 module.exports.setToConfirmed = async (req, res) => {
-  const token=  req.params.token
+  const token=  req.params.id
   connexion.query("UPDATE demande_master SET id_etat_demande_master=5 WHERE token_demande=?",
   [token],(err,results)=>{
     if (err) {

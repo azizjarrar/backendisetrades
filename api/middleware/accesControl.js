@@ -67,6 +67,11 @@ module.exports=(req,res,next)=>{
 
 
 const checkAcces=(role,path,hostUrl,method)=>{
-    var path = path.replace(/\d+/g, ':id');
-    return accesData[role].find(data=>method==data.METHOD&&data.URL==path)
+   // var path = path.replace(/\d+/g, ':id');
+    ///demandeMaster/confirm/:id
+    ///demandeMaster/:id/:id
+    console.log('here '+path);
+    console.log('role '+role);
+    console.log('method '+method);
+    return accesData[role].find(data=>method==data.METHOD&&path.includes(data.URL))
 }
